@@ -1,0 +1,1151 @@
+<title>Small Business Decision Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Public+Sans:wght@400;500;600;700&family=Young+Serif&display=swap">
+<style>
+:root {
+  --ground: #F1F3EF;
+  --surface: #FFFFFF;
+  --surface-2: #F6F7F4;
+  --ink: #1B2024;
+  --muted: #59626A;
+  --line: #D7DCD5;
+  --accent: #2A48A6;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E6EBF8;
+  --good: #2C7449;
+  --good-soft: #E1F0E6;
+  --warn: #8F5A06;
+  --warn-soft: #FAEFD6;
+  --bad: #AE2A21;
+  --bad-soft: #FAE3E0;
+  --paper: #FFFEF8;
+  --paper-ink: #22252A;
+  --bar: #2A48A6;
+  --bar-soft: #B3BFE2;
+  --grid: #E2E6E0;
+  --display: "Young Serif", Georgia, "Times New Roman", serif;
+  --body: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --mono: "Courier Prime", "Courier New", Courier, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground: #111418;
+    --surface: #191D22;
+    --surface-2: #1E2328;
+    --ink: #E6E9EC;
+    --muted: #9CA5AE;
+    --line: #2E353C;
+    --accent: #93A9F2;
+    --accent-ink: #0E1321;
+    --accent-soft: #1F2844;
+    --good: #7DCB99;
+    --good-soft: #17301F;
+    --warn: #EAB65E;
+    --warn-soft: #33270F;
+    --bad: #F2948C;
+    --bad-soft: #3A1C1A;
+    --paper: #E6E3DA;
+    --paper-ink: #1D2024;
+    --bar: #93A9F2;
+    --bar-soft: #45548A;
+    --grid: #272D33;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #111418;
+  --surface: #191D22;
+  --surface-2: #1E2328;
+  --ink: #E6E9EC;
+  --muted: #9CA5AE;
+  --line: #2E353C;
+  --accent: #93A9F2;
+  --accent-ink: #0E1321;
+  --accent-soft: #1F2844;
+  --good: #7DCB99;
+  --good-soft: #17301F;
+  --warn: #EAB65E;
+  --warn-soft: #33270F;
+  --bad: #F2948C;
+  --bad-soft: #3A1C1A;
+  --paper: #E6E3DA;
+  --paper-ink: #1D2024;
+  --bar: #93A9F2;
+  --bar-soft: #45548A;
+  --grid: #272D33;
+}
+[hidden] { display: none !important; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 56px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; color: var(--ink); }
+h1 { font-size: clamp(28px, 4vw, 38px); line-height: 1.1; letter-spacing: -0.01em; }
+h2 { font-size: 23px; line-height: 1.2; }
+h3 { font-size: 17px; line-height: 1.3; }
+p { margin: 0; }
+a { color: var(--accent); }
+.num { font-variant-numeric: tabular-nums; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* masthead */
+.mast { display: grid; grid-template-columns: 1fr auto; gap: 12px 32px; align-items: end; padding-bottom: 22px; border-bottom: 1px solid var(--line); margin-bottom: 26px; }
+.mast .lede { max-width: 62ch; color: var(--muted); font-size: 16px; margin-top: 10px; }
+.privacy { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--muted); max-width: 30ch; }
+.privacy svg { flex: none; color: var(--good); }
+@media (max-width: 760px) { .mast { grid-template-columns: 1fr; } .privacy { max-width: none; } }
+
+.layout { display: grid; grid-template-columns: minmax(300px, 350px) minmax(0, 1fr); gap: 28px; align-items: start; }
+.trustlink { display: none; font-size: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+@media (max-width: 920px) {
+  .layout { display: flex; flex-direction: column; align-items: stretch; gap: 20px; }
+  .side { display: contents; }
+  .side > .panel { order: 1; }
+  .main { order: 2; }
+  .side > .checks { order: 3; scroll-margin-top: 16px; }
+  .trustlink { display: block; }
+}
+.side { display: flex; flex-direction: column; gap: 20px; }
+.main { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+
+/* buttons and inputs */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 600 14px/1.2 var(--body); cursor: pointer; text-decoration: none; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible, .drop:focus-visible, .jump:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+#file:focus-visible + .file-label { outline: 3px solid var(--accent); outline-offset: 2px; }
+select, input[type="text"], textarea { width: 100%; font: 400 14px/1.4 var(--body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+textarea { resize: vertical; }
+label.field { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--ink); }
+label.field span.opt { font-weight: 400; color: var(--muted); }
+
+/* file panel */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.drop { border: 1.5px dashed var(--line); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: var(--surface-2); transition: border-color .15s, background .15s; }
+.drop.over { border-color: var(--accent); background: var(--accent-soft); }
+.drop .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.hint { font-size: 13px; color: var(--muted); }
+.status { font-size: 13px; color: var(--ink); }
+.status strong { font-weight: 600; }
+.error { font-size: 13px; color: var(--bad); background: var(--bad-soft); border-radius: 8px; padding: 10px 12px; }
+details.mapping > summary { cursor: pointer; font-weight: 600; font-size: 14px; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+details.mapping > summary::-webkit-details-marker { display: none; }
+details.mapping > summary::after { content: "Show"; font-weight: 500; font-size: 13px; color: var(--accent); }
+details.mapping[open] > summary::after { content: "Hide"; }
+.map-grid { display: grid; gap: 10px; margin-top: 12px; }
+.map-note { font-size: 13px; color: var(--muted); margin-top: 10px; }
+
+/* the receipt */
+.receipt-wrap { filter: drop-shadow(0 2px 2px rgba(20, 24, 28, .10)) drop-shadow(0 10px 18px rgba(20, 24, 28, .10)); }
+.receipt {
+  --zig: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 14px 100%;
+  -webkit-mask: var(--zig); mask: var(--zig);
+  background: var(--paper); color: var(--paper-ink);
+  font-family: var(--mono); font-size: 14px; line-height: 1.45;
+  padding: 20px 18px 30px;
+}
+.receipt .head { text-align: center; text-transform: uppercase; letter-spacing: .06em; display: grid; gap: 2px; }
+.receipt .head .shop { font-weight: 700; font-size: 15px; }
+.receipt .head .meta { font-size: 12px; word-break: break-word; }
+.receipt .rule { border-top: 1.5px dashed currentColor; opacity: .55; margin: 12px 0; }
+.receipt .ln { display: flex; align-items: baseline; gap: 6px; }
+.receipt .ln .lbl { flex: 0 1 auto; }
+.receipt .ln .dots { flex: 1 1 12px; min-width: 12px; border-bottom: 1.5px dotted currentColor; opacity: .45; transform: translateY(-4px); }
+.receipt .ln .val { flex: none; font-variant-numeric: tabular-nums; }
+.receipt .ln.total { font-weight: 700; text-transform: uppercase; }
+.receipt .sub { font-size: 12px; padding-left: 14px; opacity: .85; }
+.receipt .foot { text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; margin-top: 14px; }
+
+/* checks */
+.checks { display: flex; flex-direction: column; gap: 10px; }
+.checks h3 { font-size: 17px; }
+.check { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+.check .t { font-weight: 600; font-size: 14px; }
+.check .d { grid-column: 1 / -1; font-size: 13px; color: var(--muted); }
+.check .d code { font-family: var(--mono); font-size: 13px; color: var(--ink); background: var(--surface-2); padding: 0 4px; border-radius: 4px; }
+.chip { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+.chip.fixed { background: var(--good-soft); color: var(--good); }
+.chip.handled { background: var(--accent-soft); color: var(--accent); }
+.chip.heads { background: var(--warn-soft); color: var(--warn); }
+.chip.needs { background: var(--bad-soft); color: var(--bad); }
+.chip.clear { background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); }
+.clear-line { font-size: 13px; color: var(--muted); }
+
+/* main column */
+.main-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; }
+.main-head .range { font-size: 14px; color: var(--muted); }
+.pill { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+.findings { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 640px) { .findings { grid-template-columns: minmax(0, 1fr); } }
+.findings a.jump { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; padding: 12px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); text-decoration: none; font-size: 14px; height: 100%; }
+.findings a.jump:hover { border-color: var(--accent); }
+.findings .k { font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 2px; }
+.findings .dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; background: var(--accent); }
+.findings .dot.warn { background: var(--warn); }
+.findings .dot.muted { background: var(--muted); }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 14px; scroll-margin-top: 16px; min-width: 0; }
+.card .q { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--accent); }
+.card .answer { font-size: 16px; max-width: 68ch; }
+.card .answer strong { font-weight: 700; }
+.card .note { font-size: 13px; color: var(--muted); max-width: 72ch; }
+.card .empty { font-size: 15px; color: var(--muted); }
+
+/* chart */
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart .tick { fill: var(--muted); font: 500 12px var(--body); font-variant-numeric: tabular-nums; }
+.chart .gridline { stroke: var(--grid); stroke-width: 1; }
+.chart .baseline { stroke: var(--line); stroke-width: 1; }
+.chart .bar { fill: var(--bar); transition: opacity .12s; }
+.chart .bar.partial { fill: var(--bar-soft); }
+.chart .pace { fill: none; stroke: var(--bar); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.chart .hit { fill: transparent; cursor: pointer; outline: none; }
+.chart .hit:focus-visible + .focusmark { stroke: var(--accent); }
+.chart .focusmark { fill: none; stroke: transparent; stroke-width: 2; }
+.chart g.dim .bar { opacity: .45; }
+.readout { font-size: 14px; min-height: 22px; font-variant-numeric: tabular-nums; }
+.readout strong { font-weight: 700; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; background: var(--bar); }
+.legend i.p { background: var(--bar-soft); }
+.legend i.d { background: none; border: 1.5px dashed var(--bar); }
+
+/* concentration bar */
+.conc { display: grid; gap: 6px; }
+.conc .track { display: flex; height: 28px; border-radius: 6px; overflow: hidden; background: var(--surface-2); border: 1px solid var(--line); }
+.conc .track .a { background: var(--accent); }
+.conc .track .b { background: var(--bar-soft); }
+.conc .labels { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.conc .labels strong { color: var(--ink); }
+
+/* tables */
+.tablebox { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: var(--surface-2); }
+td.r, th.r { text-align: right; }
+tbody tr:last-child td { border-bottom: 0; }
+td.id { font-family: var(--mono); font-size: 13px; }
+
+/* channel bars */
+.chan { display: grid; gap: 12px; }
+.chan .row { display: grid; grid-template-columns: minmax(96px, 150px) minmax(0, 1fr) auto; gap: 6px 14px; align-items: center; }
+.chan .name { font-weight: 600; font-size: 14px; overflow-wrap: anywhere; }
+.chan .barbox { height: 22px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+.chan .barbox i { display: block; height: 100%; background: var(--bar); border-radius: 4px; }
+.chan .val { font-weight: 700; font-variant-numeric: tabular-nums; min-width: 4.5ch; text-align: right; }
+.chan .meta { grid-column: 2 / 4; font-size: 13px; color: var(--muted); margin-top: -4px; font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) {
+  .chan .row { grid-template-columns: minmax(0, 1fr) auto; }
+  .chan .name { grid-column: 1 / 3; }
+  .chan .meta { grid-column: 1 / 3; }
+}
+
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.copied { font-size: 13px; color: var(--good); }
+.ai-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+@media (max-width: 640px) { .ai-grid { grid-template-columns: minmax(0, 1fr); } }
+#prompt { font-family: var(--mono); font-size: 13px; line-height: 1.5; min-height: 260px; background: var(--surface-2); }
+.inout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; font-size: 13px; }
+.inout div { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; }
+.inout b { display: block; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 2px; }
+.inout .yes b { color: var(--good); }
+.inout .no b { color: var(--bad); }
+@media (max-width: 520px) { .inout { grid-template-columns: minmax(0, 1fr); } }
+
+footer { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+<!-- BODY -->
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <h1>Small Business Decision Kit</h1>
+      <p class="lede">This kit reads the sales export your shop already has and answers four questions in plain English. It also checks the file first, so you know which numbers you can trust.</p>
+    </div>
+    <p class="privacy">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Zm-1.2 14.2-3.5-3.5 1.4-1.4 2.1 2.1 4.9-4.9 1.4 1.4-6.3 6.3Z"/></svg>
+      <span>Your file is read inside this browser. Nothing is uploaded or stored.</span>
+    </p>
+  </header>
+
+  <div class="layout">
+    <aside class="side" aria-label="Your file">
+      <section class="panel" aria-labelledby="file-h">
+        <h2 id="file-h" style="font-size:19px">Your sales file</h2>
+        <div class="drop" id="drop" tabindex="0" aria-describedby="drop-hint">
+          <div class="btns">
+            <input type="file" id="file" accept=".csv,text/csv,.txt,.tsv" class="sr-only">
+            <label class="btn primary file-label" for="file">Choose a CSV file</label>
+            <button type="button" class="btn" id="useSample">Use the sample shop</button>
+          </div>
+          <p class="hint" id="drop-hint">You can also drag a file here. Square, Shopify, Stripe, Toast and most spreadsheets can export one. The kit expects one row per order.</p>
+        </div>
+        <p class="status" id="status" aria-live="polite"></p>
+        <p class="error" id="fileError" hidden></p>
+        <details class="mapping" id="mapping">
+          <summary>Columns the kit is using</summary>
+          <div class="map-grid">
+            <label class="field" for="map-date">Order date
+              <select id="map-date"></select></label>
+            <label class="field" for="map-amount">Amount
+              <select id="map-amount"></select></label>
+            <label class="field" for="map-customer">Customer <span class="opt">(an ID, email or name)</span>
+              <select id="map-customer"></select></label>
+            <label class="field" for="map-channel">Where the customer came from <span class="opt">(optional)</span>
+              <select id="map-channel"></select></label>
+            <label class="field" for="map-order">Order number <span class="opt">(optional)</span>
+              <select id="map-order"></select></label>
+            <label class="field" for="map-style">How dates are written
+              <select id="map-style">
+                <option value="auto">Figure it out from the file</option>
+                <option value="mdy">Month first (09/17/2026)</option>
+                <option value="dmy">Day first (17/09/2026)</option>
+              </select></label>
+          </div>
+          <p class="map-note" id="mapNote">The kit guessed these from your column names. Change any that look wrong and everything updates.</p>
+        </details>
+      </section>
+
+      <section aria-labelledby="trust-h" class="checks" id="trust">
+        <h2 id="trust-h" style="font-size:19px">Can I trust this file?</h2>
+        <div class="receipt-wrap"><div class="receipt" id="receipt"></div></div>
+        <div class="checks" id="checks"></div>
+      </section>
+    </aside>
+
+    <main class="main" id="main">
+      <div class="main-head">
+        <h2 id="main-h">What your file says</h2>
+        <span id="sampleBadge" class="pill">Sample data</span>
+      </div>
+      <p class="range" id="range"></p>
+      <p class="error" id="mainError" hidden></p>
+      <p class="trustlink" id="trustLink"></p>
+      <ul class="findings" id="findings"></ul>
+
+      <section class="card" id="growth" aria-labelledby="growth-h">
+        <p class="q">Is the business growing?</p>
+        <h3 id="growth-h" class="sr-only">Sales by month</h3>
+        <p class="answer" id="growthAnswer"></p>
+        <div class="legend" id="growthLegend">
+          <span><i></i>Full month</span>
+          <span><i class="p"></i>Partial month so far</span>
+          <span><i class="d"></i>Where it is heading at the current pace</span>
+        </div>
+        <div class="chart" id="monthChart"></div>
+        <p class="readout" id="readout" aria-live="polite"></p>
+        <p class="note">Sales here are net: refunds are subtracted, duplicate rows are removed. Tap or hover a month to see its total.</p>
+      </section>
+
+      <section class="card" id="best" aria-labelledby="best-h">
+        <p class="q">Who are my best customers?</p>
+        <h3 id="best-h" class="sr-only">Best customers</h3>
+        <p class="answer" id="bestAnswer"></p>
+        <div class="conc" id="conc"></div>
+        <div class="tablebox" id="bestTableBox"></div>
+        <p class="note" id="bestNote"></p>
+      </section>
+
+      <section class="card" id="channels" aria-labelledby="chan-h">
+        <p class="q">Where do my best customers come from?</p>
+        <h3 id="chan-h" class="sr-only">Customer value by channel</h3>
+        <p class="answer" id="chanAnswer"></p>
+        <div class="chan" id="chanBars"></div>
+        <p class="note" id="chanNote"></p>
+      </section>
+
+      <section class="card" id="drift" aria-labelledby="drift-h">
+        <p class="q">Who is drifting away?</p>
+        <h3 id="drift-h" class="sr-only">Regular customers who have gone quiet</h3>
+        <p class="answer" id="driftAnswer"></p>
+        <div class="tablebox" id="driftTableBox"></div>
+        <div class="actions" id="driftActions">
+          <button type="button" class="btn" id="driftMore" hidden></button>
+          <button type="button" class="btn primary" id="driftCopy">Copy this list</button>
+          <span class="copied" id="driftCopied" aria-live="polite"></span>
+        </div>
+        <textarea id="driftFallback" rows="6" hidden aria-label="The list as text"></textarea>
+        <p class="note">A regular here is someone with at least three orders. They count as drifting when the time since their last order is more than double their own usual gap, at least 30 days, and under six months. The copied list pastes straight into a spreadsheet.</p>
+      </section>
+
+      <section class="card" id="ask" aria-labelledby="ask-h">
+        <p class="q">Ask an AI about these numbers</p>
+        <h3 id="ask-h" class="sr-only">Build a privacy-safe prompt</h3>
+        <p class="answer">The kit writes a prompt you can paste into Claude, ChatGPT, Gemini or any AI chat. It holds totals and averages only, and it tells the AI to stick to them.</p>
+        <div class="ai-grid">
+          <label class="field" for="biz">What kind of business is this?
+            <input type="text" id="biz" autocomplete="off"></label>
+          <label class="field" for="question">What do you want to ask?
+            <textarea id="question" rows="2"></textarea></label>
+        </div>
+        <label class="field" for="prompt">Your prompt
+          <textarea id="prompt" readonly rows="14"></textarea></label>
+        <div class="actions">
+          <button type="button" class="btn primary" id="copyPrompt">Copy prompt</button>
+          <span class="copied" id="promptCopied" aria-live="polite"></span>
+        </div>
+        <div class="inout">
+          <div class="yes"><b>Included</b>Monthly totals, counts, percentages and averages by channel.</div>
+          <div class="no"><b>Never included</b>Customer IDs, names, emails, or any single order.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <span>Built by Chike Okwudiafor. Free and open source under the MIT License.</span>
+    <span>The sample shop, Hilltop Coffee Roasters, is made up. Its data is generated.</span>
+  </footer>
+</div>
+
+<script type="text/csv" id="sample-csv">__SAMPLE_CSV__</script>
+<script>
+(function () {
+  'use strict';
+
+  /* small helpers */
+  var $ = function (id) { return document.getElementById(id); };
+  var DAY = 86400000;
+  var MONTH_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var MONTH_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var MONTHS = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, sept: 9, oct: 10, nov: 11, dec: 12,
+    january: 1, february: 2, march: 3, april: 4, june: 6, july: 7, august: 8, september: 9, october: 10, november: 11, december: 12 };
+
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function money(v, cents) {
+    var n = Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: cents ? 2 : 0 });
+    return (v < 0 ? '−' : '') + '$' + n;
+  }
+  function plainMoney(v) { return (v < 0 ? '-' : '') + '$' + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function count(n) { return n.toLocaleString('en-US'); }
+  function plural(n, one, many) { return count(n) + ' ' + (n === 1 ? one : (many || one + 's')); }
+  function pct(x) { return Math.round(x * 100) + '%'; }
+  function round2(x) { return Math.round(x * 100) / 100; }
+  function median(a) { var s = a.slice().sort(function (x, y) { return x - y; }); var m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+
+  function mkDay(y, mo, d) {
+    if (!(y >= 1990 && y <= 2100) || mo < 1 || mo > 12 || d < 1) return null;
+    var dim = new Date(Date.UTC(y, mo, 0)).getUTCDate();
+    if (d > dim) return null;
+    return Date.UTC(y, mo - 1, d) / DAY;
+  }
+  function parts(day) { var t = new Date(day * DAY); return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate() }; }
+  function daysInMonth(y, m) { return new Date(Date.UTC(y, m, 0)).getUTCDate(); }
+  function fmtDay(day) { var p = parts(day); return MONTH_SHORT[p.m - 1] + ' ' + p.d + ', ' + p.y; }
+  function isoDay(day) { var p = parts(day); return p.y + '-' + String(p.m).padStart(2, '0') + '-' + String(p.d).padStart(2, '0'); }
+  function monthName(key, long) { var y = +key.slice(0, 4), m = +key.slice(5, 7); return (long ? MONTH_LONG : MONTH_SHORT)[m - 1] + ' ' + y; }
+
+  /* reading the file */
+  function parseCSV(text) {
+    if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+    var nl = text.indexOf('\n');
+    var first = nl >= 0 ? text.slice(0, nl) : text;
+    var delim = ',', best = -1;
+    [',', ';', '\t'].forEach(function (c) { var n = first.split(c).length; if (n > best) { best = n; delim = c; } });
+    var rows = [], row = [], field = '', inQ = false, i = 0, L = text.length, ch;
+    while (i < L) {
+      ch = text[i];
+      if (inQ) {
+        if (ch === '"') { if (text[i + 1] === '"') { field += '"'; i += 2; continue; } inQ = false; i++; continue; }
+        field += ch; i++; continue;
+      }
+      if (ch === '"') { inQ = true; i++; continue; }
+      if (ch === delim) { row.push(field); field = ''; i++; continue; }
+      if (ch === '\r') { i++; continue; }
+      if (ch === '\n') { row.push(field); rows.push(row); row = []; field = ''; i++; continue; }
+      field += ch; i++;
+    }
+    if (field !== '' || row.length) { row.push(field); rows.push(row); }
+    rows = rows.filter(function (r) { return r.some(function (c) { return c.trim() !== ''; }); });
+    return { header: (rows[0] || []).map(function (h) { return h.trim(); }), rows: rows.slice(1) };
+  }
+
+  function parseDate(s, style) {
+    if (s == null) return null;
+    var t = String(s).trim(), m;
+    if (!t) return null;
+    if ((m = t.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})(?=$|[T\s])/))) return mkDay(+m[1], +m[2], +m[3]);
+    if ((m = t.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4}|\d{2})(?=$|[T\s,])/))) {
+      var a = +m[1], b = +m[2], y = +m[3];
+      if (y < 100) y += 2000;
+      return style === 'dmy' ? mkDay(y, b, a) : mkDay(y, a, b);
+    }
+    if ((m = t.match(/^(\d{1,2})\s+([A-Za-z]{3,9})\.?,?\s+(\d{4})/))) { var mo = MONTHS[m[2].toLowerCase()]; return mo ? mkDay(+m[3], mo, +m[1]) : null; }
+    if ((m = t.match(/^(?:[A-Za-z]{3,9},?\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})/))) { var mo2 = MONTHS[m[1].toLowerCase()]; return mo2 ? mkDay(+m[3], mo2, +m[2]) : null; }
+    return null;
+  }
+
+  function detectStyle(values) {
+    var dmy = 0, mdy = 0, slashy = 0;
+    for (var i = 0; i < values.length; i++) {
+      var m = String(values[i] || '').trim().match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})/);
+      if (!m) continue;
+      slashy++;
+      var a = +m[1], b = +m[2];
+      if (a > 12 && b <= 12) dmy++;
+      else if (b > 12 && a <= 12) mdy++;
+    }
+    return { style: dmy > mdy ? 'dmy' : 'mdy', ambiguous: slashy > 0 && dmy === 0 && mdy === 0, slashy: slashy };
+  }
+
+  function parseAmount(s) {
+    if (s == null) return null;
+    var t = String(s).trim();
+    if (!t) return null;
+    var neg = false;
+    if (/^\(.*\)$/.test(t)) { neg = true; t = t.slice(1, -1); }
+    t = t.replace(/[−–]/g, '-');
+    if (/-\s*$/.test(t)) { neg = true; t = t.replace(/-\s*$/, ''); }
+    t = t.replace(/[^0-9.,\-]/g, '');
+    if (/^-?\d+,\d{1,2}$/.test(t)) t = t.replace(',', '.');
+    else t = t.replace(/,/g, '');
+    if (!/^-?(\d+\.?\d*|\.\d+)$/.test(t)) return null;
+    var v = parseFloat(t);
+    if (!isFinite(v)) return null;
+    if (neg) v = -Math.abs(v);
+    return v;
+  }
+
+  var ALIASES = {
+    date: ['order date', 'date', 'created at', 'created', 'created (utc)', 'transaction date', 'sale date', 'paid at', 'invoice date', 'datetime', 'timestamp', 'time', 'day'],
+    amount: ['amount', 'total', 'net sales', 'net total', 'order total', 'total amount', 'amount paid', 'total money', 'total collected', 'grand total', 'gross sales', 'net amount', 'sales', 'revenue', 'subtotal', 'price'],
+    customer: ['customer id', 'customer', 'customer email', 'email', 'client id', 'client', 'customer number', 'member id', 'customer name', 'buyer email', 'buyer', 'phone'],
+    channel: ['channel', 'source', 'sales channel', 'referral source', 'utm source', 'marketing channel', 'acquisition channel', 'lead source', 'source name', 'how did you hear about us', 'how did you hear'],
+    order: ['order id', 'order number', 'order no', 'order', 'transaction id', 'payment id', 'receipt number', 'receipt', 'invoice number', 'invoice', 'sale id', 'name', 'id']
+  };
+  function norm(s) { return String(s).toLowerCase().replace(/[_\-#]+/g, ' ').replace(/[^a-z0-9 ()]/g, '').replace(/\s+/g, ' ').trim(); }
+  function guessMapping(header) {
+    var H = header.map(norm), used = {}, map = {};
+    ['date', 'amount', 'customer', 'channel', 'order'].forEach(function (f) {
+      var hit = -1, list = ALIASES[f];
+      for (var a = 0; a < list.length && hit < 0; a++) for (var i = 0; i < H.length; i++) if (!used[i] && H[i] === list[a]) { hit = i; break; }
+      if (hit < 0) for (var a2 = 0; a2 < list.length && hit < 0; a2++) {
+        if (list[a2].length < 5) continue;
+        for (var j = 0; j < H.length; j++) if (!used[j] && H[j].indexOf(list[a2]) >= 0) { hit = j; break; }
+      }
+      map[f] = hit;
+      if (hit >= 0) used[hit] = true;
+    });
+    return map;
+  }
+
+  /* the analysis */
+  function analyze(data, map, styleSetting) {
+    var R = { ok: false };
+    if (map.date < 0 || map.amount < 0) { R.error = 'Pick the columns that hold the order date and the amount, and the kit will read your file.'; return R; }
+    var rows = data.rows;
+    var det = detectStyle(rows.map(function (r) { return r[map.date]; }));
+    var style = styleSetting === 'auto' ? det.style : styleSetting;
+    R.dateStyle = style; R.dateAmbiguous = styleSetting === 'auto' && det.ambiguous;
+
+    var seen = new Set(), rawSum = 0, dups = [], badDates = [], badAmts = [], used = [];
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i];
+      var a = parseAmount(r[map.amount]);
+      if (a != null) rawSum += a;
+      var key = r.map(function (c) { return (c || '').trim(); }).join('\u0001');
+      if (seen.has(key)) { dups.push({ r: r, a: a }); continue; }
+      seen.add(key);
+      var d = parseDate(r[map.date], style);
+      if (d == null) { badDates.push({ r: r, a: a }); continue; }
+      if (a == null) { badAmts.push({ r: r }); continue; }
+      used.push({
+        i: i, day: d, amt: a,
+        cust: map.customer >= 0 ? String(r[map.customer] || '').trim() : '',
+        ch: map.channel >= 0 ? (String(r[map.channel] || '').trim() || '(blank)') : '',
+        order: map.order >= 0 ? String(r[map.order] || '').trim() : ''
+      });
+    }
+    R.rowsInFile = rows.length;
+    R.rawSum = round2(rawSum);
+    R.dups = dups.length; R.dupSum = round2(dups.reduce(function (s, x) { return s + (x.a || 0); }, 0));
+    R.badDates = badDates.map(function (x) { return { text: String(x.r[map.date] || '').trim(), order: map.order >= 0 ? String(x.r[map.order] || '').trim() : '', a: x.a }; });
+    R.badDateSum = round2(badDates.reduce(function (s, x) { return s + (x.a || 0); }, 0));
+    R.badAmts = badAmts.map(function (x) { return String(x.r[map.amount] || '').trim(); });
+    R.used = used;
+    if (!used.length) { R.error = 'None of the rows could be read. Check that the Order date and Amount columns are matched correctly.'; return R; }
+
+    R.net = round2(used.reduce(function (s, u) { return s + u.amt; }, 0));
+    var refunds = used.filter(function (u) { return u.amt < 0; });
+    R.refunds = refunds.length; R.refundSum = round2(refunds.reduce(function (s, u) { return s + u.amt; }, 0));
+    R.orders = used.filter(function (u) { return u.amt > 0; }).length;
+    R.zeros = used.filter(function (u) { return u.amt === 0; }).length;
+    R.hasCustomer = map.customer >= 0; R.hasChannel = map.channel >= 0; R.hasOrder = map.order >= 0;
+    R.missingCust = R.hasCustomer ? used.filter(function (u) { return !u.cust; }).length : 0;
+
+    // order numbers that repeat with different details
+    if (R.hasOrder) {
+      var oc = new Map();
+      used.forEach(function (u) { if (u.amt >= 0 && u.order) oc.set(u.order, (oc.get(u.order) || 0) + 1); });
+      var ids = 0, extra = 0;
+      oc.forEach(function (n) { if (n > 1) { ids++; extra += n - 1; } });
+      R.orderConflicts = ids; R.orderConflictRows = extra;
+    }
+
+    // dates and months
+    var minDay = Infinity, maxDay = -Infinity;
+    used.forEach(function (u) { if (u.day < minDay) minDay = u.day; if (u.day > maxDay) maxDay = u.day; });
+    R.minDay = minDay; R.asOf = maxDay;
+    var p0 = parts(minDay), p1 = parts(maxDay);
+    var months = [], byKey = {};
+    for (var y = p0.y, m = p0.m; y < p1.y || (y === p1.y && m <= p1.m); m === 12 ? (y++, m = 1) : m++) {
+      var k = y + '-' + String(m).padStart(2, '0');
+      var o = { key: k, y: y, m: m, net: 0, orders: 0, start: Date.UTC(y, m - 1, 1) / DAY, dim: daysInMonth(y, m), partial: false };
+      months.push(o); byKey[k] = o;
+    }
+    used.forEach(function (u) { var p = parts(u.day); var o = byKey[p.y + '-' + String(p.m).padStart(2, '0')]; o.net += u.amt; if (u.amt > 0) o.orders++; });
+    months.forEach(function (o) { o.net = round2(o.net); });
+    var first = months[0], last = months[months.length - 1];
+    if (p0.d > 1) { first.partial = true; first.from = minDay; }
+    if (p1.d < last.dim) {
+      last.partial = true;
+      var startCov = Math.max(last.start, minDay);
+      last.daysCovered = maxDay - startCov + 1;
+      last.pace = round2(last.net / last.daysCovered * last.dim);
+      last.through = p1.d;
+    }
+    R.months = months;
+    R.full = months.filter(function (o) { return !o.partial; });
+
+    // trend
+    var F = R.full, T = { kind: 'none' };
+    if (F.length >= 6) {
+      var a3 = F.slice(-3), b3 = F.slice(-6, -3);
+      T = { kind: 'q', a: avg(a3), b: avg(b3), aFrom: a3[0].key, aTo: a3[2].key, bFrom: b3[0].key, bTo: b3[2].key };
+    } else if (F.length >= 2) {
+      T = { kind: 'm', a: F[F.length - 1].net, b: F[F.length - 2].net, aFrom: F[F.length - 1].key, bFrom: F[F.length - 2].key };
+    }
+    if (T.kind !== 'none') T.change = T.b > 0 ? T.a / T.b - 1 : null;
+    if (F.length) { T.best = F.reduce(function (x, o) { return o.net > x.net ? o : x; }, F[0]); }
+    R.trend = T;
+
+    // customers
+    R.customers = null;
+    if (R.hasCustomer) {
+      var C = new Map();
+      used.slice().sort(function (x, y2) { return x.day - y2.day || x.i - y2.i; }).forEach(function (u) {
+        if (!u.cust) return;
+        var key2 = u.cust.toLowerCase();
+        var c = C.get(key2);
+        if (!c) { c = { id: u.cust, net: 0, orders: 0, days: new Set(), first: null, ch: '', last: null }; C.set(key2, c); }
+        c.net += u.amt;
+        if (u.amt > 0) {
+          c.orders++; c.days.add(u.day);
+          if (c.first == null) { c.first = u.day; c.ch = u.ch; }
+          c.last = u.day;
+        }
+      });
+      var buyers = [];
+      C.forEach(function (c) { if (c.orders >= 1) { c.net = round2(c.net); buyers.push(c); } });
+      if (buyers.length) {
+        buyers.sort(function (x, y2) { return y2.net - x.net; });
+        var topK = Math.max(1, Math.round(buyers.length * 0.2));
+        var total = buyers.reduce(function (s, c) { return s + c.net; }, 0);
+        var topSum = buyers.slice(0, topK).reduce(function (s, c) { return s + c.net; }, 0);
+        var repeaters = buyers.filter(function (c) { return c.orders >= 2; }).length;
+        R.customers = { list: buyers, n: buyers.length, topK: topK, topShare: total > 0 ? topSum / total : 0, total: total, repeatRate: repeaters / buyers.length, avgSpend: total / buyers.length };
+
+        // channels (by where each customer first came from)
+        if (R.hasChannel) {
+          var cutoff = maxDay - 90;
+          var elig = buyers.filter(function (c) { return c.first <= cutoff; });
+          var allUsed = false;
+          if (elig.length < 30) { elig = buyers; allUsed = true; }
+          var G = new Map();
+          elig.forEach(function (c) { var g = G.get(c.ch); if (!g) { g = { ch: c.ch, n: 0, rep: 0, net: 0 }; G.set(c.ch, g); } g.n++; g.net += c.net; if (c.orders >= 2) g.rep++; });
+          var rowsC = [];
+          G.forEach(function (g) { rowsC.push({ ch: g.ch, n: g.n, repeat: g.rep / g.n, avg: g.net / g.n }); });
+          rowsC.sort(function (x, y2) { return y2.avg - x.avg; });
+          R.channels = { rows: rowsC, allUsed: allUsed, cutoff: cutoff, eligible: elig.length };
+        }
+
+        // regulars who have gone quiet
+        var risk = [], lost = 0;
+        buyers.forEach(function (c) {
+          if (c.days.size < 3) return;
+          var d = Array.from(c.days).sort(function (x, y2) { return x - y2; });
+          var gaps = [];
+          for (var g2 = 1; g2 < d.length; g2++) gaps.push(d[g2] - d[g2 - 1]);
+          var typical = median(gaps);
+          var since = maxDay - d[d.length - 1];
+          if (since >= 30 && since > 2 * typical) {
+            if (since <= 180) risk.push({ id: c.id, typical: typical, since: since, last: d[d.length - 1], net: c.net, ch: c.ch, orders: c.orders });
+            else lost++;
+          }
+        });
+        risk.sort(function (x, y2) { return y2.net - x.net; });
+        R.risk = { list: risk, lost: lost, spent: risk.reduce(function (s, x) { return s + x.net; }, 0), typical: risk.length ? median(risk.map(function (x) { return x.typical; })) : null };
+      }
+    }
+    R.ok = true;
+    return R;
+  }
+  function avg(list) { return list.reduce(function (s, o) { return s + o.net; }, 0) / list.length; }
+
+  /* state */
+  var SAMPLE_NAME = 'Hilltop Coffee Roasters';
+  var state = { data: null, fileName: '', isSample: true, map: null, style: 'auto', result: null, riskOpen: false };
+  var FIELDS = ['date', 'amount', 'customer', 'channel', 'order'];
+
+  function loadText(text, name, isSample) {
+    var data = parseCSV(text);
+    $('fileError').hidden = true;
+    if (!data.header.length || !data.rows.length) { showFileError('That file looks empty. Export your sales again and choose the new file.'); return; }
+    state.data = data; state.fileName = name; state.isSample = isSample; state.style = 'auto'; state.riskOpen = false;
+    state.map = guessMapping(data.header);
+    $('map-style').value = 'auto';
+    fillSelects();
+    $('biz').value = isSample ? 'coffee roaster' : '';
+    run();
+    var needs = state.map.date < 0 || state.map.amount < 0;
+    $('mapping').open = needs;
+  }
+  function showFileError(msg) { var e = $('fileError'); e.textContent = msg; e.hidden = false; }
+
+  function fillSelects() {
+    FIELDS.forEach(function (f) {
+      var sel = $('map-' + f);
+      var opts = '<option value="-1">' + (f === 'date' || f === 'amount' ? 'Choose a column' : 'Not in my file') + '</option>';
+      state.data.header.forEach(function (h, i) { opts += '<option value="' + i + '">' + esc(h || ('Column ' + (i + 1))) + '</option>'; });
+      sel.innerHTML = opts;
+      sel.value = String(state.map[f]);
+    });
+  }
+
+  function run() {
+    var R = analyze(state.data, state.map, state.style);
+    state.result = R;
+    render(R);
+  }
+
+  /* rendering */
+  function render(R) {
+    var name = state.isSample ? 'the sample shop, ' + SAMPLE_NAME : state.fileName;
+    $('status').innerHTML = 'Now showing <strong>' + esc(name) + '</strong>, ' + plural(state.data.rows.length, 'row') + '.' + (state.isSample ? ' The shop and its data are made up.' : '');
+    $('sampleBadge').hidden = !state.isSample;
+    var note = 'The kit guessed these from your column names. Change any that look wrong and everything updates.';
+    if (R.dateAmbiguous) note += ' Dates like 03/04/2026 could mean March 4 or April 3, so the kit reads them month first. Switch to day first if that is wrong.';
+    else if (R.dateStyle === 'dmy' && state.style === 'auto') note += ' Your dates look day first (like 17/09/2026), so that is how the kit reads them.';
+    $('mapNote').textContent = note;
+
+    var main = ['findings', 'growth', 'best', 'channels', 'drift', 'ask', 'range', 'trustLink'];
+    if (!R.ok) {
+      $('mainError').textContent = R.error; $('mainError').hidden = false;
+      main.forEach(function (id) { $(id).hidden = true; });
+      $('receipt').innerHTML = '<div class="head"><span class="shop">Sales file check</span><span class="meta">Waiting for the date and amount columns</span></div>';
+      $('checks').innerHTML = '';
+      $('mapping').open = true;
+      return;
+    }
+    $('mainError').hidden = true;
+    main.forEach(function (id) { $(id).hidden = false; });
+    $('range').textContent = 'Covering ' + fmtDay(R.minDay) + ' to ' + fmtDay(R.asOf) + '. Everything below is measured as of the last day in the file.';
+
+    renderReceipt(R);
+    renderChecks(R);
+    renderGrowth(R);
+    renderBest(R);
+    renderChannels(R);
+    renderDrift(R);
+    renderFindings(R);
+    buildPrompt();
+  }
+
+  function ln(label, val, cls) { return '<div class="ln ' + (cls || '') + '"><span class="lbl">' + label + '</span><span class="dots"></span><span class="val">' + val + '</span></div>'; }
+  function renderReceipt(R) {
+    var shop = state.isSample ? SAMPLE_NAME : 'Your sales file';
+    var h = '<div class="head"><span class="shop">' + esc(shop) + '</span><span class="meta">Sales file check</span><span class="meta">' + esc(state.isSample ? 'hilltop-coffee-orders.csv' : state.fileName) + '</span><span class="meta">' + fmtDay(R.minDay) + ' to ' + fmtDay(R.asOf) + '</span></div>';
+    h += '<div class="rule"></div>';
+    h += ln('Rows in file', count(R.rowsInFile));
+    if (R.dups) h += ln('Duplicates removed', '−' + count(R.dups));
+    if (R.badDates.length) h += ln('Unreadable dates', '−' + count(R.badDates.length));
+    if (R.badAmts.length) h += ln('Unreadable amounts', '−' + count(R.badAmts.length));
+    h += ln('Rows used', count(R.used.length), 'total');
+    h += '<div class="rule"></div>';
+    h += ln('Amount column, added up', money(R.rawSum, true));
+    if (R.dups) h += ln('Duplicate rows', money(-R.dupSum, true));
+    if (R.badDateSum) h += ln('Rows with bad dates', money(-R.badDateSum, true));
+    h += ln('Net sales you can trust', money(R.net, true), 'total');
+    if (R.refunds) h += '<div class="sub">includes ' + plural(R.refunds, 'refund') + ' (' + money(R.refundSum, true) + ')</div>';
+    h += '<div class="sub">' + plural(R.orders, 'order') + '</div>';
+    h += '<div class="foot">Checked in your browser<br>Nothing uploaded</div>';
+    $('receipt').innerHTML = h;
+  }
+
+  function check(chip, label, title, desc) { return '<div class="check"><span class="chip ' + chip + '">' + label + '</span><span class="t">' + title + '</span><p class="d">' + desc + '</p></div>'; }
+  function renderChecks(R) {
+    var h = '', clear = [];
+    if (R.dups) h += check('fixed', 'Fixed', plural(R.dups, 'duplicate row'), 'These rows matched another row in every column, so the extra copies were removed. Exports that run twice often cause this. Together they would have added ' + money(R.dupSum, true) + ' that never happened.');
+    else clear.push('no duplicate rows');
+    if (R.badDates.length) {
+      var ex = R.badDates.slice(0, 3).map(function (b) { return '<code>' + esc(b.text || '(blank)') + '</code>' + (b.order ? ' on order ' + esc(b.order) : ''); }).join(', ');
+      h += check('needs', 'Needs you', plural(R.badDates.length, 'unreadable date'), 'The kit could not read ' + ex + '. ' + (R.badDates.length === 1 ? 'That row is' : 'Those rows are') + ' left out' + (R.badDateSum ? ' (' + money(R.badDateSum, true) + ')' : '') + ' until the date is fixed in your file.');
+    } else clear.push('every date readable');
+    if (R.badAmts.length) h += check('needs', 'Needs you', plural(R.badAmts.length, 'unreadable amount'), 'Values like <code>' + esc(R.badAmts[0] || '(blank)') + '</code> are not numbers, so those rows are left out.');
+    else clear.push('every amount readable');
+    if (R.refunds) h += check('handled', 'Handled', plural(R.refunds, 'refund'), 'Negative amounts are treated as refunds. They are subtracted from sales (' + money(R.refundSum, true) + '), but they do not count as orders.');
+    if (R.hasCustomer && R.missingCust) h += check('heads', 'Heads up', plural(R.missingCust, 'order') + ' with no customer', 'These still count toward sales. They are left out of the customer answers because the kit cannot tell who placed them.');
+    else if (R.hasCustomer) clear.push('every order has a customer');
+    if (!R.hasCustomer) h += check('heads', 'Heads up', 'No customer column', 'Without a customer column the kit can show sales over time, but not best customers, channels or drifting regulars. Match the column above if your file has one.');
+    var last = R.months[R.months.length - 1], first = R.months[0];
+    if (last.partial) h += check('handled', 'Handled', monthName(last.key, true) + ' is a partial month', 'The file stops on ' + fmtDay(R.asOf) + ', so ' + monthName(last.key, true) + ' has only ' + plural(last.daysCovered, 'day') + ' of sales. It is shown on its own so it does not look like a drop.');
+    if (first.partial && R.months.length > 1) h += check('handled', 'Handled', monthName(first.key, true) + ' is a partial month', 'The file starts on ' + fmtDay(R.minDay) + ', so that month is left out of the comparisons.');
+    if (R.hasOrder && R.orderConflicts) {
+      var many = R.orderConflictRows > 0.05 * R.used.length;
+      h += check('heads', 'Heads up', plural(R.orderConflicts, 'order number') + ' used more than once', many ? 'Many order numbers repeat with different details. Your file may list items instead of orders. Sales totals are still right, but order counts will be too high.' : 'These rows share an order number but have different details, so both were kept. It is worth a quick look in your system.');
+    } else if (R.hasOrder) clear.push('order numbers unique');
+    if (R.zeros) h += check('heads', 'Heads up', plural(R.zeros, 'order') + ' for $0', 'Free or comped orders are kept, but they are not counted as paid orders.');
+    var sum = [];
+    if (R.dups) sum.push(plural(R.dups, 'duplicate row') + ' removed');
+    if (R.badDates.length) sum.push(plural(R.badDates.length, 'unreadable date') + ' to fix');
+    if (R.badAmts.length) sum.push(plural(R.badAmts.length, 'unreadable amount') + ' to fix');
+    if (R.missingCust) sum.push(plural(R.missingCust, 'order') + ' with no customer');
+    $('trustLink').innerHTML = '<strong>File check:</strong> ' + (sum.length ? sum.join(', ') + '.' : 'nothing to fix.') + ' <a href="#trust">See the full check</a>';
+    if (clear.length) h += '<p class="clear-line"><span class="chip clear">All clear</span> ' + clear.join(', ') + '.</p>';
+    $('checks').innerHTML = h;
+  }
+
+  function changeWords(c) {
+    if (c == null) return { dir: 'flat', txt: '' };
+    if (c > 0.02) return { dir: 'up', txt: pct(c) + ' more than' };
+    if (c < -0.02) return { dir: 'down', txt: pct(-c) + ' less than' };
+    return { dir: 'flat', txt: 'about the same as' };
+  }
+  function renderGrowth(R) {
+    var T = R.trend, s = '';
+    if (T.kind === 'q') {
+      var w = changeWords(T.change);
+      s = (w.dir === 'up' ? '<strong>Yes, sales are growing.</strong> ' : w.dir === 'down' ? '<strong>Sales are slipping.</strong> ' : '<strong>Sales are steady.</strong> ');
+      s += 'Over the last three full months (' + monthName(T.aFrom) + ' to ' + monthName(T.aTo) + ') you averaged <strong>' + money(T.a) + ' a month</strong>, ' + w.txt + ' the three months before.';
+    } else if (T.kind === 'm') {
+      var w2 = changeWords(T.change);
+      s = 'There are only a few full months so far. ' + monthName(T.aFrom, true) + ' brought in <strong>' + money(T.a) + '</strong>, ' + w2.txt + ' ' + monthName(T.bFrom, true) + '.';
+    } else {
+      s = 'There is not a full month of sales in this file yet, so there is nothing to compare. The chart shows what is there so far.';
+    }
+    if (T.best && R.full.length >= 3) s += ' Your best full month was ' + monthName(T.best.key, true) + ' (' + money(T.best.net) + ').';
+    var last = R.months[R.months.length - 1];
+    if (last.partial && last.pace != null) s += ' ' + monthName(last.key, true) + ' only has data through the ' + ordinal(last.through) + '. At its current pace it would finish near ' + money(last.pace) + '.';
+    $('growthAnswer').innerHTML = s;
+    var hasPartial = R.months.some(function (o) { return o.partial; });
+    $('growthLegend').hidden = !hasPartial;
+    drawMonths(R);
+  }
+  function ordinal(n) { var s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
+
+  function niceMax(v) {
+    if (v <= 0) return 1;
+    var e = Math.pow(10, Math.floor(Math.log10(v))), f = v / e;
+    var n = f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10;
+    return n * e;
+  }
+  function shortMoney(v) { return v >= 1000 ? '$' + (v / 1000).toLocaleString('en-US', { maximumFractionDigits: v % 1000 === 0 ? 0 : 1 }) + 'k' : '$' + Math.round(v); }
+
+  var chartSel = null;
+  function drawMonths(R) {
+    var box = $('monthChart');
+    var W = Math.max(280, Math.round(box.clientWidth || 600));
+    var H = W < 480 ? 210 : 250;
+    var M = R.months, n = M.length;
+    var padL = 48, padR = 8, padT = 12, padB = 38;
+    var pw = W - padL - padR, ph = H - padT - padB;
+    var top = 0;
+    M.forEach(function (o) { top = Math.max(top, o.net, o.pace || 0); });
+    var max = niceMax(top * 1.04);
+    var ticks = 4, step = max / ticks;
+    var y = function (v) { return padT + ph - (Math.max(0, v) / max) * ph; };
+    var band = pw / n, bw = Math.max(3, Math.min(46, band * 0.66));
+    var every = 1;
+    var minLabel = 40;
+    while (band * every < minLabel) every++;
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="Net sales by month">';
+    for (var t = 0; t <= ticks; t++) {
+      var v = step * t, yy = y(v);
+      svg += '<line class="' + (t === 0 ? 'baseline' : 'gridline') + '" x1="' + padL + '" x2="' + (W - padR) + '" y1="' + yy + '" y2="' + yy + '"/>';
+      svg += '<text class="tick" x="' + (padL - 8) + '" y="' + (yy + 4) + '" text-anchor="end">' + shortMoney(v) + '</text>';
+    }
+    M.forEach(function (o, i) {
+      var cx = padL + band * i + band / 2, x = cx - bw / 2;
+      var yv = y(o.net), hgt = padT + ph - yv;
+      svg += '<g data-i="' + i + '">';
+      if (o.partial && o.pace != null && o.pace > o.net) svg += '<rect class="pace" x="' + (x + 0.75) + '" y="' + y(o.pace) + '" width="' + (bw - 1.5) + '" height="' + (yv - y(o.pace)) + '" rx="2"/>';
+      svg += '<rect class="bar' + (o.partial ? ' partial' : '') + '" x="' + x + '" y="' + yv + '" width="' + bw + '" height="' + Math.max(0, hgt) + '" rx="2"/>';
+      svg += '<rect class="hit" tabindex="0" data-i="' + i + '" x="' + (padL + band * i) + '" y="' + padT + '" width="' + band + '" height="' + ph + '" aria-label="' + monthName(o.key, true) + ': ' + money(o.net) + '"/>';
+      svg += '</g>';
+      if (i % every === 0) {
+        var lab = MONTH_SHORT[o.m - 1];
+        svg += '<text class="tick" x="' + cx + '" y="' + (H - padB + 16) + '" text-anchor="middle">' + lab + '</text>';
+        if (i === 0 || o.m === 1) svg += '<text class="tick" x="' + cx + '" y="' + (H - padB + 31) + '" text-anchor="middle">' + o.y + '</text>';
+      }
+    });
+    svg += '</svg>';
+    box.innerHTML = svg;
+    var gs = box.querySelectorAll('g[data-i]');
+    function pick(i) {
+      chartSel = i;
+      gs.forEach(function (g, j) { g.classList.toggle('dim', j !== i); });
+      var o = M[i];
+      var txt = '<strong>' + monthName(o.key, true) + ':</strong> ' + money(o.net, true) + ' from ' + plural(o.orders, 'order');
+      if (o.partial && o.pace != null) txt += ', ' + ordinal(o.through) + ' so far. Pace for the full month: ' + money(o.pace) + '.';
+      else if (o.partial) txt += ' (partial month).';
+      $('readout').innerHTML = txt;
+    }
+    function reset() {
+      gs.forEach(function (g) { g.classList.remove('dim'); });
+      var F = R.full, o = F.length ? F[F.length - 1] : M[n - 1];
+      $('readout').innerHTML = '<strong>Last full month, ' + monthName(o.key, true) + ':</strong> ' + money(o.net, true) + ' from ' + plural(o.orders, 'order') + '.';
+      chartSel = null;
+    }
+    box.querySelectorAll('.hit').forEach(function (h) {
+      var i = +h.getAttribute('data-i');
+      h.addEventListener('pointerenter', function () { pick(i); });
+      h.addEventListener('focus', function () { pick(i); });
+      h.addEventListener('click', function () { pick(i); });
+    });
+    box.querySelector('svg').addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') reset(); });
+    reset();
+  }
+
+  function renderBest(R) {
+    var C = R.customers;
+    if (!C) {
+      $('bestAnswer').innerHTML = R.hasCustomer ? 'No orders in this file have a customer attached.' : 'This needs a customer column. Match one under <em>Columns the kit is using</em> if your file has one.';
+      $('conc').innerHTML = ''; $('bestTableBox').innerHTML = ''; $('bestTableBox').hidden = true; $('bestNote').textContent = '';
+      return;
+    }
+    $('bestTableBox').hidden = false;
+    $('bestAnswer').innerHTML = 'Your top 20% of customers (' + count(C.topK) + ' ' + (C.topK === 1 ? 'person' : 'people') + ') bring in <strong>' + pct(C.topShare) + ' of your sales</strong>. The average customer has spent ' + money(C.avgSpend) + ', and ' + pct(C.repeatRate) + ' have ordered more than once.';
+    var a = Math.max(0, Math.min(1, C.topShare));
+    $('conc').innerHTML = '<div class="track" role="img" aria-label="Top 20 percent of customers bring in ' + pct(a) + ' of sales"><span class="a" style="width:' + (a * 100).toFixed(1) + '%"></span><span class="b" style="width:' + ((1 - a) * 100).toFixed(1) + '%"></span></div>' +
+      '<div class="labels"><span><strong>Top 20%</strong> of customers: ' + pct(a) + ' of sales</span><span>Everyone else: ' + pct(1 - a) + '</span></div>';
+    var rows = C.list.slice(0, 10);
+    var t = '<table><thead><tr><th>Customer</th><th class="r">Orders</th><th class="r">Spent</th><th>Last order</th>' + (R.hasChannel ? '<th>Came from</th>' : '') + '</tr></thead><tbody>';
+    rows.forEach(function (c) {
+      t += '<tr><td class="id">' + esc(c.id) + '</td><td class="r">' + count(c.orders) + '</td><td class="r">' + money(c.net, true) + '</td><td>' + (c.last != null ? fmtDay(c.last) : '') + '</td>' + (R.hasChannel ? '<td>' + esc(c.ch) + '</td>' : '') + '</tr>';
+    });
+    t += '</tbody></table>';
+    $('bestTableBox').innerHTML = t;
+    var note = 'The table shows your ten biggest customers by money spent, after refunds. Percentages count only sales that have a customer attached.';
+    if (R.missingCust) note += ' ' + plural(R.missingCust, 'order') + ' had no customer, so ' + (R.missingCust === 1 ? 'it is' : 'they are') + ' not in this answer.';
+    $('bestNote').textContent = note;
+  }
+
+  function renderChannels(R) {
+    var box = $('chanBars');
+    var CH = R.channels;
+    if (!R.hasChannel || !CH) {
+      $('chanAnswer').innerHTML = !R.hasCustomer ? 'This needs a customer column and a column that says where each customer came from.' : 'This needs a column that says where each customer came from, such as Instagram, a referral or walk-in. If your file has one, match it under <em>Columns the kit is using</em>.';
+      box.innerHTML = ''; $('chanNote').textContent = '';
+      return;
+    }
+    var rows = CH.rows;
+    if (rows.length < 2) {
+      $('chanAnswer').textContent = 'All of these customers came from one place (' + (rows[0] ? rows[0].ch : 'unknown') + '), so there is nothing to compare yet.';
+      box.innerHTML = ''; $('chanNote').textContent = '';
+      return;
+    }
+    var solid = rows.filter(function (r) { return r.n >= 10; });
+    var pool = solid.length >= 2 ? solid : rows;
+    var best = pool[0], worst = pool[pool.length - 1];
+    var ratio = worst.avg > 0 ? best.avg / worst.avg : null;
+    var s;
+    if (ratio != null && ratio >= 1.25) {
+      s = 'Customers who first came through <strong>' + esc(best.ch) + '</strong> have spent <strong>' + money(best.avg) + ' each</strong> so far, about ' + ratio.toFixed(1) + ' times as much as customers from ' + esc(worst.ch) + ' (' + money(worst.avg) + ').';
+      if (best.repeat - worst.repeat >= 0.15) s += ' The difference is loyalty: ' + pct(best.repeat) + ' of ' + esc(best.ch) + ' customers came back for a second order, compared with ' + pct(worst.repeat) + ' from ' + esc(worst.ch) + '.';
+    } else {
+      s = 'Your channels bring in customers of similar value, between ' + money(worst.avg) + ' and ' + money(best.avg) + ' each so far.';
+    }
+    $('chanAnswer').innerHTML = s;
+    var maxAvg = rows[0].avg || 1;
+    box.innerHTML = rows.map(function (r) {
+      return '<div class="row"><span class="name">' + esc(r.ch) + '</span><span class="barbox"><i style="width:' + Math.max(1.5, r.avg / maxAvg * 100).toFixed(1) + '%"></i></span><span class="val">' + money(r.avg) + '</span>' +
+        '<span class="meta">' + plural(r.n, 'customer') + ', ' + pct(r.repeat) + ' came back' + (r.n < 10 ? '. Too few customers to lean on.' : '') + '</span></div>';
+    }).join('');
+    $('chanNote').textContent = CH.allUsed
+      ? 'Most customers in this file are new, so this uses everyone. Newer customers have had less time to come back, which pulls averages down.'
+      : 'Bars show average spend per customer, grouped by where each customer placed their first order. To keep it fair, only customers whose first order was on or before ' + fmtDay(CH.cutoff) + ' (90 days before the file ends) are counted, so brand-new customers do not drag the averages down.';
+  }
+
+  function gapWords(d) {
+    d = Math.round(d);
+    if (d < 14) return 'every ' + d + ' days';
+    var w = Math.round(d / 7);
+    return 'every ' + d + ' days (about ' + w + ' week' + (w === 1 ? '' : 's') + ')';
+  }
+  function renderDrift(R) {
+    var K = R.risk;
+    var tb = $('driftTableBox');
+    $('driftFallback').hidden = true; $('driftCopied').textContent = '';
+    if (!K) {
+      $('driftAnswer').innerHTML = 'This needs a customer column so the kit can follow each person over time.';
+      tb.innerHTML = ''; tb.hidden = true; $('driftActions').hidden = true;
+      return;
+    }
+    if (!K.list.length) {
+      $('driftAnswer').innerHTML = 'None of your regular customers look overdue right now.' + (K.lost ? ' ' + plural(K.lost, 'regular') + ' stopped ordering more than six months ago.' : '');
+      tb.innerHTML = ''; tb.hidden = true; $('driftActions').hidden = true;
+      return;
+    }
+    tb.hidden = false; $('driftActions').hidden = false;
+    var s = '<strong>' + plural(K.list.length, 'regular customer') + ' ' + (K.list.length === 1 ? 'has' : 'have') + ' gone quiet.</strong> They usually ordered ' + gapWords(K.typical) + ', and together they have spent <strong>' + money(K.spent) + '</strong> with you. A short personal note to the people at the top of this list is a cheap first step.';
+    if (K.lost) s += ' Another ' + plural(K.lost, 'regular') + ' stopped more than six months ago.';
+    $('driftAnswer').innerHTML = s;
+    var show = state.riskOpen ? K.list : K.list.slice(0, 12);
+    var t = '<table><thead><tr><th>Customer</th><th class="r">Usually orders every</th><th class="r">Last order</th><th class="r">Spent</th>' + (R.hasChannel ? '<th>Came from</th>' : '') + '</tr></thead><tbody>';
+    show.forEach(function (x) {
+      t += '<tr><td class="id">' + esc(x.id) + '</td><td class="r">' + Math.round(x.typical) + ' days</td><td class="r" title="' + fmtDay(x.last) + '">' + x.since + ' days ago</td><td class="r">' + money(x.net, true) + '</td>' + (R.hasChannel ? '<td>' + esc(x.ch) + '</td>' : '') + '</tr>';
+    });
+    t += '</tbody></table>';
+    tb.innerHTML = t;
+    var more = $('driftMore');
+    if (K.list.length > 12) { more.hidden = false; more.textContent = state.riskOpen ? 'Show the top 12' : 'Show all ' + count(K.list.length); }
+    else more.hidden = true;
+  }
+  function driftTSV() {
+    var R = state.result, K = R.risk;
+    var lines = ['customer\tusual_gap_days\tdays_since_last_order\tlast_order_date\ttotal_spent' + (R.hasChannel ? '\tfirst_came_from' : '')];
+    K.list.forEach(function (x) { lines.push([x.id, Math.round(x.typical), x.since, isoDay(x.last), x.net.toFixed(2)].concat(R.hasChannel ? [x.ch] : []).join('\t')); });
+    return lines.join('\n');
+  }
+
+  function renderFindings(R) {
+    var items = [];
+    var T = R.trend;
+    if (T.kind !== 'none' && T.change != null) {
+      var w = changeWords(T.change);
+      var t1 = w.dir === 'up' ? 'Sales are up ' + pct(T.change) : w.dir === 'down' ? 'Sales are down ' + pct(-T.change) : 'Sales are steady';
+      items.push(['growth', 'Growth', t1 + (T.kind === 'q' ? ' over the last three full months, compared with the three before.' : ' from one full month to the next.'), '']);
+    } else items.push(['growth', 'Growth', 'Not enough full months to compare yet.', 'muted']);
+    if (R.customers) items.push(['best', 'Best customers', 'Your top 20% of customers bring in ' + pct(R.customers.topShare) + ' of sales.', '']);
+    else items.push(['best', 'Best customers', 'Needs a customer column.', 'muted']);
+    var CH = R.channels;
+    if (CH && CH.rows.length >= 2) {
+      var solid = CH.rows.filter(function (r) { return r.n >= 10; }); var pool = solid.length >= 2 ? solid : CH.rows;
+      var b = pool[0], wv = pool[pool.length - 1], ratio = wv.avg > 0 ? b.avg / wv.avg : null;
+      items.push(['channels', 'Channels', ratio && ratio >= 1.25 ? esc(b.ch) + ' customers are worth ' + ratio.toFixed(1) + ' times as much as ' + esc(wv.ch) + ' customers.' : 'Channels bring in customers of similar value.', '']);
+    } else items.push(['channels', 'Channels', 'Needs a column for where customers came from.', 'muted']);
+    if (R.risk) items.push(['drift', 'Drifting away', R.risk.list.length ? plural(R.risk.list.length, 'regular') + ' have gone quiet. They have spent ' + money(R.risk.spent) + ' with you.' : 'No regulars look overdue right now.', R.risk.list.length ? 'warn' : '']);
+    else items.push(['drift', 'Drifting away', 'Needs a customer column.', 'muted']);
+    $('findings').innerHTML = items.map(function (it) {
+      return '<li><a class="jump" href="#' + it[0] + '"><span class="dot ' + it[3] + '"></span><span><span class="k">' + it[1] + '</span>' + it[2] + '</span></a></li>';
+    }).join('');
+  }
+
+  function buildPrompt() {
+    var R = state.result;
+    if (!R || !R.ok) { $('prompt').value = ''; return; }
+    var biz = $('biz').value.trim() || 'small business';
+    var q = $('question').value.trim() || 'Based only on these numbers, what are the three most useful things I could do next month to grow sales?';
+    var L = [];
+    L.push('I run a ' + biz + '. Below is a summary of my sales from ' + fmtDay(R.minDay) + ' to ' + fmtDay(R.asOf) + '. It was made with the Small Business Decision Kit and contains totals only, no customer details.');
+    L.push('');
+    L.push('Please use only the numbers below. If you need a number that is not here, tell me which one instead of guessing. Keep your answer short and in plain English, and say how sure you are.');
+    L.push('');
+    L.push('My question: ' + q);
+    L.push('');
+    L.push('DATA NOTES');
+    L.push('* Net sales after refunds: ' + plainMoney(R.net) + ' from ' + count(R.orders) + ' orders.');
+    if (R.dups) L.push('* ' + plural(R.dups, 'duplicate row') + ' were removed.');
+    if (R.badDates.length) L.push('* ' + plural(R.badDates.length, 'row') + ' with an unreadable date ' + (R.badDates.length === 1 ? 'is' : 'are') + ' left out (' + plainMoney(R.badDateSum) + ').');
+    if (R.refunds) L.push('* ' + plural(R.refunds, 'refund') + ' totaling ' + plainMoney(R.refundSum) + ' are included in net sales.');
+    if (R.missingCust) L.push('* ' + plural(R.missingCust, 'order') + ' had no customer ID.');
+    R.months.forEach(function (o) { if (o.partial) L.push('* ' + monthName(o.key, true) + ' is a partial month in this file.'); });
+    L.push('');
+    L.push('NET SALES BY MONTH');
+    R.months.forEach(function (o) {
+      var tag = '';
+      if (o.partial && o.pace != null) tag = ' (partial, through the ' + ordinal(o.through) + '; full-month pace ' + plainMoney(o.pace) + ')';
+      else if (o.partial) tag = ' (partial)';
+      L.push('* ' + monthName(o.key, true) + ': ' + plainMoney(o.net) + ', ' + count(o.orders) + ' orders' + tag);
+    });
+    if (R.customers) {
+      var C = R.customers;
+      L.push('');
+      L.push('CUSTOMERS');
+      L.push('* ' + count(C.n) + ' customers placed at least one order.');
+      L.push('* The top 20% of customers bring in ' + pct(C.topShare) + ' of sales that have a customer attached.');
+      L.push('* Average spend per customer: ' + plainMoney(C.avgSpend) + '. Share who ordered more than once: ' + pct(C.repeatRate) + '.');
+    }
+    if (R.channels && R.channels.rows.length) {
+      L.push('');
+      L.push('WHERE CUSTOMERS FIRST CAME FROM' + (R.channels.allUsed ? ' (all customers)' : ' (customers whose first order was at least 90 days before the file ends)'));
+      R.channels.rows.forEach(function (r) { L.push('* ' + r.ch + ': ' + count(r.n) + ' customers, ' + pct(r.repeat) + ' came back for a second order, average spend ' + plainMoney(r.avg) + ' each'); });
+    }
+    if (R.risk) {
+      L.push('');
+      L.push('REGULARS WHO HAVE GONE QUIET');
+      L.push('* A regular has 3 or more orders. They count as quiet when the time since their last order is more than double their usual gap, at least 30 days and under 6 months.');
+      L.push('* ' + count(R.risk.list.length) + ' regulars are quiet right now. Together they have spent ' + plainMoney(R.risk.spent) + (R.risk.list.length ? ', and they usually ordered every ' + Math.round(R.risk.typical) + ' days.' : '.'));
+      if (R.risk.lost) L.push('* ' + count(R.risk.lost) + ' more regulars stopped over 6 months ago.');
+    }
+    $('prompt').value = L.join('\n');
+  }
+
+  function copyText(text, statusEl, fallbackEl) {
+    function fail() {
+      if (fallbackEl) { if (fallbackEl.value !== text) fallbackEl.value = text; fallbackEl.hidden = false; fallbackEl.focus(); fallbackEl.select(); }
+      statusEl.textContent = 'Your browser blocked copying. The text is selected, so press Ctrl+C (Cmd+C on a Mac).';
+    }
+    try {
+      if (!navigator.clipboard || !navigator.clipboard.writeText) { fail(); return; }
+      navigator.clipboard.writeText(text).then(function () { statusEl.textContent = 'Copied.'; }, fail);
+    } catch (e) { fail(); }
+  }
+
+  /* wiring */
+  function readFile(f) {
+    if (!f) return;
+    if (/\.(xlsx|xls|numbers)$/i.test(f.name)) { showFileError('This is a spreadsheet file, not a CSV. Open it and save a copy as CSV (File, then Save As or Download, then CSV), and choose that copy.'); return; }
+    var rd = new FileReader();
+    rd.onload = function () { loadText(String(rd.result || ''), f.name, false); };
+    rd.onerror = function () { showFileError('The browser could not read that file. Try exporting it again.'); };
+    rd.readAsText(f);
+  }
+  $('file').addEventListener('change', function (e) { readFile(e.target.files[0]); e.target.value = ''; });
+  $('useSample').addEventListener('click', function () { loadText($('sample-csv').textContent.trim(), 'hilltop-coffee-orders.csv', true); });
+  var drop = $('drop');
+  ['dragenter', 'dragover'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); }); });
+  ['dragleave', 'drop'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); }); });
+  drop.addEventListener('drop', function (e) { var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; readFile(f); });
+  drop.addEventListener('keydown', function (e) { if (e.target === drop && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); $('file').click(); } });
+  FIELDS.forEach(function (f) {
+    $('map-' + f).addEventListener('change', function (e) {
+      var v = +e.target.value;
+      if (v >= 0) FIELDS.forEach(function (g) { if (g !== f && state.map[g] === v) { state.map[g] = -1; $('map-' + g).value = '-1'; } });
+      state.map[f] = v; state.riskOpen = false; run();
+    });
+  });
+  $('map-style').addEventListener('change', function (e) { state.style = e.target.value; run(); });
+  $('biz').addEventListener('input', buildPrompt);
+  $('question').addEventListener('input', buildPrompt);
+  $('copyPrompt').addEventListener('click', function () { copyText($('prompt').value, $('promptCopied'), $('prompt')); });
+  $('driftCopy').addEventListener('click', function () { copyText(driftTSV(), $('driftCopied'), $('driftFallback')); });
+  $('driftMore').addEventListener('click', function () { state.riskOpen = !state.riskOpen; renderDrift(state.result); });
+  var rT = null;
+  if (window.ResizeObserver) {
+    var lastW = 0;
+    new ResizeObserver(function (en) {
+      var w = Math.round(en[0].contentRect.width);
+      if (Math.abs(w - lastW) < 8) return;
+      lastW = w; clearTimeout(rT);
+      rT = setTimeout(function () { if (state.result && state.result.ok) drawMonths(state.result); }, 80);
+    }).observe($('monthChart'));
+  }
+
+  $('question').value = 'Based only on these numbers, what are the three most useful things I could do next month to grow sales?';
+  loadText($('sample-csv').textContent.trim(), 'hilltop-coffee-orders.csv', true);
+})();
+</script>

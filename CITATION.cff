@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Small Business Decision Kit"
+abstract: "A free, private, in-browser tool that checks a small business sales export for common data problems and turns it into plain-English answers about growth, best customers, acquisition channels and customers who are drifting away."
+type: software
+authors:
+  - family-names: "Okwudiafor"
+    given-names: "Chike Joseph"
+version: "1.0.0"
+url: "https://chikeokwudiafor.github.io/smallbiz-decision-kit/"
+repository-code: "https://github.com/chikeokwudiafor/smallbiz-decision-kit"
+date-released: "2026-09-27"
+license: MIT
+keywords:
+  - small business
+  - analytics
+  - data quality
+  - reconciliation
+  - privacy

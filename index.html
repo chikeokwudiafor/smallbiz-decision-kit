@@ -1,0 +1,4106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A free, private, in-browser tool that turns a small business sales export into plain-English answers, with a data trust check first.">
+<title>Small Business Decision Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Public+Sans:wght@400;500;600;700&family=Young+Serif&display=swap">
+<style>
+:root {
+  --ground: #F1F3EF;
+  --surface: #FFFFFF;
+  --surface-2: #F6F7F4;
+  --ink: #1B2024;
+  --muted: #59626A;
+  --line: #D7DCD5;
+  --accent: #2A48A6;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #E6EBF8;
+  --good: #2C7449;
+  --good-soft: #E1F0E6;
+  --warn: #8F5A06;
+  --warn-soft: #FAEFD6;
+  --bad: #AE2A21;
+  --bad-soft: #FAE3E0;
+  --paper: #FFFEF8;
+  --paper-ink: #22252A;
+  --bar: #2A48A6;
+  --bar-soft: #B3BFE2;
+  --grid: #E2E6E0;
+  --display: "Young Serif", Georgia, "Times New Roman", serif;
+  --body: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --mono: "Courier Prime", "Courier New", Courier, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground: #111418;
+    --surface: #191D22;
+    --surface-2: #1E2328;
+    --ink: #E6E9EC;
+    --muted: #9CA5AE;
+    --line: #2E353C;
+    --accent: #93A9F2;
+    --accent-ink: #0E1321;
+    --accent-soft: #1F2844;
+    --good: #7DCB99;
+    --good-soft: #17301F;
+    --warn: #EAB65E;
+    --warn-soft: #33270F;
+    --bad: #F2948C;
+    --bad-soft: #3A1C1A;
+    --paper: #E6E3DA;
+    --paper-ink: #1D2024;
+    --bar: #93A9F2;
+    --bar-soft: #45548A;
+    --grid: #272D33;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground: #111418;
+  --surface: #191D22;
+  --surface-2: #1E2328;
+  --ink: #E6E9EC;
+  --muted: #9CA5AE;
+  --line: #2E353C;
+  --accent: #93A9F2;
+  --accent-ink: #0E1321;
+  --accent-soft: #1F2844;
+  --good: #7DCB99;
+  --good-soft: #17301F;
+  --warn: #EAB65E;
+  --warn-soft: #33270F;
+  --bad: #F2948C;
+  --bad-soft: #3A1C1A;
+  --paper: #E6E3DA;
+  --paper-ink: #1D2024;
+  --bar: #93A9F2;
+  --bar-soft: #45548A;
+  --grid: #272D33;
+}
+[hidden] { display: none !important; }
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 56px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; color: var(--ink); }
+h1 { font-size: clamp(28px, 4vw, 38px); line-height: 1.1; letter-spacing: -0.01em; }
+h2 { font-size: 23px; line-height: 1.2; }
+h3 { font-size: 17px; line-height: 1.3; }
+p { margin: 0; }
+a { color: var(--accent); }
+.num { font-variant-numeric: tabular-nums; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* masthead */
+.mast { display: grid; grid-template-columns: 1fr auto; gap: 12px 32px; align-items: end; padding-bottom: 22px; border-bottom: 1px solid var(--line); margin-bottom: 26px; }
+.mast .lede { max-width: 62ch; color: var(--muted); font-size: 16px; margin-top: 10px; }
+.privacy { display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--muted); max-width: 30ch; }
+.privacy svg { flex: none; color: var(--good); }
+@media (max-width: 760px) { .mast { grid-template-columns: 1fr; } .privacy { max-width: none; } }
+
+.layout { display: grid; grid-template-columns: minmax(300px, 350px) minmax(0, 1fr); gap: 28px; align-items: start; }
+.trustlink { display: none; font-size: 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+@media (max-width: 920px) {
+  .layout { display: flex; flex-direction: column; align-items: stretch; gap: 20px; }
+  .side { display: contents; }
+  .side > .panel { order: 1; }
+  .main { order: 2; }
+  .side > .checks { order: 3; scroll-margin-top: 16px; }
+  .trustlink { display: block; }
+}
+.side { display: flex; flex-direction: column; gap: 20px; }
+.main { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+
+/* buttons and inputs */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 600 14px/1.2 var(--body); cursor: pointer; text-decoration: none; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible, .drop:focus-visible, .jump:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+#file:focus-visible + .file-label { outline: 3px solid var(--accent); outline-offset: 2px; }
+select, input[type="text"], textarea { width: 100%; font: 400 14px/1.4 var(--body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+textarea { resize: vertical; }
+label.field { display: grid; gap: 4px; font-size: 13px; font-weight: 600; color: var(--ink); }
+label.field span.opt { font-weight: 400; color: var(--muted); }
+
+/* file panel */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.drop { border: 1.5px dashed var(--line); border-radius: 10px; padding: 16px; display: flex; flex-direction: column; gap: 12px; background: var(--surface-2); transition: border-color .15s, background .15s; }
+.drop.over { border-color: var(--accent); background: var(--accent-soft); }
+.drop .btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.hint { font-size: 13px; color: var(--muted); }
+.status { font-size: 13px; color: var(--ink); }
+.status strong { font-weight: 600; }
+.error { font-size: 13px; color: var(--bad); background: var(--bad-soft); border-radius: 8px; padding: 10px 12px; }
+details.mapping > summary { cursor: pointer; font-weight: 600; font-size: 14px; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+details.mapping > summary::-webkit-details-marker { display: none; }
+details.mapping > summary::after { content: "Show"; font-weight: 500; font-size: 13px; color: var(--accent); }
+details.mapping[open] > summary::after { content: "Hide"; }
+.map-grid { display: grid; gap: 10px; margin-top: 12px; }
+.map-note { font-size: 13px; color: var(--muted); margin-top: 10px; }
+
+/* the receipt */
+.receipt-wrap { filter: drop-shadow(0 2px 2px rgba(20, 24, 28, .10)) drop-shadow(0 10px 18px rgba(20, 24, 28, .10)); }
+.receipt {
+  --zig: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / 14px 100%;
+  -webkit-mask: var(--zig); mask: var(--zig);
+  background: var(--paper); color: var(--paper-ink);
+  font-family: var(--mono); font-size: 14px; line-height: 1.45;
+  padding: 20px 18px 30px;
+}
+.receipt .head { text-align: center; text-transform: uppercase; letter-spacing: .06em; display: grid; gap: 2px; }
+.receipt .head .shop { font-weight: 700; font-size: 15px; }
+.receipt .head .meta { font-size: 12px; word-break: break-word; }
+.receipt .rule { border-top: 1.5px dashed currentColor; opacity: .55; margin: 12px 0; }
+.receipt .ln { display: flex; align-items: baseline; gap: 6px; }
+.receipt .ln .lbl { flex: 0 1 auto; }
+.receipt .ln .dots { flex: 1 1 12px; min-width: 12px; border-bottom: 1.5px dotted currentColor; opacity: .45; transform: translateY(-4px); }
+.receipt .ln .val { flex: none; font-variant-numeric: tabular-nums; }
+.receipt .ln.total { font-weight: 700; text-transform: uppercase; }
+.receipt .sub { font-size: 12px; padding-left: 14px; opacity: .85; }
+.receipt .foot { text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; margin-top: 14px; }
+
+/* checks */
+.checks { display: flex; flex-direction: column; gap: 10px; }
+.checks h3 { font-size: 17px; }
+.check { display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+.check .t { font-weight: 600; font-size: 14px; }
+.check .d { grid-column: 1 / -1; font-size: 13px; color: var(--muted); }
+.check .d code { font-family: var(--mono); font-size: 13px; color: var(--ink); background: var(--surface-2); padding: 0 4px; border-radius: 4px; }
+.chip { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+.chip.fixed { background: var(--good-soft); color: var(--good); }
+.chip.handled { background: var(--accent-soft); color: var(--accent); }
+.chip.heads { background: var(--warn-soft); color: var(--warn); }
+.chip.needs { background: var(--bad-soft); color: var(--bad); }
+.chip.clear { background: var(--surface-2); color: var(--muted); border: 1px solid var(--line); }
+.clear-line { font-size: 13px; color: var(--muted); }
+
+/* main column */
+.main-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 8px 16px; }
+.main-head .range { font-size: 14px; color: var(--muted); }
+.pill { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+.findings { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 640px) { .findings { grid-template-columns: minmax(0, 1fr); } }
+.findings a.jump { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; padding: 12px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); text-decoration: none; font-size: 14px; height: 100%; }
+.findings a.jump:hover { border-color: var(--accent); }
+.findings .k { font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 2px; }
+.findings .dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; background: var(--accent); }
+.findings .dot.warn { background: var(--warn); }
+.findings .dot.muted { background: var(--muted); }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 22px; display: flex; flex-direction: column; gap: 14px; scroll-margin-top: 16px; min-width: 0; }
+.card .q { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--accent); }
+.card .answer { font-size: 16px; max-width: 68ch; }
+.card .answer strong { font-weight: 700; }
+.card .note { font-size: 13px; color: var(--muted); max-width: 72ch; }
+.card .empty { font-size: 15px; color: var(--muted); }
+
+/* chart */
+.chart { position: relative; width: 100%; }
+.chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.chart .tick { fill: var(--muted); font: 500 12px var(--body); font-variant-numeric: tabular-nums; }
+.chart .gridline { stroke: var(--grid); stroke-width: 1; }
+.chart .baseline { stroke: var(--line); stroke-width: 1; }
+.chart .bar { fill: var(--bar); transition: opacity .12s; }
+.chart .bar.partial { fill: var(--bar-soft); }
+.chart .pace { fill: none; stroke: var(--bar); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.chart .hit { fill: transparent; cursor: pointer; outline: none; }
+.chart .hit:focus-visible + .focusmark { stroke: var(--accent); }
+.chart .focusmark { fill: none; stroke: transparent; stroke-width: 2; }
+.chart g.dim .bar { opacity: .45; }
+.readout { font-size: 14px; min-height: 22px; font-variant-numeric: tabular-nums; }
+.readout strong { font-weight: 700; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; background: var(--bar); }
+.legend i.p { background: var(--bar-soft); }
+.legend i.d { background: none; border: 1.5px dashed var(--bar); }
+
+/* concentration bar */
+.conc { display: grid; gap: 6px; }
+.conc .track { display: flex; height: 28px; border-radius: 6px; overflow: hidden; background: var(--surface-2); border: 1px solid var(--line); }
+.conc .track .a { background: var(--accent); }
+.conc .track .b { background: var(--bar-soft); }
+.conc .labels { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.conc .labels strong { color: var(--ink); }
+
+/* tables */
+.tablebox { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: var(--surface-2); }
+td.r, th.r { text-align: right; }
+tbody tr:last-child td { border-bottom: 0; }
+td.id { font-family: var(--mono); font-size: 13px; }
+
+/* channel bars */
+.chan { display: grid; gap: 12px; }
+.chan .row { display: grid; grid-template-columns: minmax(96px, 150px) minmax(0, 1fr) auto; gap: 6px 14px; align-items: center; }
+.chan .name { font-weight: 600; font-size: 14px; overflow-wrap: anywhere; }
+.chan .barbox { height: 22px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+.chan .barbox i { display: block; height: 100%; background: var(--bar); border-radius: 4px; }
+.chan .val { font-weight: 700; font-variant-numeric: tabular-nums; min-width: 4.5ch; text-align: right; }
+.chan .meta { grid-column: 2 / 4; font-size: 13px; color: var(--muted); margin-top: -4px; font-variant-numeric: tabular-nums; }
+@media (max-width: 520px) {
+  .chan .row { grid-template-columns: minmax(0, 1fr) auto; }
+  .chan .name { grid-column: 1 / 3; }
+  .chan .meta { grid-column: 1 / 3; }
+}
+
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.copied { font-size: 13px; color: var(--good); }
+.ai-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+@media (max-width: 640px) { .ai-grid { grid-template-columns: minmax(0, 1fr); } }
+#prompt { font-family: var(--mono); font-size: 13px; line-height: 1.5; min-height: 260px; background: var(--surface-2); }
+.inout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; font-size: 13px; }
+.inout div { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; }
+.inout b { display: block; font-size: 12px; letter-spacing: .05em; text-transform: uppercase; margin-bottom: 2px; }
+.inout .yes b { color: var(--good); }
+.inout .no b { color: var(--bad); }
+@media (max-width: 520px) { .inout { grid-template-columns: minmax(0, 1fr); } }
+
+footer { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="mast">
+    <div>
+      <h1>Small Business Decision Kit</h1>
+      <p class="lede">This kit reads the sales export your shop already has and answers four questions in plain English. It also checks the file first, so you know which numbers you can trust.</p>
+    </div>
+    <p class="privacy">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Zm-1.2 14.2-3.5-3.5 1.4-1.4 2.1 2.1 4.9-4.9 1.4 1.4-6.3 6.3Z"/></svg>
+      <span>Your file is read inside this browser. Nothing is uploaded or stored.</span>
+    </p>
+  </header>
+
+  <div class="layout">
+    <aside class="side" aria-label="Your file">
+      <section class="panel" aria-labelledby="file-h">
+        <h2 id="file-h" style="font-size:19px">Your sales file</h2>
+        <div class="drop" id="drop" tabindex="0" aria-describedby="drop-hint">
+          <div class="btns">
+            <input type="file" id="file" accept=".csv,text/csv,.txt,.tsv" class="sr-only">
+            <label class="btn primary file-label" for="file">Choose a CSV file</label>
+            <button type="button" class="btn" id="useSample">Use the sample shop</button>
+          </div>
+          <p class="hint" id="drop-hint">You can also drag a file here. Square, Shopify, Stripe, Toast and most spreadsheets can export one. The kit expects one row per order.</p>
+        </div>
+        <p class="status" id="status" aria-live="polite"></p>
+        <p class="error" id="fileError" hidden></p>
+        <details class="mapping" id="mapping">
+          <summary>Columns the kit is using</summary>
+          <div class="map-grid">
+            <label class="field" for="map-date">Order date
+              <select id="map-date"></select></label>
+            <label class="field" for="map-amount">Amount
+              <select id="map-amount"></select></label>
+            <label class="field" for="map-customer">Customer <span class="opt">(an ID, email or name)</span>
+              <select id="map-customer"></select></label>
+            <label class="field" for="map-channel">Where the customer came from <span class="opt">(optional)</span>
+              <select id="map-channel"></select></label>
+            <label class="field" for="map-order">Order number <span class="opt">(optional)</span>
+              <select id="map-order"></select></label>
+            <label class="field" for="map-style">How dates are written
+              <select id="map-style">
+                <option value="auto">Figure it out from the file</option>
+                <option value="mdy">Month first (09/17/2026)</option>
+                <option value="dmy">Day first (17/09/2026)</option>
+              </select></label>
+          </div>
+          <p class="map-note" id="mapNote">The kit guessed these from your column names. Change any that look wrong and everything updates.</p>
+        </details>
+      </section>
+
+      <section aria-labelledby="trust-h" class="checks" id="trust">
+        <h2 id="trust-h" style="font-size:19px">Can I trust this file?</h2>
+        <div class="receipt-wrap"><div class="receipt" id="receipt"></div></div>
+        <div class="checks" id="checks"></div>
+      </section>
+    </aside>
+
+    <main class="main" id="main">
+      <div class="main-head">
+        <h2 id="main-h">What your file says</h2>
+        <span id="sampleBadge" class="pill">Sample data</span>
+      </div>
+      <p class="range" id="range"></p>
+      <p class="error" id="mainError" hidden></p>
+      <p class="trustlink" id="trustLink"></p>
+      <ul class="findings" id="findings"></ul>
+
+      <section class="card" id="growth" aria-labelledby="growth-h">
+        <p class="q">Is the business growing?</p>
+        <h3 id="growth-h" class="sr-only">Sales by month</h3>
+        <p class="answer" id="growthAnswer"></p>
+        <div class="legend" id="growthLegend">
+          <span><i></i>Full month</span>
+          <span><i class="p"></i>Partial month so far</span>
+          <span><i class="d"></i>Where it is heading at the current pace</span>
+        </div>
+        <div class="chart" id="monthChart"></div>
+        <p class="readout" id="readout" aria-live="polite"></p>
+        <p class="note">Sales here are net: refunds are subtracted, duplicate rows are removed. Tap or hover a month to see its total.</p>
+      </section>
+
+      <section class="card" id="best" aria-labelledby="best-h">
+        <p class="q">Who are my best customers?</p>
+        <h3 id="best-h" class="sr-only">Best customers</h3>
+        <p class="answer" id="bestAnswer"></p>
+        <div class="conc" id="conc"></div>
+        <div class="tablebox" id="bestTableBox"></div>
+        <p class="note" id="bestNote"></p>
+      </section>
+
+      <section class="card" id="channels" aria-labelledby="chan-h">
+        <p class="q">Where do my best customers come from?</p>
+        <h3 id="chan-h" class="sr-only">Customer value by channel</h3>
+        <p class="answer" id="chanAnswer"></p>
+        <div class="chan" id="chanBars"></div>
+        <p class="note" id="chanNote"></p>
+      </section>
+
+      <section class="card" id="drift" aria-labelledby="drift-h">
+        <p class="q">Who is drifting away?</p>
+        <h3 id="drift-h" class="sr-only">Regular customers who have gone quiet</h3>
+        <p class="answer" id="driftAnswer"></p>
+        <div class="tablebox" id="driftTableBox"></div>
+        <div class="actions" id="driftActions">
+          <button type="button" class="btn" id="driftMore" hidden></button>
+          <button type="button" class="btn primary" id="driftCopy">Copy this list</button>
+          <span class="copied" id="driftCopied" aria-live="polite"></span>
+        </div>
+        <textarea id="driftFallback" rows="6" hidden aria-label="The list as text"></textarea>
+        <p class="note">A regular here is someone with at least three orders. They count as drifting when the time since their last order is more than double their own usual gap, at least 30 days, and under six months. The copied list pastes straight into a spreadsheet.</p>
+      </section>
+
+      <section class="card" id="ask" aria-labelledby="ask-h">
+        <p class="q">Ask an AI about these numbers</p>
+        <h3 id="ask-h" class="sr-only">Build a privacy-safe prompt</h3>
+        <p class="answer">The kit writes a prompt you can paste into Claude, ChatGPT, Gemini or any AI chat. It holds totals and averages only, and it tells the AI to stick to them.</p>
+        <div class="ai-grid">
+          <label class="field" for="biz">What kind of business is this?
+            <input type="text" id="biz" autocomplete="off"></label>
+          <label class="field" for="question">What do you want to ask?
+            <textarea id="question" rows="2"></textarea></label>
+        </div>
+        <label class="field" for="prompt">Your prompt
+          <textarea id="prompt" readonly rows="14"></textarea></label>
+        <div class="actions">
+          <button type="button" class="btn primary" id="copyPrompt">Copy prompt</button>
+          <span class="copied" id="promptCopied" aria-live="polite"></span>
+        </div>
+        <div class="inout">
+          <div class="yes"><b>Included</b>Monthly totals, counts, percentages and averages by channel.</div>
+          <div class="no"><b>Never included</b>Customer IDs, names, emails, or any single order.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <span>Built by Chike Okwudiafor. Free and open source under the MIT License.</span>
+    <span>The sample shop, Hilltop Coffee Roasters, is made up. Its data is generated.</span>
+  </footer>
+</div>
+
+<script type="text/csv" id="sample-csv">order_id,order_date,customer_id,channel,amount
+HC-10001,2025-08-01,C0015,Google Ads,15.97
+HC-10002,2025-08-02,C0597,Walk-in,13.07
+HC-10003,2025-08-04,C0132,Referral,37.78
+HC-10004,2025-08-07,C0026,Farmers Market,20.91
+HC-10005,2025-08-08,C0513,Referral,22.08
+HC-10006,2025-08-09,C0329,Referral,34.60
+HC-10007,2025-08-12,C0526,Walk-in,13.66
+HC-10008,2025-08-13,C0676,Instagram,21.11
+HC-10009,2025-08-16,C0343,Walk-in,12.65
+HC-10010,2025-08-17,C0001,Google Ads,19.89
+HC-10011,2025-08-17,C0329,Referral,18.70
+HC-10012,2025-08-19,C0665,Google Ads,17.45
+HC-10013,2025-08-21,C0110,Walk-in,20.27
+HC-10014,2025-08-21,C0124,Google Ads,17.71
+HC-10015,2025-08-21,C0173,Farmers Market,21.42
+HC-10016,2025-08-21,C0352,Instagram,24.18
+HC-10017,2025-08-22,C0132,Referral,37.55
+HC-10018,2025-08-22,C0142,Walk-in,20.61
+HC-10019,2025-08-23,C0555,Referral,27.88
+HC-10020,2025-08-23,C0580,Referral,35.68
+HC-10021,2025-08-24,C0386,Farmers Market,13.05
+HC-10022,2025-08-24,C0664,Walk-in,17.05
+HC-10023,2025-08-25,C0030,Instagram,17.00
+HC-10024,2025-08-25,C0234,Instagram,18.66
+HC-10025,2025-08-26,C0152,Google Ads,29.94
+HC-10026,2025-08-26,C0265,Farmers Market,21.42
+HC-10027,2025-08-26,C0329,Referral,17.73
+HC-10028,2025-08-26,C0337,Farmers Market,16.78
+HC-10029,2025-08-27,C0272,Walk-in,16.41
+HC-10030,2025-08-28,C0062,Referral,31.63
+HC-10031,2025-08-28,C0099,Referral,22.60
+HC-10032,2025-08-28,C0510,Referral,21.63
+HC-10033,2025-08-29,C0162,Walk-in,11.36
+HC-10034,2025-08-30,C0146,Google Ads,27.95
+HC-10035,2025-08-30,C0241,Referral,31.88
+HC-10036,2025-08-30,C0482,Walk-in,20.16
+HC-10037,2025-08-31,C0473,Instagram,21.29
+HC-10038,2025-09-02,C0329,Referral,23.41
+HC-10039,2025-09-02,C0368,Walk-in,22.05
+HC-10040,2025-09-02,C0526,Walk-in,14.05
+HC-10041,2025-09-03,C0131,Google Ads,29.37
+HC-10042,2025-09-03,C0258,Instagram,14.69
+HC-10043,2025-09-03,C0655,Referral,31.37
+HC-10044,2025-09-04,C0328,Walk-in,23.65
+HC-10045,2025-09-04,C0580,Referral,25.19
+HC-10046,2025-09-04,C0709,Walk-in,18.84
+HC-10047,2025-09-05,C0208,Farmers Market,15.69
+HC-10048,2025-09-05,C0433,Walk-in,22.87
+HC-10049,2025-09-06,C0149,Instagram,20.65
+HC-10050,2025-09-08,C0184,Walk-in,17.94
+HC-10051,2025-09-08,C0204,Google Ads,18.23
+HC-10052,2025-09-09,C0175,Instagram,17.31
+HC-10053,2025-09-09,C0403,Instagram,17.55
+HC-10054,2025-09-10,C0202,Walk-in,17.08
+HC-10055,2025-09-10,C0503,Walk-in,16.76
+HC-10056,2025-09-10,C0665,Google Ads,73.20
+HC-10057,2025-09-11,C0329,Referral,31.81
+HC-10058,2025-09-11,C0799,Instagram,21.45
+HC-10059,2025-09-12,C0335,Walk-in,11.40
+HC-10060,2025-09-13,C0510,Referral,34.61
+HC-10061,2025-09-13,C0522,Google Ads,18.09
+HC-10062,2025-09-13,C0614,Walk-in,14.58
+HC-10063,2025-09-14,C0018,Walk-in,14.16
+HC-10064,2025-09-14,C0019,Farmers Market,17.51
+HC-10065,2025-09-14,C0433,Walk-in,13.36
+HC-10066,2025-09-15,C0329,Referral,17.96
+HC-10067,2025-09-15,C0791,Walk-in,22.17
+HC-10068,2025-09-16,C0607,Google Ads,33.53
+HC-10069,2025-09-16,C0635,Farmers Market,18.76
+HC-10070,2025-09-17,C0097,Walk-in,12.43
+HC-10071,2025-09-17,C0132,Referral,17.75
+HC-10072,2025-09-17,C0419,Instagram,29.16
+HC-10073,2025-09-17,C0580,Referral,25.31
+HC-10074,2025-09-17,C0601,Walk-in,22.12
+HC-10075,2025-09-18,C0335,Walk-in,21.66
+HC-10076,2025-09-18,C0632,Farmers Market,26.56
+HC-10077,2025-09-19,C0107,Instagram,18.80
+HC-10078,2025-09-19,C0686,Instagram,14.93
+HC-10079,2025-09-20,C0084,Walk-in,12.60
+HC-10080,2025-09-20,C0386,Farmers Market,14.33
+HC-10081,2025-09-20,C0468,Walk-in,20.02
+HC-10082,2025-09-20,C0487,Referral,22.14
+HC-10083,2025-09-20,C0526,Walk-in,21.89
+HC-10084,2025-09-21,C0369,Instagram,27.95
+HC-10085,2025-09-21,C0717,Google Ads,31.69
+HC-10086,2025-09-22,C0077,Walk-in,22.93
+HC-10087,2025-09-22,C0194,Farmers Market,22.42
+HC-10088,2025-09-22,C0258,Instagram,17.08
+HC-10089,2025-09-22,C0383,Instagram,26.00
+HC-10090,2025-09-22,C0484,Farmers Market,16.98
+HC-10091,2025-09-22,C0514,Instagram,20.85
+HC-10092,2025-09-23,C0482,Walk-in,23.65
+HC-10093,2025-09-23,C0510,Referral,18.70
+HC-10094,2025-09-25,C0197,Farmers Market,16.97
+HC-10095,2025-09-25,C0234,Instagram,25.88
+HC-10096,2025-09-25,C0329,Referral,31.58
+HC-10097,2025-09-25,C0380,Farmers Market,26.96
+HC-10098,2025-09-26,C0644,Instagram,25.60
+HC-10099,2025-09-26,C0789,Walk-in,12.58
+HC-10100,2025-09-27,C0179,Farmers Market,23.39
+HC-10101,2025-09-27,C0650,Walk-in,20.02
+HC-10102,2025-09-28,C0473,Instagram,24.13
+HC-10103,2025-09-29,C0377,Walk-in,16.86
+HC-10104,2025-09-29,C0392,Instagram,28.26
+HC-10105,2025-09-29,C0424,Walk-in,11.11
+HC-10106,2025-09-29,C0575,Walk-in,14.07
+HC-10107,2025-09-30,C0510,Referral,36.40
+HC-10108,2025-09-30,C0614,Walk-in,12.31
+HC-10109,2025-09-30,C0654,Farmers Market,26.56
+HC-10110,2025-10-01,C0207,Farmers Market,16.40
+HC-10111,2025-10-01,C0481,Google Ads,34.68
+HC-10112,2025-10-01,C0702,Walk-in,18.14
+HC-10113,2025-10-02,C0132,Referral,19.87
+HC-10114,2025-10-02,C0503,Walk-in,11.12
+HC-10115,2025-10-02,C0592,Walk-in,15.91
+HC-10116,2025-10-02,C0634,Google Ads,27.27
+HC-10117,2025-10-02,C0709,Walk-in,13.85
+HC-10118,2025-10-03,C0433,Walk-in,11.56
+HC-10119,2025-10-03,C0526,Walk-in,13.33
+HC-10120,2025-10-03,C0580,Referral,21.84
+HC-10121,2025-10-05,C0156,Farmers Market,20.95
+HC-10122,2025-10-06,C0099,Referral,38.41
+HC-10123,2025-10-06,C0665,Google Ads,30.47
+HC-10124,2025-10-06,C0699,Instagram,27.84
+HC-10125,2025-10-08,C0287,Instagram,21.70
+HC-10126,2025-10-08,C0325,Google Ads,22.61
+HC-10127,2025-10-08,C0329,Referral,25.77
+HC-10128,2025-10-09,C0079,Google Ads,19.94
+HC-10129,2025-10-09,C0173,Farmers Market,27.23
+HC-10130,2025-10-09,C0335,Walk-in,22.56
+HC-10131,2025-10-09,C0341,Walk-in,14.49
+HC-10132,2025-10-09,C0510,Referral,38.47
+HC-10133,2025-10-10,C0135,Instagram,18.61
+HC-10134,2025-10-10,C0138,Google Ads,23.20
+HC-10135,2025-10-10,C0390,Instagram,25.77
+HC-10136,2025-10-10,C0729,Instagram,27.72
+HC-10137,2025-10-11,C0426,Google Ads,28.94
+HC-10138,2025-10-11,C0655,Referral,31.12
+HC-10139,2025-10-12,C0437,Instagram,23.40
+HC-10140,2025-10-12,C0632,Farmers Market,22.05
+HC-10141,2025-10-13,C0639,Farmers Market,22.80
+HC-10142,2025-10-13,C0719,Instagram,30.38
+HC-10143,2025-10-14,C0121,Walk-in,17.62
+HC-10144,2025-10-14,C0482,Walk-in,17.27
+HC-10145,2025-10-14,C0526,Walk-in,16.70
+HC-10146,2025-10-14,C0570,Walk-in,20.41
+HC-10147,2025-10-14,C0576,Referral,32.38
+HC-10148,2025-10-14,C0628,Instagram,29.01
+HC-10149,2025-10-15,C0044,Walk-in,18.72
+HC-10150,2025-10-15,C0377,Walk-in,21.52
+HC-10151,2025-10-15,C0386,Farmers Market,13.11
+HC-10152,2025-10-15,C0484,Farmers Market,104.68
+HC-10153,2025-10-16,C0433,Walk-in,16.80
+HC-10154,2025-10-16,C0472,Walk-in,22.49
+HC-10155,2025-10-16,C0487,Referral,33.67
+HC-10156,2025-10-17,C0094,Google Ads,17.23
+HC-10157,2025-10-17,C0457,Instagram,23.73
+HC-10158,2025-10-18,C0025,Walk-in,17.27
+HC-10159,2025-10-18,C0402,Google Ads,24.12
+HC-10160,2025-10-18,C0522,Google Ads,23.90
+HC-10161,2025-10-19,C0136,Walk-in,21.35
+HC-10162,2025-10-19,C0424,Walk-in,23.62
+HC-10163,2025-10-19,C0510,Referral,22.07
+HC-10164,2025-10-19,C0555,Referral,28.24
+HC-10165,2025-10-19,C0665,Google Ads,32.20
+HC-10166,2025-10-20,C0580,Referral,18.42
+HC-10167,2025-10-20,C0695,Instagram,64.83
+HC-10168,2025-10-21,C0077,Walk-in,16.80
+HC-10169,2025-10-21,C0086,Walk-in,22.53
+HC-10170,2025-10-21,C0152,Google Ads,33.16
+HC-10171,2025-10-21,C0503,Walk-in,12.16
+HC-10172,2025-10-21,C0643,Walk-in,18.15
+HC-10173,2025-10-21,C0722,Farmers Market,18.82
+HC-10174,2025-10-22,C0329,Referral,19.70
+HC-10175,2025-10-22,C0334,Walk-in,23.42
+HC-10176,2025-10-22,C0513,Referral,30.23
+HC-10177,2025-10-22,C0650,Walk-in,17.82
+HC-10178,2025-10-24,C0291,Instagram,26.54
+HC-10179,2025-10-24,C0654,Farmers Market,19.47
+HC-10180,2025-10-25,C0121,Walk-in,20.37
+HC-10181,2025-10-25,C0156,Farmers Market,13.80
+HC-10182,2025-10-25,C0220,Walk-in,20.48
+HC-10183,2025-10-25,C0590,Walk-in,20.93
+HC-10184,2025-10-26,C0526,Walk-in,15.50
+HC-10185,2025-10-26,C0768,Google Ads,22.98
+HC-10186,2025-10-27,C0554,Google Ads,29.94
+HC-10187,2025-10-28,C0029,Google Ads,32.39
+HC-10188,2025-10-28,C0084,Walk-in,14.90
+HC-10189,2025-10-28,C0132,Referral,23.70
+HC-10190,2025-10-28,C0341,Walk-in,22.68
+HC-10191,2025-10-28,C0576,Referral,31.75
+HC-10192,2025-10-29,C0125,Instagram,20.54
+HC-10193,2025-10-29,C0473,Instagram,29.89
+HC-10194,2025-10-30,C0112,Walk-in,18.09
+HC-10195,2025-10-30,C0234,Instagram,19.33
+HC-10196,2025-10-30,C0335,Walk-in,19.88
+HC-10197,2025-10-30,C0487,Referral,25.53
+HC-10198,2025-10-30,C0530,Google Ads,20.54
+HC-10199,2025-10-31,C0078,Instagram,27.88
+HC-10200,2025-10-31,C0121,Walk-in,12.04
+HC-10201,2025-10-31,C0194,Farmers Market,16.78
+HC-10202,2025-10-31,C0337,Farmers Market,16.98
+HC-10203,2025-10-31,C0532,Instagram,22.21
+HC-10204,2025-11-01,C0115,Instagram,25.41
+HC-10205,2025-11-01,C0377,Walk-in,13.25
+HC-10206,2025-11-01,C0614,Walk-in,15.70
+HC-10207,2025-11-02,C0040,Instagram,21.21
+HC-10208,2025-11-02,C0735,Farmers Market,19.45
+HC-10209,2025-11-03,C0264,Walk-in,11.13
+HC-10210,2025-11-03,C0446,Farmers Market,13.57
+HC-10211,2025-11-04,C0503,Walk-in,11.40
+HC-10212,2025-11-04,C0632,Farmers Market,13.92
+HC-10213,2025-11-05,C0329,Referral,36.27
+HC-10214,2025-11-05,C0386,Farmers Market,24.41
+HC-10215,2025-11-06,C0062,Referral,38.39
+HC-10216,2025-11-06,C0292,Instagram,29.15
+HC-10217,2025-11-06,C0510,Referral,27.72
+HC-10218,2025-11-07,C0156,Farmers Market,13.00
+HC-10219,2025-11-07,C0159,Google Ads,20.75
+HC-10220,2025-11-08,C0077,Walk-in,11.75
+HC-10221,2025-11-08,C0580,Referral,33.62
+HC-10222,2025-11-08,C0658,Google Ads,26.10
+HC-10223,2025-11-09,C0112,Walk-in,12.65
+HC-10224,2025-11-09,C0570,Walk-in,11.66
+HC-10225,2025-11-09,C0643,Walk-in,17.55
+HC-10226,2025-11-10,C0298,Walk-in,21.78
+HC-10227,2025-11-10,C0424,Walk-in,22.63
+HC-10228,2025-11-10,C0439,Walk-in,17.03
+HC-10229,2025-11-10,C0484,Farmers Market,16.60
+HC-10230,2025-11-11,C0335,Walk-in,16.32
+HC-10231,2025-11-11,C0433,Walk-in,16.78
+HC-10232,2025-11-11,C0498,Instagram,101.44
+HC-10233,2025-11-11,C0526,Walk-in,13.63
+HC-10234,2025-11-11,C0532,Instagram,25.22
+HC-10235,2025-11-11,C0607,Google Ads,20.98
+HC-10236,2025-11-11,C0654,Farmers Market,18.74
+HC-10237,2025-11-12,C0019,Farmers Market,16.13
+HC-10238,2025-11-13,C0086,Walk-in,19.06
+HC-10239,2025-11-13,C0232,Farmers Market,16.51
+HC-10240,2025-11-13,C0341,Walk-in,11.13
+HC-10241,2025-11-13,C0376,Google Ads,28.52
+HC-10242,2025-11-13,C0482,Walk-in,12.56
+HC-10243,2025-11-13,C0494,Farmers Market,25.42
+HC-10244,2025-11-13,C0503,Walk-in,24.35
+HC-10245,2025-11-13,C0633,Referral,28.26
+HC-10246,2025-11-14,C0105,Instagram,17.00
+HC-10247,2025-11-14,C0120,Google Ads,23.91
+HC-10248,2025-11-14,C0243,Referral,25.75
+HC-10249,2025-11-14,C0451,Instagram,29.52
+HC-10250,2025-11-14,C0503,Walk-in,12.06
+HC-10251,2025-11-14,C0600,Farmers Market,63.70
+HC-10252,2025-11-15,C0329,Referral,21.58
+HC-10253,2025-11-15,C0532,Instagram,24.59
+HC-10254,2025-11-15,C0750,Instagram,25.77
+HC-10255,2025-11-16,C0023,Walk-in,20.23
+HC-10256,2025-11-16,C0165,Google Ads,23.20
+HC-10257,2025-11-17,C0058,Instagram,26.36
+HC-10258,2025-11-17,C0061,Instagram,23.26
+HC-10259,2025-11-17,C0417,Walk-in,19.39
+HC-10260,2025-11-17,C0589,Farmers Market,17.06
+HC-10261,2025-11-17,C0620,Referral,38.54
+HC-10262,2025-11-17,C0639,Farmers Market,14.94
+HC-10263,2025-11-17,C0650,Walk-in,21.13
+HC-10264,2025-11-17,C0665,Google Ads,28.70
+HC-10265,2025-11-18,C0382,Instagram,28.71
+HC-10266,2025-11-18,C0456,Referral,34.44
+HC-10267,2025-11-18,C0493,Google Ads,32.82
+HC-10268,2025-11-18,C0510,Referral,18.95
+HC-10269,2025-11-19,C0099,Referral,37.08
+HC-10270,2025-11-19,C0492,Google Ads,26.68
+HC-10271,2025-11-20,C0054,Walk-in,12.66
+HC-10272,2025-11-20,C0121,Walk-in,17.03
+HC-10273,2025-11-20,C0156,Farmers Market,25.55
+HC-10274,2025-11-20,C0414,Walk-in,21.45
+HC-10275,2025-11-20,C0655,Referral,37.78
+HC-10276,2025-11-20,C0684,Instagram,28.96
+HC-10277,2025-11-21,C0112,Walk-in,20.62
+HC-10278,2025-11-21,C0123,Referral,29.05
+HC-10279,2025-11-21,C0391,Instagram,19.12
+HC-10280,2025-11-21,C0582,Referral,21.63
+HC-10281,2025-11-21,C0616,Farmers Market,21.14
+HC-10282,2025-11-21,C0729,Instagram,28.79
+HC-10283,2025-11-22,C0334,Walk-in,23.41
+HC-10284,2025-11-22,C0341,Walk-in,14.29
+HC-10285,2025-11-22,C0478,Google Ads,31.61
+HC-10286,2025-11-22,C0576,Referral,29.81
+HC-10287,2025-11-22,C0580,Referral,21.01
+HC-10288,2025-11-22,C0656,Google Ads,16.07
+HC-10289,2025-11-22,C0669,Instagram,14.65
+HC-10290,2025-11-22,C0795,Google Ads,33.37
+HC-10291,2025-11-23,C0059,Referral,35.52
+HC-10292,2025-11-23,C0269,Referral,36.53
+HC-10293,2025-11-23,C0464,Instagram,27.68
+HC-10294,2025-11-23,C0495,Walk-in,19.02
+HC-10295,2025-11-24,C0329,Referral,27.44
+HC-10296,2025-11-24,C0411,Walk-in,64.64
+HC-10297,2025-11-24,C0555,Referral,25.69
+HC-10298,2025-11-24,C0600,Farmers Market,27.46
+HC-10299,2025-11-24,C0646,Walk-in,18.23
+HC-10300,2025-11-25,C0077,Walk-in,15.30
+HC-10301,2025-11-25,C0173,Farmers Market,21.06
+HC-10302,2025-11-25,C0179,Farmers Market,18.87
+HC-10303,2025-11-25,C0234,Instagram,30.37
+HC-10304,2025-11-25,C0273,Walk-in,20.92
+HC-10305,2025-11-25,C0362,Instagram,15.96
+HC-10306,2025-11-25,C0487,Referral,30.54
+HC-10307,2025-11-25,C0561,Farmers Market,15.32
+HC-10308,2025-11-25,C0733,Instagram,21.63
+HC-10309,2025-11-25,C0769,Walk-in,11.24
+HC-10310,2025-11-26,C0096,Walk-in,17.66
+HC-10311,2025-11-26,C0180,Walk-in,20.26
+HC-10312,2025-11-26,C0198,Google Ads,18.45
+HC-10313,2025-11-26,C0473,Instagram,16.79
+HC-10314,2025-11-26,C0643,Walk-in,14.87
+HC-10315,2025-11-26,C0654,Farmers Market,12.77
+HC-10316,2025-11-27,C0136,Walk-in,22.28
+HC-10317,2025-11-27,C0258,Instagram,19.68
+HC-10318,2025-11-27,C0386,Farmers Market,14.94
+HC-10319,2025-11-28,C0377,Walk-in,21.62
+HC-10320,2025-11-28,C0605,Google Ads,31.02
+HC-10321,2025-11-29,C0116,Instagram,26.96
+HC-10322,2025-11-29,C0424,Walk-in,20.54
+HC-10323,2025-11-29,C0503,Walk-in,13.29
+HC-10324,2025-11-29,C0570,Walk-in,12.98
+HC-10325,2025-11-29,C0627,Instagram,20.05
+HC-10326,2025-11-30,C0086,Walk-in,16.43
+HC-10327,2025-11-30,C0123,Referral,24.03
+HC-10328,2025-11-30,C0510,Referral,33.78
+HC-10329,2025-11-30,C0517,Instagram,26.29
+HC-10330,2025-11-30,C0579,Google Ads,25.95
+HC-10331,2025-12-01,C0019,Farmers Market,25.88
+HC-10332,2025-12-01,C0138,Google Ads,40.39
+HC-10333,2025-12-01,C0285,Instagram,24.80
+HC-10334,2025-12-01,C0484,Farmers Market,35.56
+HC-10335,2025-12-01,C0687,Instagram,23.64
+HC-10336,2025-12-02,C0243,Referral,24.53
+HC-10337,2025-12-02,C0310,Referral,37.13
+HC-10338,2025-12-02,C0433,Walk-in,23.54
+HC-10339,2025-12-02,C0489,Instagram,30.70
+HC-10340,2025-12-02,C0526,Walk-in,24.86
+HC-10341,2025-12-03,C0039,Farmers Market,34.99
+HC-10342,2025-12-03,C0065,Google Ads,28.51
+HC-10343,2025-12-03,C0070,Walk-in,32.34
+HC-10344,2025-12-03,C0084,Walk-in,23.85
+HC-10345,2025-12-03,C0111,Walk-in,21.57
+HC-10346,2025-12-03,C0298,Walk-in,27.79
+HC-10347,2025-12-03,C0329,Referral,24.32
+HC-10348,2025-12-04,C0103,Walk-in,26.35
+HC-10349,2025-12-04,C0132,Referral,39.54
+HC-10350,2025-12-04,C0444,Referral,39.29
+HC-10351,2025-12-04,C0522,Google Ads,33.37
+HC-10352,2025-12-04,C0633,Referral,35.35
+HC-10353,2025-12-05,C0148,Google Ads,43.29
+HC-10354,2025-12-05,C0182,Instagram,20.04
+HC-10355,2025-12-05,C0324,Google Ads,32.21
+HC-10356,2025-12-05,C0645,Referral,24.08
+HC-10357,2025-12-06,C0158,Instagram,20.41
+HC-10358,2025-12-06,C0632,Farmers Market,28.90
+HC-10359,2025-12-07,C0054,Walk-in,26.05
+HC-10360,2025-12-07,C0532,Instagram,35.11
+HC-10361,2025-12-07,C0580,Referral,37.67
+HC-10362,2025-12-07,C0650,Walk-in,21.52
+HC-10363,2025-12-07,C0654,Farmers Market,36.32
+HC-10364,2025-12-08,C0121,Walk-in,18.66
+HC-10365,2025-12-08,C0386,Farmers Market,33.45
+HC-10366,2025-12-08,C0487,Referral,27.22
+HC-10367,2025-12-09,C0076,Instagram,34.00
+HC-10368,2025-12-09,C0112,Walk-in,26.15
+HC-10369,2025-12-09,C0150,Instagram,20.22
+HC-10370,2025-12-09,C0375,Referral,45.11
+HC-10371,2025-12-09,C0482,Walk-in,26.13
+HC-10372,2025-12-09,C0505,Google Ads,39.84
+HC-10373,2025-12-10,C0136,Walk-in,27.41
+HC-10374,2025-12-10,C0494,Farmers Market,21.95
+HC-10375,2025-12-10,C0503,Walk-in,26.41
+HC-10376,2025-12-10,C0510,Referral,38.54
+HC-10377,2025-12-10,C0620,Referral,24.11
+HC-10378,2025-12-10,C0641,Farmers Market,18.95
+HC-10379,2025-12-11,C0156,Farmers Market,26.43
+HC-10380,2025-12-11,C0283,Referral,25.96
+HC-10381,2025-12-11,C0459,Instagram,39.01
+HC-10382,2025-12-11,C0610,Instagram,33.91
+HC-10383,2025-12-11,C0679,Referral,24.82
+HC-10384,2025-12-11,C0700,Instagram,40.95
+HC-10385,2025-12-12,C0217,Referral,31.52
+HC-10386,2025-12-12,C0318,Referral,34.53
+HC-10387,2025-12-12,C0341,Walk-in,23.65
+HC-10388,2025-12-12,C0362,Instagram,37.94
+HC-10389,2025-12-12,C0473,Instagram,35.37
+HC-10390,2025-12-12,C0730,Google Ads,36.06
+HC-10391,2025-12-12,C0769,Walk-in,21.20
+HC-10392,2025-12-13,C0009,Instagram,38.49
+HC-10393,2025-12-13,C0176,Walk-in,21.12
+HC-10394,2025-12-13,C0238,Google Ads,24.62
+HC-10395,2025-12-13,C0769,Walk-in,19.04
+HC-10396,2025-12-15,C0059,Referral,44.59
+HC-10397,2025-12-15,C0121,Walk-in,20.66
+HC-10398,2025-12-15,C0160,Walk-in,25.99
+HC-10399,2025-12-15,C0576,Referral,50.47
+HC-10400,2025-12-15,C0783,Google Ads,45.00
+HC-10401,2025-12-16,C0029,Google Ads,40.49
+HC-10402,2025-12-16,C0032,Instagram,31.60
+HC-10403,2025-12-16,C0041,Referral,49.37
+HC-10404,2025-12-16,C0070,Walk-in,16.60
+HC-10405,2025-12-16,C0123,Referral,34.43
+HC-10406,2025-12-16,C0186,Google Ads,34.31
+HC-10407,2025-12-16,C0542,Farmers Market,33.40
+HC-10408,2025-12-16,C0782,Instagram,26.93
+HC-10409,2025-12-17,C0054,Walk-in,19.06
+HC-10410,2025-12-17,C0062,Referral,51.84
+HC-10411,2025-12-17,C0180,Walk-in,25.26
+HC-10412,2025-12-17,C0370,Walk-in,15.18
+HC-10413,2025-12-17,C0424,Walk-in,27.28
+HC-10414,2025-12-17,C0513,Referral,37.36
+HC-10415,2025-12-17,C0526,Walk-in,17.14
+HC-10416,2025-12-17,C0570,Walk-in,18.87
+HC-10417,2025-12-17,C0633,Referral,28.74
+HC-10418,2025-12-17,C0652,Walk-in,15.89
+HC-10419,2025-12-17,C0665,Google Ads,39.94
+HC-10420,2025-12-18,C0038,Google Ads,37.11
+HC-10421,2025-12-18,C0335,Walk-in,17.92
+HC-10422,2025-12-18,C0485,Farmers Market,23.95
+HC-10423,2025-12-18,C0590,Walk-in,25.99
+HC-10424,2025-12-18,C0759,Referral,33.96
+HC-10425,2025-12-19,C0086,Walk-in,21.15
+HC-10426,2025-12-19,C0129,Instagram,40.08
+HC-10427,2025-12-19,C0169,Walk-in,25.30
+HC-10428,2025-12-19,C0373,Instagram,27.09
+HC-10429,2025-12-19,C0413,Referral,24.52
+HC-10430,2025-12-19,C0510,Referral,37.23
+HC-10431,2025-12-19,C0524,Referral,37.00
+HC-10432,2025-12-19,C0585,Farmers Market,17.92
+HC-10433,2025-12-19,C0719,Instagram,38.39
+HC-10434,2025-12-20,C0132,Referral,51.06
+HC-10435,2025-12-20,C0234,Instagram,38.87
+HC-10436,2025-12-20,C0318,Referral,36.25
+HC-10437,2025-12-20,C0399,Google Ads,41.79
+HC-10438,2025-12-20,C0471,Google Ads,44.57
+HC-10439,2025-12-20,C0612,Farmers Market,32.44
+HC-10440,2025-12-20,C0650,Walk-in,18.48
+HC-10441,2025-12-21,C0283,Referral,52.06
+HC-10442,2025-12-21,C0377,Walk-in,21.03
+HC-10443,2025-12-21,C0587,Farmers Market,23.33
+HC-10444,2025-12-22,C0067,Walk-in,20.41
+HC-10445,2025-12-22,C0112,Walk-in,33.25
+HC-10446,2025-12-22,C0156,Farmers Market,18.20
+HC-10447,2025-12-22,C0304,Referral,46.45
+HC-10448,2025-12-22,C0310,Referral,38.89
+HC-10449,2025-12-22,C0518,Google Ads,35.77
+HC-10450,2025-12-22,C0525,Referral,38.08
+HC-10451,2025-12-22,C0600,Farmers Market,28.13
+HC-10452,2025-12-22,C0679,Referral,31.53
+HC-10453,2025-12-23,C0310,Referral,37.48
+HC-10454,2025-12-23,C0445,Farmers Market,32.20
+HC-10455,2025-12-23,C0487,Referral,24.87
+HC-10456,2025-12-23,C0595,Google Ads,30.09
+HC-10457,2025-12-23,C0654,Farmers Market,32.18
+HC-10458,2025-12-23,C0675,Google Ads,22.61
+HC-10459,2025-12-24,C0213,Walk-in,17.26
+HC-10460,2025-12-24,C0277,Instagram,22.41
+HC-10461,2025-12-24,C0433,Walk-in,20.73
+HC-10462,2025-12-24,C0516,Farmers Market,26.93
+HC-10463,2025-12-24,C0769,Walk-in,29.20
+HC-10464,2025-12-25,C0019,Farmers Market,22.39
+HC-10465,2025-12-25,C0039,Farmers Market,34.84
+HC-10466,2025-12-25,C0070,Walk-in,26.66
+HC-10467,2025-12-25,C0152,Google Ads,39.30
+HC-10468,2025-12-25,C0217,Referral,45.63
+HC-10469,2025-12-25,C0341,Walk-in,16.38
+HC-10470,2025-12-25,C0385,Google Ads,42.68
+HC-10471,2025-12-25,C0528,Farmers Market,32.21
+HC-10472,2025-12-25,C0533,Instagram,38.30
+HC-10473,2025-12-25,C0580,Referral,31.44
+HC-10474,2025-12-25,C0606,Referral,45.31
+HC-10475,2025-12-26,C0123,Referral,52.27
+HC-10476,2025-12-26,C0154,Walk-in,19.71
+HC-10477,2025-12-26,C0298,Walk-in,22.49
+HC-10478,2025-12-26,C0431,Instagram,35.76
+HC-10479,2025-12-26,C0647,Referral,36.27
+HC-10480,2025-12-26,C0667,Google Ads,35.21
+HC-10481,2025-12-27,C0053,Referral,44.82
+HC-10482,2025-12-27,C0121,Walk-in,28.40
+HC-10483,2025-12-27,C0354,Referral,27.87
+HC-10484,2025-12-27,C0407,Walk-in,32.25
+HC-10485,2025-12-27,C0510,Referral,34.59
+HC-10486,2025-12-27,C0679,Referral,42.73
+HC-10487,2025-12-28,C0482,Walk-in,32.31
+HC-10488,2025-12-28,C0503,Walk-in,23.73
+HC-10489,2025-12-28,C0636,Instagram,27.11
+HC-10490,2025-12-28,C0696,Instagram,39.48
+HC-10491,2025-12-28,C0772,Referral,147.99
+HC-10492,2025-12-29,C0310,Referral,32.79
+HC-10493,2025-12-29,C0316,Google Ads,35.35
+HC-10494,2025-12-29,C0415,Walk-in,16.68
+HC-10495,2025-12-29,C0576,Referral,34.49
+HC-10496,2025-12-30,C0041,Referral,37.60
+HC-10497,2025-12-30,C0127,Walk-in,24.57
+HC-10498,2025-12-30,C0243,Referral,48.14
+HC-10499,2025-12-30,C0282,Farmers Market,27.37
+HC-10500,2025-12-30,C0334,Walk-in,26.97
+HC-10501,2025-12-30,C0424,Walk-in,30.24
+HC-10502,2025-12-30,C0446,Farmers Market,26.76
+HC-10503,2025-12-30,C0550,Farmers Market,30.33
+HC-10504,2025-12-30,C0588,Instagram,34.90
+HC-10505,2025-12-31,C0095,Google Ads,37.80
+HC-10506,2025-12-31,C0155,Walk-in,16.00
+HC-10507,2025-12-31,C0318,Referral,41.43
+HC-10508,2025-12-31,C0362,Instagram,34.20
+HC-10509,2025-12-31,C0377,Walk-in,32.46
+HC-10510,2025-12-31,C0473,Instagram,38.20
+HC-10511,2025-12-31,C0511,Walk-in,17.45
+HC-10512,2025-12-31,C0642,Walk-in,29.83
+HC-10513,2025-12-31,C0670,Referral,30.26
+HC-10514,2025-12-31,C0759,Referral,49.95
+HC-10515,2026-01-01,C0067,Walk-in,20.44
+HC-10516,2026-01-01,C0086,Walk-in,13.34
+HC-10516,2026-01-01,C0086,Walk-in,13.34
+HC-10517,2026-01-01,C0164,Google Ads,24.47
+HC-10518,2026-01-01,C0221,Farmers Market,16.96
+HC-10519,2026-01-01,C0229,Referral,30.08
+HC-10520,2026-01-01,C0526,Walk-in,15.90
+HC-10521,2026-01-01,C0633,Referral,36.72
+HC-10522,2026-01-02,C0070,Walk-in,11.74
+HC-10523,2026-01-02,C0091,Google Ads,26.31
+HC-10524,2026-01-02,C0173,Farmers Market,20.17
+HC-10525,2026-01-02,C0330,Google Ads,18.61
+HC-10526,2026-01-02,C0341,Walk-in,14.38
+HC-10527,2026-01-02,C0375,Referral,21.76
+HC-10528,2026-01-02,C0679,Referral,17.82
+HC-10529,2026-01-03,C0160,Walk-in,17.56
+HC-10530,2026-01-03,C0190,Farmers Market,14.10
+HC-10531,2026-01-03,C0217,Referral,19.40
+HC-10532,2026-01-03,C0413,Referral,28.20
+HC-10532,2026-01-03,C0413,Referral,28.20
+HC-10533,2026-01-03,C0485,Farmers Market,22.24
+HC-10534,2026-01-04,C0347,Instagram,29.04
+HC-10535,2026-01-04,C0603,Instagram,25.33
+HC-10536,2026-01-05,C0004,Google Ads,31.10
+HC-10537,2026-01-05,C0416,Instagram,15.37
+HC-10538,2026-01-05,C0587,Farmers Market,25.79
+HC-10539,2026-01-05,C0647,Referral,28.40
+HC-10540,2026-01-05,C0733,Instagram,19.08
+HC-10541,2026-01-05,C0766,Instagram,27.02
+HC-10542,2026-01-05,C0772,Referral,33.85
+HC-10543,2026-01-06,C0123,Referral,34.76
+HC-10544,2026-01-06,C0283,Referral,26.32
+HC-10545,2026-01-06,C0421,Referral,20.33
+HC-10546,2026-01-06,C0600,Farmers Market,26.35
+HC-10547,2026-01-07,C0060,Google Ads,26.03
+HC-10548,2026-01-07,C0234,Instagram,16.82
+HC-10549,2026-01-07,C0377,Walk-in,17.04
+HC-10550,2026-01-07,C0487,Referral,25.57
+HC-10551,2026-01-07,C0510,Referral,33.01
+HC-10552,2026-01-07,C0579,Google Ads,17.86
+HC-10553,2026-01-08,C0141,Google Ads,25.81
+HC-10554,2026-01-08,C0512,Instagram,29.54
+HC-10555,2026-01-08,C0580,Referral,29.43
+HC-10556,2026-01-08,C0697,Instagram,17.54
+HC-10557,2026-01-08,C0759,Referral,34.19
+HC-10558,2026-01-09,C0243,Referral,20.37
+HC-10559,2026-01-09,C0318,Referral,22.17
+HC-10560,2026-01-09,C0484,Farmers Market,19.13
+HC-10561,2026-01-09,C0525,Referral,29.49
+HC-10562,2026-01-09,C0615,Walk-in,23.46
+HC-10563,2026-01-09,C0735,Farmers Market,12.68
+HC-10564,2026-01-10,C0041,Referral,24.00
+HC-10565,2026-01-10,C0052,Google Ads,21.49
+HC-10566,2026-01-10,C0054,Walk-in,17.18
+HC-10567,2026-01-10,C0086,Walk-in,12.60
+HC-10568,2026-01-10,C0180,Walk-in,13.28
+HC-10569,2026-01-10,C0354,Referral,35.31
+HC-10570,2026-01-10,C0650,Walk-in,19.74
+HC-10571,2026-01-11,C0039,Farmers Market,15.68
+HC-10572,2026-01-11,C0413,Referral,30.49
+HC-10573,2026-01-11,C0633,Referral,26.04
+HC-10574,2026-01-11,C0701,Walk-in,17.22
+HC-10575,2026-01-12,C0067,Walk-in,15.16
+HC-10576,2026-01-12,C0209,Referral,35.81
+HC-10577,2026-01-12,C0217,Referral,29.25
+HC-10578,2026-01-12,C0298,Walk-in,18.33
+HC-10579,2026-01-12,C0424,Walk-in,16.82
+HC-10580,2026-01-12,C0719,Instagram,19.07
+HC-10581,2026-01-13,C0070,Walk-in,24.50
+HC-10582,2026-01-13,C0156,Farmers Market,26.02
+HC-10583,2026-01-13,C0335,Walk-in,16.61
+HC-10584,2026-01-13,C0407,Walk-in,18.85
+HC-10585,2026-01-13,C0772,Referral,28.19
+HC-10585,2026-01-13,C0772,Referral,28.19
+HC-10586,2026-01-14,C0117,Instagram,21.50
+HC-10587,2026-01-14,C0121,Walk-in,24.32
+HC-10588,2026-01-14,C0379,Farmers Market,18.44
+HC-10589,2026-01-14,C0654,Farmers Market,16.95
+HC-10590,2026-01-15,C0160,Walk-in,16.47
+HC-10591,2026-01-15,C0183,Walk-in,21.42
+HC-10592,2026-01-15,C0229,Referral,27.75
+HC-10593,2026-01-15,C0232,Farmers Market,14.91
+HC-10594,2026-01-15,C0310,Referral,31.14
+HC-10595,2026-01-15,C0420,Instagram,28.60
+HC-10596,2026-01-15,C0433,Walk-in,15.43
+HC-10597,2026-01-15,C0532,Instagram,14.23
+HC-10598,2026-01-15,C0576,Referral,32.20
+HC-10599,2026-01-15,C0679,Referral,31.82
+HC-10600,2026-01-16,C0054,Walk-in,22.75
+HC-10601,2026-01-16,C0158,Instagram,23.01
+HC-10602,2026-01-16,C0304,Referral,32.09
+HC-10603,2026-01-16,C0510,Referral,23.35
+HC-10604,2026-01-16,C0612,Farmers Market,17.35
+HC-10605,2026-01-16,C0647,Referral,18.70
+HC-10606,2026-01-16,C0769,Walk-in,19.89
+HC-10607,2026-01-17,C0123,Referral,32.41
+HC-10608,2026-01-17,C0386,Farmers Market,19.91
+HC-10609,2026-01-17,C0421,Referral,32.41
+HC-10610,2026-01-17,C0444,Referral,108.42
+HC-10611,2026-01-17,C0482,Walk-in,11.62
+HC-10612,2026-01-17,C0607,Google Ads,17.31
+HC-10613,2026-01-17,C0679,Referral,35.86
+HC-10614,2026-01-18,C0051,Google Ads,22.20
+HC-10615,2026-01-18,C0059,Referral,23.46
+HC-10616,2026-01-18,C0132,Referral,27.66
+HC-10617,2026-01-18,C0318,Referral,37.55
+HC-10618,2026-01-18,C0454,Walk-in,12.65
+HC-10619,2026-01-18,C0582,Referral,31.13
+HC-10620,2026-01-18,C0606,Referral,34.99
+HC-10621,2026-01-18,C0633,Referral,34.11
+HC-10622,2026-01-18,C0640,Farmers Market,27.39
+HC-10623,2026-01-19,C0041,Referral,36.81
+HC-10624,2026-01-19,C0112,Walk-in,12.90
+HC-10625,2026-01-19,C0155,Walk-in,22.57
+HC-10626,2026-01-19,C0396,Referral,25.86
+HC-10627,2026-01-19,C0494,Farmers Market,13.86
+HC-10628,2026-01-20,C0525,Referral,19.20
+HC-10629,2026-01-20,C0623,Instagram,16.38
+HC-10630,2026-01-20,C0737,Walk-in,24.18
+HC-10631,2026-01-21,C0138,Google Ads,16.47
+HC-10632,2026-01-21,C0140,Farmers Market,22.41
+HC-10633,2026-01-21,C0529,Walk-in,16.24
+HC-10634,2026-01-21,C0531,Instagram,14.86
+HC-10635,2026-01-21,C0536,Walk-in,13.74
+HC-10636,2026-01-21,C0738,Farmers Market,18.80
+HC-10637,2026-01-22,C0243,Referral,19.99
+HC-10638,2026-01-22,C0293,Walk-in,18.89
+HC-10639,2026-01-22,C0473,Instagram,90.51
+HC-10640,2026-01-22,C0526,Walk-in,16.52
+HC-10641,2026-01-22,C0713,Referral,32.75
+HC-10642,2026-01-23,C0007,Walk-in,19.75
+HC-10643,2026-01-23,C0318,Referral,38.32
+HC-10644,2026-01-23,C0341,Walk-in,19.48
+HC-10645,2026-01-23,C0503,Walk-in,19.11
+HC-10646,2026-01-23,C0670,Referral,27.87
+HC-10647,2026-01-23,C0772,Referral,28.51
+HC-10648,2026-01-24,C0121,Walk-in,16.09
+HC-10649,2026-01-24,C0261,Walk-in,11.23
+HC-10650,2026-01-24,C0504,Instagram,19.36
+HC-10651,2026-01-24,C0580,Referral,32.98
+HC-10652,2026-01-24,C0779,Instagram,26.07
+HC-10653,2026-01-25,C0219,Instagram,23.88
+HC-10654,2026-01-25,C0310,Referral,37.80
+HC-10655,2026-01-25,C0496,Referral,23.80
+HC-10656,2026-01-25,C0529,Walk-in,68.26
+HC-10657,2026-01-25,C0546,Walk-in,20.73
+HC-10658,2026-01-25,C0741,Google Ads,24.93
+HC-10659,2026-01-25,C0745,Google Ads,18.49
+HC-10660,2026-01-26,C0029,Google Ads,20.15
+HC-10661,2026-01-26,C0054,Walk-in,15.20
+HC-10662,2026-01-26,C0605,Google Ads,19.34
+HC-10663,2026-01-26,C0633,Referral,34.70
+HC-10664,2026-01-26,C0732,Referral,23.79
+HC-10665,2026-01-27,C0019,Farmers Market,26.38
+HC-10666,2026-01-27,C0217,Referral,30.29
+HC-10667,2026-01-27,C0228,Instagram,28.38
+HC-10668,2026-01-27,C0353,Google Ads,32.20
+HC-10669,2026-01-27,C0354,Referral,32.17
+HC-10670,2026-01-27,C0407,Walk-in,18.74
+HC-10671,2026-01-27,C0424,Walk-in,16.59
+HC-10672,2026-01-27,C0503,Walk-in,15.60
+HC-10673,2026-01-28,C0067,Walk-in,22.66
+HC-10674,2026-01-28,C0180,Walk-in,13.95
+HC-10675,2026-01-28,C0598,Instagram,26.85
+HC-10676,2026-01-28,C0632,Farmers Market,16.64
+HC-10677,2026-01-28,C0645,Referral,35.23
+HC-10678,2026-01-28,C0679,Referral,71.69
+HC-10679,2026-01-28,C0729,Instagram,26.35
+HC-10680,2026-01-29,C0086,Walk-in,23.37
+HC-10681,2026-01-29,C0122,Farmers Market,17.50
+HC-10682,2026-01-29,C0141,Google Ads,20.35
+HC-10683,2026-01-29,C0190,Farmers Market,12.39
+HC-10684,2026-01-29,C0195,Farmers Market,17.31
+HC-10685,2026-01-29,C0293,Walk-in,14.51
+HC-10686,2026-01-29,C0467,Google Ads,33.86
+HC-10687,2026-01-29,C0532,Instagram,24.25
+HC-10688,2026-01-29,C0570,Walk-in,18.56
+HC-10689,2026-01-29,C0588,Instagram,28.81
+HC-10690,2026-01-29,C0638,Google Ads,24.33
+HC-10691,2026-01-29,C0772,Referral,38.10
+HC-10692,2026-01-30,C0085,Walk-in,11.15
+HC-10693,2026-01-30,C0160,Walk-in,21.04
+HC-10694,2026-01-30,C0199,Farmers Market,12.82
+HC-10695,2026-01-30,C0323,Walk-in,18.68
+HC-10696,2026-01-30,C0413,Referral,27.93
+HC-10697,2026-01-30,C0485,Farmers Market,16.88
+HC-10698,2026-01-30,C0487,Referral,24.10
+HC-10699,2026-01-30,C0510,Referral,37.45
+HC-10700,2026-01-30,C0522,Google Ads,33.63
+HC-10701,2026-01-30,C0587,Farmers Market,14.38
+HC-10702,2026-01-30,C0647,Referral,19.66
+HC-10703,2026-01-30,C0665,Google Ads,19.25
+HC-10704,2026-01-31,C0039,Farmers Market,22.93
+HC-10705,2026-01-31,C0377,Walk-in,23.68
+HC-10706,2026-01-31,C0496,Referral,17.56
+HC-10707,2026-01-31,C0529,Walk-in,22.88
+HC-10708,2026-01-31,C0707,Instagram,14.14
+HC-10709,2026-02-01,C0243,Referral,18.54
+HC-10710,2026-02-01,C0335,Walk-in,23.64
+HC-10711,2026-02-01,C0362,Instagram,24.12
+HC-10712,2026-02-01,C0608,Farmers Market,26.29
+HC-10713,2026-02-01,C0679,Referral,18.35
+HC-10714,2026-02-02,C0143,Referral,22.61
+HC-10715,2026-02-02,C0174,Referral,17.60
+HC-10716,2026-02-02,C0293,Walk-in,23.43
+HC-10717,2026-02-02,C0583,Walk-in,23.87
+HC-10718,2026-02-02,C0606,Referral,30.23
+HC-10719,2026-02-03,C0070,Walk-in,13.84
+HC-10720,2026-02-03,C0134,Instagram,28.69
+HC-10721,2026-02-03,C0318,Referral,26.13
+HC-10722,2026-02-03,C0576,Referral,27.44
+HC-10723,2026-02-03,C0662,Google Ads,30.19
+HC-10724,2026-02-03,C0670,Referral,36.48
+HC-10725,2026-02-03,C0679,Referral,31.33
+HC-10726,2026-02-04,C0086,Walk-in,20.94
+HC-10727,2026-02-04,C0121,Walk-in,15.39
+HC-10728,2026-02-04,C0155,Walk-in,20.14
+HC-10729,2026-02-04,C0156,Farmers Market,12.85
+HC-10730,2026-02-04,C0271,Farmers Market,22.78
+HC-10731,2026-02-04,C0304,Referral,33.46
+HC-10732,2026-02-04,C0656,Google Ads,23.10
+HC-10733,2026-02-04,C0738,Farmers Market,13.44
+HC-10734,2026-02-05,C0067,Walk-in,16.24
+HC-10735,2026-02-05,C0167,Google Ads,29.23
+HC-10736,2026-02-05,C0433,Walk-in,17.69
+HC-10737,2026-02-05,C0612,Farmers Market,27.50
+HC-10738,2026-02-05,C0694,Instagram,27.67
+HC-10739,2026-02-05,C0737,Walk-in,13.75
+HC-10740,2026-02-06,C0217,Referral,35.71
+HC-10741,2026-02-06,C0288,Google Ads,18.06
+HC-10742,2026-02-06,C0298,Walk-in,14.63
+HC-10743,2026-02-06,C0308,Instagram,16.82
+HC-10744,2026-02-06,C0404,Google Ads,28.00
+HC-10745,2026-02-06,C0415,Walk-in,22.25
+HC-10746,2026-02-06,C0580,Referral,34.06
+HC-10747,2026-02-06,C0650,Walk-in,22.98
+HC-10748,2026-02-06,C0695,Instagram,23.61
+HC-10749,2026-02-06,C0769,Walk-in,17.30
+HC-10750,2026-02-07,C0019,Farmers Market,25.44
+HC-10751,2026-02-07,C0123,Referral,27.80
+HC-10752,2026-02-07,C0218,Instagram,15.35
+HC-10753,2026-02-07,C0230,Google Ads,18.49
+HC-10754,2026-02-07,C0407,Walk-in,17.06
+HC-10755,2026-02-07,C0444,Referral,38.30
+HC-10756,2026-02-07,C0446,Farmers Market,26.43
+HC-10757,2026-02-07,C0590,Walk-in,11.33
+HC-10758,2026-02-08,C0183,Walk-in,21.53
+HC-10759,2026-02-08,C0185,Instagram,15.03
+HC-10760,2026-02-08,C0234,Instagram,29.08
+HC-10761,2026-02-08,C0236,Google Ads,26.11
+HC-10762,2026-02-08,C0600,Farmers Market,17.66
+HC-10763,2026-02-08,C0654,Farmers Market,20.14
+HC-10764,2026-02-08,C0797,Farmers Market,22.24
+HC-10765,2026-02-09,C0101,Instagram,19.89
+HC-10766,2026-02-09,C0354,Referral,33.20
+HC-10767,2026-02-09,C0482,Walk-in,19.62
+HC-10768,2026-02-09,C0496,Referral,27.97
+HC-10769,2026-02-09,C0510,Referral,18.34
+HC-10770,2026-02-09,C0526,Walk-in,16.34
+HC-10771,2026-02-09,C0606,Referral,30.22
+HC-10772,2026-02-09,C0633,Referral,28.09
+HC-10773,2026-02-09,C0748,Instagram,18.65
+HC-10774,2026-02-09,C0760,Google Ads,19.23
+HC-10775,2026-02-09,C0772,Referral,36.28
+HC-10776,2026-02-10,C0039,Farmers Market,20.82
+HC-10777,2026-02-10,C0050,Walk-in,14.84
+HC-10778,2026-02-10,C0132,Referral,19.98
+HC-10779,2026-02-10,C0139,Google Ads,22.94
+HC-10780,2026-02-10,C0293,Walk-in,19.19
+HC-10781,2026-02-10,C0696,Instagram,20.10
+HC-10782,2026-02-10,C0759,Referral,31.90
+HC-10783,2026-02-11,C0042,Farmers Market,19.50
+HC-10784,2026-02-11,C0161,Walk-in,19.82
+HC-10785,2026-02-11,C0338,Instagram,14.57
+HC-10786,2026-02-11,C0410,Farmers Market,14.47
+HC-10787,2026-02-11,C0411,Walk-in,19.74
+HC-10788,2026-02-11,C0484,Farmers Market,20.63
+HC-10789,2026-02-11,C0487,Referral,34.64
+HC-10790,2026-02-11,C0525,Referral,34.11
+HC-10791,2026-02-11,C0550,Farmers Market,21.98
+HC-10792,2026-02-11,C0558,Instagram,19.50
+HC-10793,2026-02-11,C0679,Referral,26.38
+HC-10794,2026-02-11,C0797,Farmers Market,25.66
+HC-10795,2026-02-12,C0041,Referral,29.18
+HC-10796,2026-02-12,C0172,Walk-in,19.94
+HC-10797,2026-02-12,C0304,Referral,25.78
+HC-10798,2026-02-12,C0494,Farmers Market,14.54
+HC-10799,2026-02-12,C0529,Walk-in,13.67
+HC-10800,2026-02-12,C0622,Referral,24.80
+HC-10801,2026-02-13,C0010,Referral,28.56
+HC-10802,2026-02-13,C0054,Walk-in,19.34
+HC-10803,2026-02-13,C0070,Walk-in,18.59
+HC-10804,2026-02-13,,Walk-in,22.27
+HC-10805,2026-02-13,C0532,Instagram,25.37
+HC-10806,2026-02-13,C0670,Referral,37.66
+HC-10807,2026-02-13,C0772,Referral,23.50
+HC-10808,2026-02-14,C0032,Instagram,14.29
+HC-10809,2026-02-14,C0121,Walk-in,14.69
+HC-10810,2026-02-14,C0160,Walk-in,24.21
+HC-10811,2026-02-14,C0377,Walk-in,13.48
+HC-10812,2026-02-14,C0540,Instagram,28.60
+HC-10813,2026-02-14,C0697,Instagram,15.26
+HC-10814,2026-02-15,C0161,Walk-in,24.20
+HC-10815,2026-02-15,C0433,Walk-in,13.85
+HC-10816,2026-02-15,C0526,Walk-in,11.95
+HC-10817,2026-02-15,C0691,Walk-in,24.51
+HC-10818,2026-02-15,C0732,Referral,38.47
+HC-10819,2026-02-16,C0190,Farmers Market,12.54
+HC-10820,2026-02-16,C0318,Referral,38.78
+HC-10821,2026-02-16,C0322,Instagram,26.45
+HC-10822,2026-02-16,C0388,Instagram,27.18
+HC-10823,2026-02-16,C0473,Instagram,15.61
+HC-10824,2026-02-16,C0589,Farmers Market,24.78
+HC-10825,2026-02-16,C0665,Google Ads,31.49
+HC-10826,2026-02-17,C0242,Instagram,28.41
+HC-10827,2026-02-17,C0310,Referral,23.02
+HC-10828,2026-02-17,C0475,Google Ads,30.77
+HC-10829,2026-02-17,C0553,Farmers Market,17.07
+HC-10830,2026-02-17,C0583,Walk-in,14.41
+HC-10831,2026-02-17,C0647,Referral,33.36
+HC-10832,2026-02-18,C0503,Walk-in,12.52
+HC-10833,2026-02-18,C0515,Instagram,14.16
+HC-10834,2026-02-18,C0764,Referral,18.84
+HC-10835,2026-02-19,C0138,Google Ads,16.82
+HC-10836,2026-02-19,C0158,Instagram,15.39
+HC-10837,2026-02-19,C0293,Walk-in,58.22
+HC-10838,2026-02-19,C0496,Referral,35.68
+HC-10839,2026-02-19,C0780,Google Ads,17.03
+HC-10840,2026-02-19,C0800,Farmers Market,98.61
+HC-10841,2026-02-20,C0053,Referral,28.88
+HC-10842,2026-02-20,C0059,Referral,38.72
+HC-10843,2026-02-20,C0413,Referral,23.12
+HC-10844,2026-02-20,C0448,Walk-in,11.09
+HC-10845,2026-02-20,C0510,Referral,21.93
+HC-10846,2026-02-20,C0529,Walk-in,12.97
+HC-10847,2026-02-20,C0587,Farmers Market,16.83
+HC-10848,2026-02-20,C0626,Walk-in,11.49
+HC-10849,2026-02-20,C0772,Referral,24.22
+HC-10850,2026-02-20,C0773,Farmers Market,20.54
+HC-10851,2026-02-21,C0156,Farmers Market,17.13
+HC-10852,2026-02-21,C0335,Walk-in,14.08
+HC-10853,2026-02-21,C0362,Instagram,20.78
+HC-10854,2026-02-21,C0424,Walk-in,15.32
+HC-10855,2026-02-21,C0606,Referral,23.82
+HC-10856,2026-02-21,C0738,Farmers Market,23.60
+HC-10857,2026-02-22,C0102,Walk-in,12.40
+HC-10858,2026-02-22,C0173,Farmers Market,24.74
+HC-10859,2026-02-22,C0308,Instagram,20.99
+HC-10860,2026-02-22,C0354,Referral,32.97
+HC-10861,2026-02-22,C0580,Referral,28.39
+HC-10862,2026-02-23,C0050,Walk-in,21.26
+HC-10863,2026-02-23,C0067,Walk-in,15.07
+HC-10864,2026-02-23,C0089,Farmers Market,25.08
+HC-10865,2026-02-23,C0129,Instagram,18.53
+HC-10866,2026-02-23,C0166,Farmers Market,19.31
+HC-10867,2026-02-23,C0217,Referral,26.59
+HC-10868,2026-02-23,C0537,Farmers Market,15.17
+HC-10869,2026-02-23,C0654,Farmers Market,20.61
+HC-10870,2026-02-23,C0731,Google Ads,31.57
+HC-10871,2026-02-24,C0180,Walk-in,23.56
+HC-10872,2026-02-24,C0341,Walk-in,13.07
+HC-10873,2026-02-24,C0407,Walk-in,21.00
+HC-10874,2026-02-24,C0526,Walk-in,19.89
+HC-10875,2026-02-24,C0632,Farmers Market,13.76
+HC-10876,2026-02-24,C0670,Referral,34.44
+HC-10877,2026-02-25,C0056,Google Ads,21.81
+HC-10878,2026-02-25,C0105,Instagram,29.33
+HC-10879,2026-02-25,C0298,Walk-in,16.48
+HC-10880,2026-02-25,C0318,Referral,28.73
+HC-10881,2026-02-25,C0395,Walk-in,22.94
+HC-10882,2026-02-25,C0633,Referral,26.70
+HC-10883,2026-02-25,C0679,Referral,19.27
+HC-10884,2026-02-25,C0771,Google Ads,16.77
+HC-10885,2026-02-26,C0460,Google Ads,20.11
+HC-10886,2026-02-26,C0503,Walk-in,15.68
+HC-10887,2026-02-26,C0576,Referral,25.20
+HC-10888,2026-02-26,C0583,Walk-in,54.09
+HC-10889,2026-02-26,C0600,Farmers Market,25.52
+HC-10890,2026-02-26,C0647,Referral,23.90
+HC-10891,2026-02-27,C0086,Walk-in,22.13
+HC-10892,2026-02-27,C0485,Farmers Market,19.24
+HC-10893,2026-02-27,C0525,Referral,27.29
+HC-10894,2026-02-27,C0570,Walk-in,14.82
+HC-10895,2026-02-27,C0650,Walk-in,23.28
+HC-10896,2026-02-27,C0738,Farmers Market,15.72
+HC-10897,2026-02-27,C0797,Farmers Market,27.01
+HC-10898,2026-02-28,C0132,Referral,27.46
+HC-10899,2026-02-28,C0161,Walk-in,21.88
+HC-10900,2026-02-28,C0200,Walk-in,51.80
+HC-10900,2026-02-28,C0200,Walk-in,51.80
+HC-10901,2026-02-28,C0229,Referral,20.14
+HC-10902,2026-02-28,C0271,Farmers Market,16.63
+HC-10903,2026-02-28,C0275,Farmers Market,16.77
+HC-10904,2026-02-28,C0335,Walk-in,13.81
+HC-10905,2026-02-28,C0412,Walk-in,23.49
+HC-10906,2026-02-28,C0476,Instagram,14.02
+HC-10907,2026-02-28,C0605,Google Ads,17.09
+HC-10908,2026-03-01,C0041,Referral,34.83
+HC-10909,2026-03-01,C0152,Google Ads,20.20
+HC-10910,2026-03-01,C0304,Referral,31.19
+HC-10911,2026-03-01,C0377,Walk-in,13.01
+HC-10912,2026-03-01,C0386,Farmers Market,15.70
+HC-10913,2026-03-01,C0612,Farmers Market,23.02
+HC-10914,2026-03-01,C0719,Instagram,23.12
+HC-10915,2026-03-01,C0769,Walk-in,23.38
+HC-10916,2026-03-02,C0123,Referral,34.46
+HC-10917,2026-03-02,C0243,Referral,24.34
+HC-10918,2026-03-02,C0424,Walk-in,18.12
+HC-10919,2026-03-02,C0511,Walk-in,20.79
+HC-10920,2026-03-02,C0647,Referral,30.38
+HC-10921,2026-03-02,C0651,Google Ads,21.43
+HC-10922,2026-03-03,C0054,Walk-in,23.94
+HC-10923,2026-03-03,C0121,Walk-in,12.37
+HC-10924,2026-03-03,C0221,Farmers Market,19.82
+HC-10925,2026-03-03,C0423,Google Ads,16.43
+HC-10925,2026-03-03,C0423,Google Ads,16.43
+HC-10926,2026-03-03,C0487,Referral,30.29
+HC-10927,2026-03-03,C0529,Walk-in,12.30
+HC-10928,2026-03-03,C0762,Instagram,26.81
+HC-10929,2026-03-04,C0070,Walk-in,22.11
+HC-10930,2026-03-04,C0217,Referral,36.27
+HC-10931,2026-03-04,C0280,Farmers Market,17.91
+HC-10932,2026-03-04,C0393,Walk-in,12.91
+HC-10933,2026-03-04,C0503,Walk-in,15.59
+HC-10934,2026-03-04,C0526,Walk-in,11.97
+HC-10935,2026-03-04,C0583,Walk-in,20.03
+HC-10936,2026-03-05,C0183,Walk-in,11.97
+HC-10937,2026-03-05,C0293,Walk-in,84.65
+HC-10938,2026-03-05,C0310,Referral,21.84
+HC-10939,2026-03-05,C0396,Referral,29.02
+HC-10940,2026-03-05,C0484,Farmers Market,22.26
+HC-10941,2026-03-05,C0721,Referral,26.76
+HC-10942,2026-03-05,C0737,Walk-in,21.28
+HC-10943,2026-03-06,C0155,Walk-in,16.66
+HC-10944,2026-03-06,C0156,Farmers Market,21.27
+HC-10945,2026-03-06,C0190,Farmers Market,17.88
+HC-10946,2026-03-06,C0321,Instagram,22.86
+HC-10947,2026-03-06,C0433,Walk-in,22.09
+HC-10948,2026-03-06,C0473,Instagram,21.67
+HC-10949,2026-03-06,C0553,Farmers Market,15.24
+HC-10950,2026-03-06,C0615,Walk-in,22.24
+HC-10951,2026-03-06,C0729,Instagram,14.55
+HC-10952,2026-03-06,C0732,Referral,33.60
+HC-10953,2026-03-07,C0004,Google Ads,25.90
+HC-10954,2026-03-07,C0054,Walk-in,13.92
+HC-10955,2026-03-07,C0101,Instagram,25.60
+HC-10956,2026-03-07,C0160,Walk-in,15.48
+HC-10957,2026-03-07,C0166,Farmers Market,22.59
+HC-10958,2026-03-07,C0407,Walk-in,12.95
+HC-10959,2026-03-07,C0496,Referral,25.14
+HC-10960,2026-03-07,C0587,Farmers Market,87.46
+HC-10961,2026-03-07,C0679,Referral,29.46
+HC-10962,2026-03-08,C0059,Referral,29.46
+HC-10963,2026-03-08,C0261,Walk-in,19.49
+HC-10964,2026-03-08,C0348,Google Ads,32.73
+HC-10965,2026-03-08,C0487,Referral,36.87
+HC-10966,2026-03-08,C0636,Instagram,18.44
+HC-10967,2026-03-08,C0759,Referral,31.23
+HC-10968,2026-03-09,C0232,Farmers Market,19.79
+HC-10969,2026-03-09,C0341,Walk-in,11.55
+HC-10970,2026-03-09,C0482,Walk-in,23.44
+HC-10971,2026-03-09,C0657,Instagram,28.09
+HC-10972,2026-03-09,C0705,Instagram,23.92
+HC-10973,2026-03-09,C0772,Referral,38.66
+HC-10974,2026-03-10,C0019,Farmers Market,13.12
+HC-10975,2026-03-10,C0155,Walk-in,14.20
+HC-10976,2026-03-10,C0177,Google Ads,28.70
+HC-10977,2026-03-10,C0298,Walk-in,15.70
+HC-10978,2026-03-10,C0354,Referral,17.64
+HC-10979,2026-03-10,C0359,Instagram,14.84
+HC-10980,2026-03-10,C0510,Referral,26.10
+HC-10981,2026-03-10,C0633,Referral,35.17
+HC-10982,2026-03-11,C0067,Walk-in,11.35
+HC-10983,2026-03-11,C0318,Referral,24.07
+HC-10984,2026-03-11,C0429,Walk-in,18.12
+HC-10985,2026-03-11,C0564,Walk-in,24.03
+HC-10986,2026-03-11,C0579,Google Ads,21.24
+HC-10987,2026-03-12,C0050,Walk-in,20.14
+HC-10988,2026-03-12,C0121,Walk-in,16.27
+HC-10989,2026-03-12,C0132,Referral,21.57
+HC-10990,2026-03-12,C0293,Walk-in,18.16
+HC-10991,2026-03-12,C0304,Referral,21.17
+HC-10992,2026-03-12,C0309,Referral,21.57
+HC-10993,2026-03-12,C0335,Walk-in,13.46
+HC-10994,2026-03-12,C0440,Google Ads,33.82
+HC-10995,2026-03-12,C0525,Referral,28.48
+HC-10996,2026-03-12,C0532,Instagram,18.04
+HC-10997,2026-03-12,C0647,Referral,28.21
+HC-10998,2026-03-12,C0697,Instagram,22.20
+HC-10999,2026-03-13,C0055,Instagram,26.36
+HC-11000,2026-03-13,C0070,Walk-in,21.58
+HC-11001,2026-03-13,C0156,Farmers Market,23.18
+HC-11002,2026-03-13,C0166,Farmers Market,26.31
+HC-11003,2026-03-13,C0228,Instagram,15.29
+HC-11004,2026-03-13,C0612,Farmers Market,16.58
+HC-11005,2026-03-13,C0662,Google Ads,31.12
+HC-11006,2026-03-14,C0141,Google Ads,20.89
+HC-11007,2026-03-14,C0217,Referral,36.59
+HC-11008,2026-03-14,C0377,Walk-in,14.02
+HC-11009,2026-03-14,C0438,Google Ads,23.09
+HC-11010,2026-03-14,C0606,Referral,27.55
+HC-11011,2026-03-14,C0654,Farmers Market,16.81
+HC-11012,2026-03-14,C0701,Walk-in,20.19
+HC-11013,2026-03-14,C0738,Farmers Market,24.02
+HC-11014,2026-03-15,C0009,Instagram,16.05
+HC-11015,2026-03-15,C0424,Walk-in,15.96
+HC-11016,2026-03-15,C0433,Walk-in,13.32
+HC-11017,2026-03-15,C0496,Referral,30.19
+HC-11018,2026-03-15,C0580,Referral,35.76
+HC-11019,2026-03-15,C0583,Walk-in,14.93
+HC-11020,2026-03-15,C0600,Farmers Market,16.83
+HC-11021,2026-03-16,C0104,Referral,34.54
+HC-11022,2026-03-16,C0510,Referral,36.75
+HC-11023,2026-03-16,C0650,Walk-in,24.08
+HC-11024,2026-03-16,C0721,Referral,25.48
+HC-11025,2026-03-16,C0737,Walk-in,15.58
+HC-11026,2026-03-17,C0022,Google Ads,18.62
+HC-11027,2026-03-17,C0032,Instagram,19.46
+HC-11028,2026-03-17,C0041,Referral,28.10
+HC-11029,2026-03-17,C0461,Walk-in,22.99
+HC-11030,2026-03-17,C0661,Farmers Market,18.34
+HC-11031,2026-03-18,C0027,Google Ads,31.10
+HC-11032,2026-03-18,C0086,Walk-in,13.04
+HC-11033,2026-03-18,C0102,Walk-in,15.61
+HC-11034,2026-03-18,C0173,Farmers Market,23.75
+HC-11035,2026-03-18,C0345,Instagram,13.75
+HC-11036,2026-03-18,C0670,Referral,30.69
+HC-11037,2026-03-18,C0689,Instagram,28.77
+HC-11038,2026-03-19,C0014,Referral,20.85
+HC-11039,2026-03-19,C0138,Google Ads,33.54
+HC-11040,2026-03-19,C0166,Farmers Market,22.57
+HC-11041,2026-03-19,C0308,Instagram,25.66
+HC-11042,2026-03-19,C0310,Referral,36.21
+HC-11043,2026-03-19,C0393,Walk-in,17.29
+HC-11044,2026-03-19,C0510,Referral,37.76
+HC-11045,2026-03-20,C0037,Google Ads,34.03
+HC-11046,2026-03-20,C0039,Farmers Market,14.19
+HC-11047,2026-03-20,C0054,Walk-in,13.19
+HC-11048,2026-03-20,C0161,Walk-in,12.39
+HC-11049,2026-03-20,C0170,Instagram,18.15
+HC-11050,2026-03-20,C0260,Instagram,25.34
+HC-11051,2026-03-20,C0301,Referral,25.75
+HC-11052,2026-03-20,C0407,Walk-in,15.24
+HC-11053,2026-03-20,C0633,Referral,30.67
+HC-11054,2026-03-21,C0154,Walk-in,18.93
+HC-11055,2026-03-21,C0289,Walk-in,13.05
+HC-11056,2026-03-21,C0341,Walk-in,20.12
+HC-11057,2026-03-21,C0355,Google Ads,22.10
+HC-11058,2026-03-21,C0415,Walk-in,18.10
+HC-11059,2026-03-21,C0460,Google Ads,34.74
+HC-11060,2026-03-21,C0494,Farmers Market,13.71
+HC-11061,2026-03-21,C0504,Instagram,26.80
+HC-11062,2026-03-21,C0529,Walk-in,22.35
+HC-11063,2026-03-21,C0665,Google Ads,22.44
+HC-11064,2026-03-21,C0797,Farmers Market,25.99
+HC-11065,2026-03-22,C0057,Instagram,24.70
+HC-11066,2026-03-22,C0143,Referral,29.99
+HC-11067,2026-03-22,C0224,Referral,30.38
+HC-11068,2026-03-22,C0290,Farmers Market,21.57
+HC-11069,2026-03-22,C0298,Walk-in,13.48
+HC-11070,2026-03-22,C0413,Referral,38.59
+HC-11071,2026-03-22,C0526,Walk-in,15.15
+HC-11072,2026-03-22,C0553,Farmers Market,18.79
+HC-11073,2026-03-22,C0650,Walk-in,14.66
+HC-11074,2026-03-23,C0180,Walk-in,17.07
+HC-11075,2026-03-23,C0318,Referral,22.34
+HC-11076,2026-03-23,C0335,Walk-in,17.02
+HC-11077,2026-03-23,C0576,Referral,23.75
+HC-11078,2026-03-23,C0647,Referral,32.26
+HC-11079,2026-03-23,C0679,Referral,27.06
+HC-11080,2026-03-23,C0738,Farmers Market,17.52
+HC-11081,2026-03-24,C0121,Walk-in,14.43
+HC-11082,2026-03-24,C0156,Farmers Market,13.52
+HC-11083,2026-03-24,C0271,Farmers Market,18.15
+HC-11084,2026-03-24,C0401,Farmers Market,16.81
+HC-11085,2026-03-25,C0059,Referral,37.46
+HC-11086,2026-03-25,C0293,Walk-in,16.15
+HC-11087,2026-03-25,C0301,Referral,25.36
+HC-11088,2026-03-25,C0317,Walk-in,14.53
+HC-11089,2026-03-25,C0354,Referral,32.39
+HC-11090,2026-03-25,C0364,Instagram,17.77
+HC-11091,2026-03-25,C0772,Referral,28.08
+HC-11092,2026-03-26,C0129,Instagram,25.65
+HC-11093,2026-03-26,C0137,Referral,28.47
+HC-11094,2026-03-26,C0155,Walk-in,11.17
+HC-11095,2026-03-26,C0205,Farmers Market,24.54
+HC-11096,2026-03-26,C0212,Walk-in,16.13
+HC-11097,2026-03-26,C0316,Google Ads,21.79
+HC-11098,2026-03-26,C0484,Farmers Market,25.84
+HC-11099,2026-03-26,C0522,Google Ads,25.25
+HC-11100,2026-03-26,C0769,Walk-in,22.55
+HC-11101,2026-03-27,C0012,Farmers Market,101.74
+HC-11102,2026-03-27,C0309,Referral,23.36
+HC-11103,2026-03-27,C0482,Walk-in,15.02
+HC-11104,2026-03-27,C0532,Instagram,25.09
+HC-11105,2026-03-27,C0713,Referral,17.99
+HC-11106,2026-03-28,C0054,Walk-in,48.28
+HC-11107,2026-03-28,C0067,Walk-in,65.73
+HC-11108,2026-03-28,C0132,Referral,34.63
+HC-11109,2026-03-28,C0158,Instagram,22.96
+HC-11110,2026-03-28,C0217,Referral,19.26
+HC-11111,2026-03-28,C0424,Walk-in,20.87
+HC-11112,2026-03-28,C0433,Walk-in,24.23
+HC-11113,2026-03-28,C0462,Instagram,18.91
+HC-11114,2026-03-28,C0473,Instagram,28.25
+HC-11115,2026-03-28,C0525,Referral,19.13
+HC-11116,2026-03-28,C0570,Walk-in,16.79
+HC-11117,2026-03-28,C0573,Walk-in,16.58
+HC-11118,2026-03-28,C0594,Walk-in,20.29
+HC-11119,2026-03-29,C0041,Referral,28.04
+HC-11120,2026-03-29,C0049,Walk-in,11.99
+HC-11121,2026-03-29,C0160,Walk-in,21.74
+HC-11122,2026-03-29,C0166,Farmers Market,15.98
+HC-11123,2026-03-29,C0190,Farmers Market,15.07
+HC-11124,2026-03-29,C0234,Instagram,17.49
+HC-11125,2026-03-29,C0304,Referral,24.84
+HC-11126,2026-03-29,C0418,Google Ads,30.12
+HC-11127,2026-03-29,C0485,Farmers Market,24.59
+HC-11128,2026-03-29,C0600,Farmers Market,25.32
+HC-11129,2026-03-30,C0010,Referral,18.57
+HC-11130,2026-03-30,C0123,Referral,30.03
+HC-11131,2026-03-30,C0151,Instagram,14.52
+HC-11132,2026-03-30,C0173,Farmers Market,13.25
+HC-11133,2026-03-30,C0174,Referral,33.38
+HC-11134,2026-03-30,C0187,Referral,24.25
+HC-11135,2026-03-30,C0243,Referral,32.19
+HC-11136,2026-03-30,C0407,Walk-in,22.49
+HC-11137,2026-03-30,C0583,Walk-in,19.30
+HC-11138,2026-03-30,C0607,Google Ads,30.42
+HC-11139,2026-03-30,C0744,Instagram,26.85
+HC-11140,2026-03-31,C0050,Walk-in,17.77
+HC-11141,2026-03-31,C0354,Referral,19.43
+HC-11142,2026-03-31,C0633,Referral,29.80
+HC-11143,2026-03-31,C0698,Farmers Market,21.03
+HC-11144,2026-03-31,C0763,Farmers Market,21.58
+HC-11145,2026-03-31,C0788,Instagram,19.26
+HC-11146,2026-04-01,C0070,Walk-in,19.16
+HC-11147,2026-04-01,C0156,Farmers Market,16.01
+HC-11148,2026-04-01,C0161,Walk-in,21.21
+HC-11149,2026-04-01,C0199,Farmers Market,19.22
+HC-11150,2026-04-01,C0293,Walk-in,21.99
+HC-11151,2026-04-01,C0306,Farmers Market,23.73
+HC-11152,2026-04-01,C0377,Walk-in,23.46
+HC-11153,2026-04-01,C0496,Referral,18.53
+HC-11154,2026-04-01,C0587,Farmers Market,17.75
+HC-11155,2026-04-01,C0606,Referral,19.57
+HC-11156,2026-04-01,C0670,Referral,32.32
+HC-11157,2026-04-01,C0674,Instagram,22.94
+HC-11158,2026-04-01,C0721,Referral,37.73
+HC-11159,2026-04-01,C0755,Google Ads,26.31
+HC-11160,2026-04-02,C0086,Walk-in,19.24
+HC-11161,2026-04-02,C0106,Farmers Market,23.65
+HC-11162,2026-04-02,C0171,Farmers Market,23.90
+HC-11163,2026-04-02,C0487,Referral,22.21
+HC-11164,2026-04-02,C0526,Walk-in,24.42
+HC-11165,2026-04-02,C0529,Walk-in,14.26
+HC-11166,2026-04-03,C0032,Instagram,20.98
+HC-11167,2026-04-03,C0310,Referral,19.99
+HC-11168,2026-04-03,C0487,Referral,28.11
+HC-11169,2026-04-03,C0679,Referral,34.54
+HC-11170,2026-04-03,C0759,Referral,28.40
+HC-11171,2026-04-04,C0055,Instagram,24.60
+HC-11172,2026-04-04,C0224,Referral,36.35
+HC-11173,2026-04-04,C0247,Walk-in,21.82
+HC-11174,2026-04-04,C0263,Referral,19.16
+HC-11175,2026-04-04,C0362,Instagram,20.11
+HC-11176,2026-04-04,C0386,Farmers Market,18.83
+HC-11177,2026-04-04,C0460,Google Ads,34.17
+HC-11178,2026-04-04,C0607,Google Ads,24.69
+HC-11179,2026-04-05,C0017,Instagram,24.57
+HC-11180,2026-04-05,C0029,Google Ads,30.96
+HC-11181,2026-04-05,C0039,Farmers Market,19.41
+HC-11182,2026-04-05,C0074,Farmers Market,18.89
+HC-11183,2026-04-05,C0503,Walk-in,23.88
+HC-11184,2026-04-05,C0580,Referral,19.92
+HC-11185,2026-04-05,C0647,Referral,38.26
+HC-11186,2026-04-05,C0673,Instagram,17.75
+HC-11187,2026-04-05,C0772,Referral,38.60
+HC-11188,2026-04-06,C0005,Instagram,24.04
+HC-11189,2026-04-06,C0104,Referral,17.99
+HC-11190,2026-04-06,C0263,Referral,33.43
+HC-11191,2026-04-06,C0318,Referral,18.02
+HC-11192,2026-04-06,C0432,Instagram,21.54
+HC-11193,2026-04-06,C0630,Walk-in,13.82
+HC-11194,2026-04-06,C0661,Farmers Market,22.16
+HC-11195,2026-04-06,C0697,Instagram,23.70
+HC-11196,2026-04-07,C0020,Farmers Market,14.70
+HC-11197,2026-04-07,C0054,Walk-in,17.18
+HC-11198,2026-04-07,C0067,Walk-in,22.81
+HC-11199,2026-04-07,C0121,Walk-in,13.22
+HC-11200,2026-04-07,C0341,Walk-in,15.11
+HC-11201,2026-04-07,C0494,Farmers Market,18.54
+HC-11202,2026-04-07,C0612,Farmers Market,14.72
+HC-11203,2026-04-07,C0690,Walk-in,21.15
+HC-11204,2026-04-07,C0797,Farmers Market,25.23
+HC-11205,2026-04-08,C0069,Farmers Market,19.52
+HC-11206,2026-04-08,C0160,Walk-in,23.73
+HC-11207,2026-04-08,C0166,Farmers Market,18.02
+HC-11208,2026-04-08,C0180,Walk-in,23.24
+HC-11209,2026-04-08,C0429,Walk-in,17.39
+HC-11210,2026-04-08,C0632,Farmers Market,17.84
+HC-11211,2026-04-08,C0719,Instagram,18.53
+HC-11212,2026-04-09,C0027,Google Ads,28.42
+HC-11213,2026-04-09,C0217,Referral,32.98
+HC-11214,2026-04-09,C0304,Referral,29.90
+HC-11215,2026-04-09,C0496,Referral,29.71
+HC-11216,2026-04-09,C0529,Walk-in,20.91
+HC-11217,2026-04-09,C0532,Instagram,23.77
+HC-11218,2026-04-09,C0553,Farmers Market,24.47
+HC-11219,2026-04-09,C0679,Referral,28.24
+HC-11220,2026-04-09,C0707,Instagram,17.26
+HC-11221,2026-04-10,C0155,Walk-in,16.13
+HC-11222,2026-04-10,C0465,Referral,28.91
+HC-11223,2026-04-10,C0605,Google Ads,31.85
+HC-11224,2026-04-10,C0738,Farmers Market,21.63
+RF-903,2026-04-10,C0171,Farmers Market,-23.90
+HC-11225,2026-04-11,C0168,Walk-in,14.05
+HC-11226,2026-04-11,C0293,Walk-in,12.50
+HC-11227,2026-04-11,C0298,Walk-in,14.02
+HC-11228,2026-04-11,C0434,Walk-in,13.59
+HC-11229,2026-04-11,C0502,Google Ads,26.45
+HC-11230,2026-04-11,C0583,Walk-in,14.48
+HC-11231,2026-04-11,C0633,Referral,31.22
+HC-11232,2026-04-11,C0696,Instagram,29.67
+HC-11233,2026-04-11,C0737,Walk-in,24.25
+HC-11234,2026-04-11,C0787,Instagram,29.77
+HC-11235,2026-04-11,C0797,Farmers Market,12.49
+HC-11236,2026-04-12,C0019,Farmers Market,25.06
+HC-11237,2026-04-12,C0510,Referral,29.44
+HC-11238,2026-04-12,C0654,Farmers Market,18.32
+HC-11239,2026-04-12,C0666,Farmers Market,16.76
+HC-11240,2026-04-12,C0721,Referral,31.41
+HC-11241,2026-04-13,C0100,Google Ads,30.37
+HC-11242,2026-04-13,C0123,Referral,30.15
+HC-11243,2026-04-13,C0308,Instagram,27.57
+HC-11244,2026-04-13,C0393,Walk-in,15.72
+HC-11245,2026-04-13,C0413,Referral,25.61
+HC-11246,2026-04-13,C0485,Farmers Market,20.95
+HC-11247,2026-04-13,C0567,Instagram,20.27
+HC-11248,2026-04-13,C0576,Referral,28.79
+HC-11249,2026-04-13,C0650,Walk-in,23.13
+HC-11250,2026-04-13,C0772,Referral,21.07
+HC-11251,2026-04-14,C0041,Referral,32.00
+HC-11252,2026-04-14,C0132,Referral,33.91
+HC-11253,2026-04-14,C0152,Google Ads,21.03
+HC-11254,2026-04-14,C0317,Walk-in,19.29
+HC-11255,2026-04-14,C0318,Referral,32.45
+HC-11256,2026-04-14,C0367,Farmers Market,26.38
+HC-11257,2026-04-14,C0520,Farmers Market,20.47
+HC-11258,2026-04-14,C0753,Walk-in,11.12
+HC-11259,2026-04-15,C0046,Farmers Market,18.05
+HC-11260,2026-04-15,C0070,Walk-in,24.43
+HC-11261,2026-04-15,C0102,Walk-in,11.57
+HC-11262,2026-04-15,C0335,Walk-in,20.40
+HC-11263,2026-04-15,C0377,Walk-in,12.45
+HC-11264,2026-04-15,C0449,Instagram,26.97
+HC-11265,2026-04-15,C0526,Walk-in,18.34
+HC-11266,2026-04-15,C0551,Walk-in,11.93
+HC-11267,2026-04-15,C0636,Instagram,28.03
+HC-11268,2026-04-15,C0716,Farmers Market,23.94
+HC-11269,2026-04-15,C0736,Instagram,20.36
+HC-11270,2026-04-15,C0771,Google Ads,26.85
+HC-11271,2026-04-15,C0796,Referral,37.42
+HC-11272,2026-04-16,C0021,Farmers Market,23.72
+HC-11273,2026-04-16,C0224,Referral,25.10
+HC-11274,2026-04-16,C0310,Referral,24.56
+HC-11275,2026-04-16,C0473,Instagram,23.76
+HC-11276,2026-04-16,C0496,Referral,26.09
+HC-11277,2026-04-16,C0599,Walk-in,14.84
+HC-11278,2026-04-17,C0054,Walk-in,15.01
+HC-11279,2026-04-17,C0086,Walk-in,19.96
+HC-11280,2026-04-17,C0271,Farmers Market,12.82
+HC-11281,2026-04-17,C0570,Walk-in,14.60
+HC-11282,2026-04-17,C0647,Referral,18.70
+HC-11283,2026-04-18,C0067,Walk-in,24.29
+HC-11284,2026-04-18,C0121,Walk-in,18.91
+HC-11285,2026-04-18,C0132,Referral,36.04
+HC-11286,2026-04-18,C0354,Referral,18.55
+HC-11287,2026-04-18,C0606,Referral,36.65
+HC-11288,2026-04-19,C0059,Referral,36.54
+HC-11289,2026-04-19,C0130,Google Ads,28.46
+HC-11290,2026-04-19,C0156,Farmers Market,18.27
+HC-11291,2026-04-19,C0180,Walk-in,12.72
+HC-11292,2026-04-19,C0293,Walk-in,19.01
+HC-11293,2026-04-19,C0301,Referral,21.59
+HC-11294,2026-04-19,C0341,Walk-in,11.72
+HC-11295,2026-04-19,C0650,Walk-in,16.73
+HC-11296,2026-04-19,C0665,Google Ads,31.99
+HC-11297,2026-04-19,C0704,Walk-in,14.04
+HC-11298,2026-04-19,C0738,Farmers Market,26.25
+HC-11299,2026-04-20,C0003,Walk-in,11.14
+HC-11300,2026-04-20,C0217,Referral,37.00
+HC-11301,2026-04-20,C0359,Instagram,21.39
+HC-11302,2026-04-20,C0433,Walk-in,19.69
+HC-11303,2026-04-20,C0496,Referral,20.57
+HC-11304,2026-04-20,C0525,Referral,33.74
+HC-11305,2026-04-20,C0527,Walk-in,14.21
+HC-11306,2026-04-20,C0584,Referral,30.92
+HC-11307,2026-04-20,C0633,Referral,21.16
+HC-11308,2026-04-20,C0729,Instagram,16.64
+HC-11309,2026-04-21,C0047,Walk-in,14.35
+HC-11310,2026-04-21,C0145,Google Ads,18.96
+HC-11311,2026-04-21,C0166,Farmers Market,18.25
+HC-11312,2026-04-21,C0279,Instagram,22.92
+HC-11313,2026-04-21,C0371,Walk-in,13.51
+HC-11314,2026-04-21,C0510,Referral,19.37
+HC-11315,2026-04-21,C0746,Farmers Market,12.96
+HC-11316,2026-04-22,C0050,Walk-in,17.68
+HC-11317,2026-04-22,C0102,Walk-in,17.48
+HC-11318,2026-04-22,C0104,Referral,18.49
+HC-11319,2026-04-22,C0387,Referral,34.24
+HC-11320,2026-04-22,C0407,Walk-in,12.31
+HC-11321,2026-04-22,C0469,Farmers Market,23.51
+HC-11322,2026-04-22,C0583,Walk-in,15.60
+HC-11323,2026-04-23,C0083,Farmers Market,14.71
+HC-11324,2026-04-23,C0123,Referral,31.14
+HC-11325,2026-04-23,C0158,Instagram,26.83
+HC-11326,2026-04-23,C0173,Farmers Market,22.32
+HC-11327,2026-04-23,C0308,Instagram,14.98
+HC-11328,2026-04-23,C0355,Google Ads,18.10
+HC-11329,2026-04-23,C0361,Walk-in,15.01
+HC-11330,2026-04-23,C0429,Walk-in,17.82
+HC-11331,2026-04-23,C0480,Referral,37.83
+HC-11332,2026-04-23,C0484,Farmers Market,18.50
+HC-11333,2026-04-23,C0679,Referral,21.32
+HC-11334,2026-04-23,C0721,Referral,30.35
+HC-11335,2026-04-23,C0769,Walk-in,18.18
+HC-11336,2026-04-24,C0190,Farmers Market,12.89
+HC-11337,2026-04-24,C0250,Referral,23.04
+HC-11338,2026-04-24,C0298,Walk-in,13.54
+HC-11339,2026-04-24,C0313,Farmers Market,14.79
+HC-11340,2026-04-24,C0318,Referral,29.51
+HC-11341,2026-04-24,C0377,Walk-in,18.82
+HC-11342,2026-04-24,C0482,Walk-in,17.93
+HC-11343,2026-04-24,C0487,Referral,25.08
+HC-11344,2026-04-24,C0569,Walk-in,19.93
+HC-11345,2026-04-24,C0600,Farmers Market,26.23
+HC-11346,2026-04-25,C0286,Walk-in,20.04
+HC-11347,2026-04-25,C0293,Walk-in,18.34
+HC-11348,2026-04-25,C0294,Instagram,14.62
+HC-11349,2026-04-25,C0759,Referral,22.41
+HC-11350,2026-04-26,C0121,Walk-in,21.43
+HC-11351,2026-04-26,C0424,Walk-in,17.76
+HC-11352,2026-04-26,C0580,Referral,18.01
+HC-11353,2026-04-26,C0705,Instagram,14.30
+HC-11354,2026-04-26,C0737,Walk-in,21.47
+HC-11355,2026-04-26,C0772,Referral,26.88
+HC-11356,2026-04-27,C0234,Instagram,15.85
+HC-11357,2026-04-27,C0310,Referral,23.51
+HC-11358,2026-04-27,C0496,Referral,23.59
+HC-11359,2026-04-27,C0529,Walk-in,20.86
+HC-11360,2026-04-27,C0587,Farmers Market,16.60
+HC-11361,2026-04-27,C0670,Referral,27.96
+HC-11362,2026-04-27,C0796,Referral,18.14
+HC-11363,2026-04-28,C0029,Google Ads,23.52
+HC-11364,2026-04-28,C0073,Walk-in,15.06
+HC-11365,2026-04-28,C0141,Google Ads,29.52
+HC-11366,2026-04-28,C0462,Instagram,18.95
+HC-11367,2026-04-28,C0503,Walk-in,19.48
+HC-11368,2026-04-28,C0532,Instagram,27.79
+HC-11369,2026-04-28,C0579,Google Ads,29.77
+HC-11370,2026-04-28,C0761,Walk-in,20.88
+HC-11371,2026-04-29,C0039,Farmers Market,20.85
+HC-11372,2026-04-29,C0055,Instagram,16.70
+HC-11373,2026-04-29,C0070,Walk-in,18.40
+HC-11374,2026-04-29,C0215,Referral,33.11
+HC-11375,2026-04-29,C0293,Walk-in,19.37
+HC-11376,2026-04-29,C0332,Farmers Market,15.81
+HC-11377,2026-04-29,C0354,Referral,31.78
+HC-11378,2026-04-29,C0460,Google Ads,29.97
+HC-11379,2026-04-29,C0503,Walk-in,19.55
+HC-11380,2026-04-29,C0550,Farmers Market,24.44
+HC-11381,2026-04-30,C0041,Referral,33.19
+HC-11382,2026-04-30,C0054,Walk-in,20.66
+HC-11383,2026-04-30,C0067,Walk-in,21.18
+HC-11384,2026-04-30,C0087,Farmers Market,19.38
+HC-11385,2026-04-30,C0233,Walk-in,16.54
+HC-11386,2026-04-30,C0304,Referral,19.09
+HC-11387,2026-04-30,C0362,Instagram,83.14
+HC-11388,2026-04-30,C0377,Walk-in,17.11
+HC-11389,2026-04-30,C0387,Referral,22.00
+HC-11390,2026-04-30,C0526,Walk-in,22.62
+HC-11391,2026-04-30,C0633,Referral,28.60
+HC-11392,2026-04-30,C0647,Referral,23.30
+HC-11393,2026-04-30,C0710,Farmers Market,22.30
+HC-11394,2026-04-30,C0752,Farmers Market,24.41
+HC-11395,2026-05-01,C0019,Farmers Market,26.43
+HC-11396,2026-05-01,C0161,Walk-in,20.40
+HC-11397,2026-05-01,C0212,Walk-in,16.43
+HC-11398,2026-05-01,C0224,Referral,36.87
+HC-11399,2026-05-01,C0318,Referral,37.55
+HC-11400,2026-05-01,C0407,Walk-in,19.77
+HC-11401,2026-05-01,C0434,Walk-in,20.04
+HC-11402,2026-05-02,C0121,Walk-in,18.05
+HC-11403,2026-05-02,C0138,Google Ads,33.53
+HC-11404,2026-05-02,C0504,Instagram,19.16
+HC-11405,2026-05-02,C0522,Google Ads,83.55
+HC-11406,2026-05-02,C0576,Referral,37.50
+HC-11407,2026-05-02,C0674,Instagram,25.83
+HC-11408,2026-05-03,C0050,Walk-in,14.56
+HC-11409,2026-05-03,C0123,Referral,35.72
+HC-11410,2026-05-03,C0217,Referral,32.18
+HC-11411,2026-05-03,C0341,Walk-in,13.47
+HC-11412,2026-05-03,C0377,Walk-in,13.07
+HC-11413,2026-05-03,C0793,Instagram,13.79
+HC-11414,2026-05-04,C0156,Farmers Market,17.39
+HC-11415,2026-05-04,C0331,Instagram,14.15
+HC-11416,2026-05-04,C0386,Farmers Market,27.28
+HC-11417,2026-05-04,C0473,Instagram,24.04
+HC-11418,2026-05-04,C0511,Walk-in,14.60
+HC-11419,2026-05-04,C0584,Referral,27.79
+HC-11420,2026-05-04,C0606,Referral,31.68
+HC-11421,2026-05-04,C0679,Referral,31.72
+HC-11422,2026-05-04,C0758,Google Ads,23.58
+HC-11423,2026-05-04,C0797,Farmers Market,14.48
+HC-11424,2026-05-05,C0064,Farmers Market,19.77
+HC-11425,2026-05-05,C0250,Referral,20.16
+HC-11426,2026-05-05,C0496,Referral,30.74
+HC-11427,2026-05-05,C0583,Walk-in,20.15
+HC-11428,2026-05-05,C0631,Instagram,14.12
+HC-11429,2026-05-05,C0721,Referral,22.23
+HC-11430,2026-05-05,C0737,Walk-in,17.29
+HC-11431,2026-05-06,C0106,Farmers Market,18.23
+HC-11432,2026-05-06,C0129,Instagram,21.08
+HC-11433,2026-05-06,C0166,Farmers Market,21.09
+HC-11434,2026-05-06,C0243,Referral,30.01
+HC-11435,2026-05-06,C0387,Referral,28.85
+HC-11436,2026-05-06,C0413,Referral,17.93
+HC-11437,2026-05-06,C0479,Walk-in,24.37
+HC-11438,2026-05-06,C0494,Farmers Market,21.69
+HC-11439,2026-05-06,C0570,Walk-in,13.27
+HC-11440,2026-05-06,C0600,Farmers Market,24.93
+HC-11441,2026-05-06,C0682,Farmers Market,20.54
+HC-11442,2026-05-06,C0712,Walk-in,11.51
+HC-11443,2026-05-07,C0014,Referral,29.20
+HC-11444,13/45/2026,C0160,Walk-in,24.61
+HC-11445,2026-05-07,C0361,Walk-in,17.13
+HC-11446,2026-05-07,C0525,Referral,33.66
+HC-11447,2026-05-07,C0612,Farmers Market,22.08
+HC-11448,2026-05-07,C0716,Farmers Market,19.22
+HC-11449,2026-05-07,C0724,Walk-in,22.97
+HC-11450,2026-05-08,C0121,Walk-in,15.25
+HC-11451,2026-05-08,C0155,Walk-in,20.12
+HC-11452,2026-05-08,C0174,Referral,27.45
+HC-11453,2026-05-08,C0180,Walk-in,15.83
+HC-11454,2026-05-08,C0255,Google Ads,30.21
+HC-11455,2026-05-08,C0317,Walk-in,23.70
+HC-11456,2026-05-08,C0318,Referral,18.37
+HC-11457,2026-05-08,C0510,Referral,25.14
+HC-11458,2026-05-08,C0529,Walk-in,13.45
+HC-11459,2026-05-08,C0534,Walk-in,15.73
+HC-11460,2026-05-08,C0553,Farmers Market,14.27
+HC-11461,2026-05-08,C0607,Google Ads,32.43
+HC-11462,2026-05-08,C0654,Farmers Market,12.44
+HC-11463,2026-05-08,C0796,Referral,37.95
+HC-11464,2026-05-09,C0067,Walk-in,23.33
+HC-11465,2026-05-09,C0104,Referral,25.61
+HC-11466,2026-05-09,C0293,Walk-in,16.46
+HC-11467,2026-05-09,C0335,Walk-in,23.12
+HC-11468,2026-05-09,C0387,Referral,37.81
+HC-11469,2026-05-09,C0465,Referral,26.54
+HC-11470,2026-05-09,C0632,Farmers Market,18.29
+HC-11471,2026-05-09,C0769,Walk-in,13.80
+HC-11472,2026-05-10,C0086,Walk-in,21.56
+HC-11473,2026-05-10,C0271,Farmers Market,15.69
+HC-11474,2026-05-10,C0462,Instagram,26.48
+HC-11475,2026-05-10,C0480,Referral,32.62
+HC-11476,2026-05-10,C0485,Farmers Market,21.89
+HC-11477,2026-05-10,C0767,Walk-in,21.40
+HC-11478,2026-05-11,C0070,Walk-in,12.54
+HC-11479,2026-05-11,C0137,Referral,20.79
+HC-11480,2026-05-11,C0215,Referral,27.02
+HC-11481,2026-05-11,C0225,Farmers Market,22.42
+HC-11482,2026-05-11,C0306,Farmers Market,18.96
+HC-11483,2026-05-11,C0308,Instagram,22.33
+HC-11484,2026-05-11,C0470,Walk-in,16.93
+HC-11485,2026-05-11,C0591,Referral,24.72
+HC-11486,2026-05-11,C0666,Farmers Market,18.28
+HC-11487,2026-05-11,C0753,Walk-in,21.69
+HC-11488,2026-05-12,C0090,Walk-in,16.32
+HC-11489,2026-05-12,C0132,Referral,35.41
+HC-11490,2026-05-12,C0181,Instagram,26.99
+HC-11491,2026-05-12,C0228,Instagram,18.00
+HC-11492,2026-05-12,C0298,Walk-in,23.70
+HC-11493,2026-05-12,C0310,Referral,138.38
+HC-11494,2026-05-12,C0359,Instagram,17.66
+HC-11495,2026-05-12,C0434,Walk-in,23.81
+HC-11496,2026-05-12,C0460,Google Ads,20.47
+HC-11497,2026-05-12,C0633,Referral,23.89
+HC-11498,2026-05-12,C0679,Referral,31.69
+HC-11499,2026-05-12,C0689,Instagram,13.91
+HC-11500,2026-05-13,C0050,Walk-in,19.16
+HC-11501,2026-05-13,C0268,Referral,28.71
+HC-11502,2026-05-13,C0294,Instagram,16.59
+HC-11503,2026-05-13,C0301,Referral,23.37
+HC-11504,2026-05-13,C0318,Referral,20.54
+HC-11505,2026-05-13,C0341,Walk-in,19.36
+HC-11506,2026-05-13,C0377,Walk-in,23.74
+HC-11507,2026-05-13,C0571,Google Ads,18.75
+HC-11508,2026-05-13,C0665,Google Ads,24.03
+HC-11509,2026-05-14,C0361,Walk-in,22.98
+HC-11510,2026-05-14,C0393,Walk-in,19.26
+HC-11511,2026-05-14,C0510,Referral,27.60
+HC-11512,2026-05-14,C0566,Farmers Market,21.06
+HC-11513,2026-05-14,C0567,Instagram,26.81
+HC-11514,2026-05-14,C0647,Referral,19.73
+HC-11515,2026-05-14,C0721,Referral,29.73
+HC-11516,2026-05-14,C0738,Farmers Market,14.45
+HC-11517,2026-05-14,C0761,Walk-in,17.47
+HC-11518,2026-05-15,C0032,Instagram,15.59
+HC-11519,2026-05-15,C0121,Walk-in,23.91
+HC-11520,2026-05-15,C0133,Walk-in,11.89
+HC-11521,2026-05-15,C0295,Instagram,15.11
+HC-11522,2026-05-15,C0326,Instagram,16.49
+HC-11523,2026-05-15,C0433,Walk-in,12.07
+HC-11524,2026-05-15,C0487,Referral,26.57
+HC-11525,2026-05-15,C0560,Instagram,21.07
+HC-11526,2026-05-16,C0069,Farmers Market,26.69
+HC-11527,2026-05-16,C0081,Google Ads,16.16
+HC-11528,2026-05-16,C0156,Farmers Market,14.48
+HC-11529,2026-05-16,C0212,Walk-in,15.15
+HC-11530,2026-05-16,C0217,Referral,20.15
+HC-11531,2026-05-16,C0484,Farmers Market,16.93
+HC-11532,2026-05-16,C0583,Walk-in,21.53
+HC-11533,2026-05-17,C0059,Referral,23.52
+HC-11534,2026-05-17,C0160,Walk-in,21.49
+HC-11535,2026-05-17,C0407,Walk-in,14.07
+HC-11536,2026-05-17,C0430,Walk-in,23.08
+HC-11537,2026-05-17,C0480,Referral,23.77
+HC-11538,2026-05-17,C0496,Referral,24.43
+HC-11539,2026-05-17,C0543,Google Ads,23.53
+HC-11540,2026-05-17,C0576,Referral,31.28
+HC-11541,2026-05-17,C0584,Referral,29.07
+HC-11542,2026-05-17,C0624,Instagram,24.30
+HC-11543,2026-05-17,C0650,Walk-in,15.26
+HC-11544,2026-05-17,C0653,Instagram,30.38
+HC-11545,2026-05-17,C0677,Instagram,24.74
+HC-11546,2026-05-18,C0093,Walk-in,15.27
+HC-11547,2026-05-18,C0173,Farmers Market,14.37
+HC-11548,2026-05-18,C0354,Referral,30.03
+HC-11549,2026-05-18,C0596,Farmers Market,24.67
+HC-11550,2026-05-18,C0606,Referral,21.03
+HC-11551,2026-05-18,C0724,Walk-in,13.65
+HC-11552,2026-05-18,C0796,Referral,38.03
+HC-11553,2026-05-19,C0293,Walk-in,18.56
+HC-11554,2026-05-19,C0304,Referral,22.48
+HC-11555,2026-05-19,C0413,Referral,30.11
+HC-11556,2026-05-19,C0424,Walk-in,17.26
+HC-11557,2026-05-19,C0470,Walk-in,15.27
+HC-11558,2026-05-19,C0580,Referral,28.35
+HC-11559,2026-05-19,C0661,Farmers Market,19.52
+HC-11560,2026-05-19,C0701,Walk-in,20.41
+HC-11561,2026-05-19,C0759,Referral,33.90
+HC-11562,2026-05-20,C0041,Referral,37.41
+HC-11563,2026-05-20,C0067,Walk-in,14.18
+HC-11564,2026-05-20,C0073,Walk-in,16.90
+HC-11565,2026-05-20,C0086,Walk-in,21.31
+HC-11566,2026-05-20,C0114,Farmers Market,20.71
+HC-11567,2026-05-20,C0121,Walk-in,24.20
+HC-11568,2026-05-20,C0161,Walk-in,16.14
+HC-11569,2026-05-20,C0308,Instagram,23.95
+HC-11570,2026-05-20,C0365,Google Ads,25.95
+HC-11571,2026-05-20,C0529,Walk-in,14.93
+HC-11572,2026-05-20,C0532,Instagram,26.60
+HC-11573,2026-05-20,C0659,Instagram,21.93
+HC-11574,2026-05-20,C0670,Referral,25.70
+HC-11575,2026-05-20,C0706,Farmers Market,23.96
+HC-11576,2026-05-21,C0102,Walk-in,21.37
+HC-11577,2026-05-21,C0104,Referral,25.26
+HC-11578,2026-05-21,C0224,Referral,32.43
+HC-11579,2026-05-21,C0296,Instagram,17.02
+HC-11580,2026-05-21,C0360,Walk-in,20.73
+HC-11581,2026-05-21,C0429,Walk-in,18.43
+HC-11582,2026-05-21,C0633,Referral,31.48
+HC-11583,2026-05-21,C0647,Referral,30.95
+HC-11584,2026-05-22,C0027,Google Ads,33.49
+HC-11585,2026-05-22,C0039,Farmers Market,23.83
+HC-11586,2026-05-22,C0054,Walk-in,17.22
+HC-11587,2026-05-22,C0191,Walk-in,14.35
+HC-11588,2026-05-22,C0215,Referral,21.14
+HC-11589,2026-05-22,C0250,Referral,22.21
+HC-11590,2026-05-22,C0387,Referral,18.36
+HC-11591,2026-05-22,C0497,Google Ads,31.21
+HC-11592,2026-05-22,C0526,Walk-in,24.09
+HC-11593,2026-05-22,C0588,Instagram,16.70
+HC-11594,2026-05-22,C0619,Referral,31.25
+HC-11595,2026-05-23,C0070,Walk-in,12.84
+HC-11596,2026-05-23,C0166,Farmers Market,19.75
+HC-11597,2026-05-23,C0190,Farmers Market,23.20
+HC-11598,2026-05-23,C0259,Google Ads,19.91
+HC-11599,2026-05-23,C0466,Referral,18.11
+HC-11600,2026-05-23,C0654,Farmers Market,25.65
+HC-11601,2026-05-23,C0708,Instagram,27.24
+HC-11602,2026-05-23,C0729,Instagram,18.95
+HC-11603,2026-05-23,C0747,Instagram,14.05
+HC-11604,2026-05-24,C0298,Walk-in,21.07
+HC-11605,2026-05-24,C0318,Referral,30.12
+HC-11606,2026-05-24,C0458,Instagram,20.51
+HC-11607,2026-05-24,C0719,Instagram,27.14
+HC-11608,2026-05-25,C0013,Referral,17.62
+HC-11609,2026-05-25,C0119,Instagram,28.40
+HC-11610,2026-05-25,C0158,Instagram,13.86
+HC-11611,2026-05-25,C0217,Referral,21.28
+HC-11612,2026-05-25,C0341,Walk-in,19.14
+HC-11613,2026-05-25,C0503,Walk-in,12.21
+HC-11614,2026-05-25,C0553,Farmers Market,21.33
+HC-11615,2026-05-25,C0600,Farmers Market,14.44
+HC-11616,2026-05-25,C0612,Farmers Market,12.83
+HC-11617,2026-05-25,C0680,Referral,23.83
+HC-11618,2026-05-25,C0721,Referral,28.83
+HC-11619,2026-05-25,C0761,Walk-in,13.77
+HC-11620,2026-05-25,C0797,Farmers Market,12.94
+HC-11621,2026-05-26,C0048,Instagram,27.03
+HC-11622,2026-05-26,C0187,Referral,38.14
+HC-11623,2026-05-26,C0362,Instagram,22.02
+HC-11624,2026-05-26,C0441,Instagram,28.42
+HC-11625,2026-05-26,C0480,Referral,24.98
+HC-11626,2026-05-26,C0771,Google Ads,24.51
+HC-11627,2026-05-27,C0033,Referral,33.47
+HC-11628,2026-05-27,C0072,Instagram,28.93
+HC-11629,2026-05-27,C0435,Walk-in,21.79
+HC-11630,2026-05-27,C0450,Walk-in,21.92
+HC-11631,2026-05-27,C0510,Referral,26.75
+HC-11632,2026-05-27,C0679,Referral,28.50
+HC-11633,2026-05-27,C0724,Walk-in,23.74
+HC-11634,2026-05-28,C0108,Instagram,14.36
+HC-11635,2026-05-28,C0312,Walk-in,18.43
+HC-11636,2026-05-28,C0355,Google Ads,28.57
+HC-11637,2026-05-28,C0361,Walk-in,21.85
+HC-11638,2026-05-28,C0434,Walk-in,19.73
+HC-11639,2026-05-28,C0566,Farmers Market,16.51
+HC-11640,2026-05-28,C0657,Instagram,20.91
+HC-11641,2026-05-29,C0086,Walk-in,17.16
+HC-11642,2026-05-29,C0121,Walk-in,15.85
+HC-11643,2026-05-29,C0180,Walk-in,21.81
+HC-11644,2026-05-29,C0268,Referral,28.66
+HC-11645,2026-05-29,C0340,Walk-in,21.88
+HC-11646,2026-05-29,C0473,Instagram,19.71
+HC-11647,2026-05-29,C0525,Referral,104.47
+HC-11648,2026-05-29,C0565,Instagram,24.71
+HC-11649,2026-05-29,C0570,Walk-in,23.90
+HC-11650,2026-05-29,C0583,Walk-in,15.95
+HC-11651,2026-05-29,C0584,Referral,20.31
+HC-11652,2026-05-29,C0674,Instagram,14.25
+HC-11653,2026-05-30,C0132,Referral,19.42
+HC-11654,2026-05-30,C0215,Referral,36.60
+HC-11655,2026-05-30,C0237,Walk-in,15.15
+HC-11656,2026-05-30,C0271,Farmers Market,24.46
+HC-11657,2026-05-30,C0335,Walk-in,21.61
+HC-11658,2026-05-30,C0342,Walk-in,24.46
+HC-11659,2026-05-30,C0496,Referral,24.95
+HC-11660,2026-05-30,C0587,Farmers Market,12.59
+HC-11661,2026-05-30,C0737,Walk-in,11.06
+HC-11662,2026-05-31,C0147,Google Ads,21.36
+HC-11663,2026-05-31,C0191,Walk-in,24.27
+HC-11664,2026-05-31,C0320,Instagram,15.16
+HC-11665,2026-05-31,C0397,Referral,27.60
+HC-11666,2026-05-31,C0405,Google Ads,24.15
+HC-11667,2026-05-31,C0413,Referral,27.51
+HC-11668,2026-05-31,C0487,Referral,29.77
+HC-11669,2026-05-31,C0660,Instagram,28.66
+HC-11670,2026-05-31,C0796,Referral,36.29
+HC-11671,2026-06-01,C0017,Instagram,22.35
+HC-11672,2026-06-01,C0041,Referral,29.09
+HC-11673,2026-06-01,C0067,Walk-in,14.03
+HC-11674,2026-06-01,C0301,Referral,24.96
+HC-11675,2026-06-01,C0305,Farmers Market,14.71
+HC-11676,2026-06-01,C0310,Referral,18.46
+HC-11677,2026-06-01,C0354,Referral,36.82
+HC-11678,2026-06-01,C0470,Walk-in,12.84
+HC-11679,2026-06-01,C0482,Walk-in,12.40
+HC-11680,2026-06-01,C0633,Referral,25.16
+HC-11681,2026-06-01,C0650,Walk-in,18.12
+HC-11682,2026-06-01,C0721,Referral,25.82
+HC-11683,2026-06-02,C0161,Walk-in,20.29
+HC-11684,2026-06-02,C0217,Referral,38.55
+HC-11685,2026-06-02,C0243,Referral,38.67
+HC-11686,2026-06-02,C0304,Referral,23.84
+HC-11687,2026-06-02,C0371,Walk-in,11.50
+HC-11688,2026-06-02,C0387,Referral,28.35
+HC-11689,2026-06-02,C0433,Walk-in,13.96
+HC-11690,2026-06-02,C0477,Walk-in,17.46
+HC-11691,2026-06-02,C0529,Walk-in,19.69
+HC-11692,2026-06-02,C0578,Referral,30.67
+HC-11693,2026-06-02,C0591,Referral,18.76
+HC-11694,2026-06-02,C0629,Referral,35.26
+HC-11695,2026-06-02,C0769,Walk-in,16.47
+HC-11696,2026-06-03,C0006,Google Ads,22.71
+HC-11697,2026-06-03,C0019,Farmers Market,14.88
+HC-11698,2026-06-03,C0059,Referral,26.51
+HC-11699,2026-06-03,C0216,Farmers Market,15.47
+HC-11700,2026-06-03,C0234,Instagram,23.56
+HC-11701,2026-06-03,C0293,Walk-in,13.48
+HC-11702,2026-06-03,C0407,Walk-in,14.83
+HC-11703,2026-06-03,C0636,Instagram,28.97
+HC-11704,2026-06-03,C0767,Walk-in,14.97
+HC-11705,2026-06-04,C0055,Instagram,24.31
+HC-11706,2026-06-04,C0166,Farmers Market,26.32
+HC-11707,2026-06-04,C0224,Referral,25.90
+HC-11708,2026-06-04,C0225,Farmers Market,18.04
+HC-11709,2026-06-04,C0250,Referral,21.67
+HC-11710,2026-06-04,C0267,Walk-in,23.06
+HC-11711,2026-06-04,C0318,Referral,35.07
+HC-11712,2026-06-04,C0480,Referral,22.30
+HC-11713,2026-06-05,C0090,Walk-in,20.28
+HC-11714,2026-06-05,C0173,Farmers Market,17.25
+HC-11715,2026-06-05,C0263,Referral,18.43
+HC-11716,2026-06-05,C0377,Walk-in,14.67
+HC-11717,2026-06-05,C0526,Walk-in,24.40
+HC-11718,2026-06-05,C0580,Referral,22.66
+HC-11719,2026-06-05,C0647,Referral,26.02
+HC-11720,2026-06-05,C0693,Google Ads,29.78
+HC-11721,2026-06-05,C0759,Referral,37.52
+HC-11722,2026-06-05,C0785,Referral,24.49
+HC-11723,2026-06-06,C0050,Walk-in,18.61
+HC-11724,2026-06-06,C0054,Walk-in,23.62
+HC-11725,2026-06-06,C0101,Instagram,15.74
+HC-11726,2026-06-06,C0113,Walk-in,22.07
+HC-11727,2026-06-06,C0357,Referral,34.88
+HC-11728,2026-06-06,C0361,Walk-in,23.54
+HC-11729,2026-06-06,C0584,Referral,32.92
+HC-11730,2026-06-06,C0654,Farmers Market,13.18
+HC-11731,2026-06-06,C0679,Referral,24.40
+HC-11732,2026-06-06,C0710,Farmers Market,17.85
+HC-11733,2026-06-06,C0716,Farmers Market,12.73
+HC-11734,2026-06-07,C0212,Walk-in,13.19
+HC-11735,2026-06-07,C0294,Instagram,13.83
+HC-11736,2026-06-07,C0317,Walk-in,17.73
+HC-11737,2026-06-07,C0367,Farmers Market,23.40
+HC-11738,2026-06-07,C0424,Walk-in,20.39
+HC-11739,2026-06-07,C0435,Walk-in,18.54
+HC-11740,2026-06-07,C0442,Instagram,14.00
+HC-11741,2026-06-07,C0501,Instagram,27.44
+HC-11742,2026-06-07,C0606,Referral,28.70
+HC-11743,2026-06-07,C0629,Referral,24.79
+HC-11744,2026-06-07,C0725,Walk-in,22.62
+HC-11745,2026-06-07,C0738,Farmers Market,15.56
+HC-11746,2026-06-07,C0761,Walk-in,11.93
+HC-11747,2026-06-08,C0069,Farmers Market,21.62
+HC-11748,2026-06-08,C0102,Walk-in,19.42
+HC-11749,2026-06-08,C0156,Farmers Market,23.36
+HC-11750,2026-06-08,C0161,Walk-in,13.10
+HC-11751,2026-06-08,C0239,Walk-in,11.09
+HC-11752,2026-06-08,C0310,Referral,27.82
+HC-11753,2026-06-08,C0384,Walk-in,17.70
+HC-11754,2026-06-08,C0494,Farmers Market,12.76
+HC-11755,2026-06-08,C0510,Referral,26.38
+HC-11756,2026-06-08,C0670,Referral,32.70
+HC-11757,2026-06-08,C0721,Referral,35.98
+HC-11758,2026-06-09,C0070,Walk-in,21.77
+HC-11759,2026-06-09,C0086,Walk-in,18.73
+HC-11760,2026-06-09,C0227,Google Ads,34.75
+HC-11761,2026-06-09,C0268,Referral,28.06
+HC-11762,2026-06-09,C0462,Instagram,27.98
+HC-11763,2026-06-09,C0480,Referral,24.88
+HC-11764,2026-06-09,C0576,Referral,24.15
+HC-11765,2026-06-09,C0661,Farmers Market,21.11
+HC-11766,2026-06-09,C0705,Instagram,23.95
+HC-11767,2026-06-10,C0054,Walk-in,19.55
+HC-11768,2026-06-10,C0106,Farmers Market,19.89
+HC-11769,2026-06-10,C0155,Walk-in,17.62
+HC-11770,2026-06-10,C0276,Walk-in,18.74
+HC-11771,2026-06-10,C0308,Instagram,18.22
+HC-11772,2026-06-10,C0346,Instagram,14.14
+HC-11773,2026-06-10,C0350,Instagram,22.65
+HC-11774,2026-06-10,C0434,Walk-in,22.65
+HC-11775,2026-06-10,C0460,Google Ads,21.41
+HC-11776,2026-06-10,C0496,Referral,33.81
+HC-11777,2026-06-10,C0503,Walk-in,11.50
+HC-11778,2026-06-10,C0696,Instagram,29.53
+HC-11779,2026-06-10,C0765,Referral,20.70
+HC-11780,2026-06-11,C0121,Walk-in,17.78
+HC-11781,2026-06-11,C0293,Walk-in,17.63
+HC-11782,2026-06-11,C0438,Google Ads,20.13
+HC-11783,2026-06-11,C0559,Walk-in,21.81
+HC-11784,2026-06-11,C0728,Instagram,18.25
+HC-11785,2026-06-11,C0746,Farmers Market,19.35
+HC-11786,2026-06-11,C0754,Google Ads,24.44
+HC-11787,2026-06-12,C0067,Walk-in,14.46
+HC-11788,2026-06-12,C0104,Referral,22.76
+HC-11789,2026-06-12,C0250,Referral,33.90
+HC-11790,2026-06-12,C0318,Referral,26.19
+HC-11791,2026-06-12,C0354,Referral,21.71
+HC-11792,2026-06-12,C0359,Instagram,16.32
+HC-11793,2026-06-12,C0361,Walk-in,20.81
+HC-11794,2026-06-12,C0387,Referral,31.10
+HC-11795,2026-06-12,C0397,Referral,25.46
+HC-11796,2026-06-12,C0670,Referral,20.05
+HC-11797,2026-06-12,C0749,Walk-in,23.34
+HC-11798,2026-06-12,C0753,Walk-in,14.79
+HC-11799,2026-06-13,C0166,Farmers Market,14.98
+HC-11800,2026-06-13,C0215,Referral,25.66
+HC-11801,2026-06-13,C0281,Referral,21.42
+HC-11802,2026-06-13,C0294,Instagram,29.29
+HC-11803,2026-06-13,C0315,Instagram,24.06
+HC-11804,2026-06-13,C0504,Instagram,15.38
+HC-11805,2026-06-13,C0525,Referral,20.03
+HC-11806,2026-06-13,C0584,Referral,33.95
+HC-11807,2026-06-13,C0796,Referral,22.06
+HC-11808,2026-06-14,C0070,Walk-in,11.26
+HC-11809,2026-06-14,C0161,Walk-in,17.62
+HC-11810,2026-06-14,C0190,Farmers Market,15.76
+HC-11811,2026-06-14,C0224,Referral,29.91
+HC-11812,2026-06-14,C0342,Walk-in,19.33
+HC-11813,2026-06-14,C0394,Referral,27.90
+HC-11814,2026-06-14,C0429,Walk-in,18.40
+HC-11815,2026-06-14,C0480,Referral,35.75
+HC-11816,2026-06-14,C0490,Farmers Market,25.51
+HC-11817,2026-06-14,C0522,Google Ads,18.34
+HC-11818,2026-06-14,C0570,Walk-in,23.84
+HC-11819,2026-06-14,C0591,Referral,31.10
+HC-11820,2026-06-14,C0680,Referral,30.32
+HC-11821,2026-06-14,C0724,Walk-in,13.71
+HC-11822,2026-06-14,C0797,Farmers Market,15.54
+HC-11823,2026-06-15,C0225,Farmers Market,21.61
+HC-11824,2026-06-15,C0386,Farmers Market,17.28
+HC-11825,2026-06-15,C0389,Walk-in,13.44
+HC-11826,2026-06-15,C0393,Walk-in,19.73
+HC-11827,2026-06-15,C0633,Referral,21.44
+HC-11828,2026-06-15,C0706,Farmers Market,19.15
+HC-11829,2026-06-15,C0770,Walk-in,19.90
+HC-11830,2026-06-16,C0019,Farmers Market,15.60
+HC-11831,2026-06-16,C0027,Google Ads,32.46
+HC-11832,2026-06-16,C0028,Farmers Market,21.99
+HC-11833,2026-06-16,C0029,Google Ads,33.35
+HC-11834,2026-06-16,C0217,Referral,20.28
+HC-11835,2026-06-16,C0305,Farmers Market,25.81
+HC-11836,2026-06-16,C0377,Walk-in,23.35
+HC-11837,2026-06-16,C0470,Walk-in,22.37
+HC-11838,2026-06-16,C0529,Walk-in,21.68
+HC-11839,2026-06-16,C0532,Instagram,29.05
+HC-11840,2026-06-16,C0552,Farmers Market,22.29
+HC-11841,2026-06-16,C0611,Google Ads,125.47
+HC-11842,2026-06-16,C0654,Farmers Market,24.96
+HC-11843,2026-06-16,C0666,Farmers Market,25.61
+HC-11844,2026-06-16,C0698,Farmers Market,20.27
+HC-11845,2026-06-17,C0050,Walk-in,13.65
+HC-11846,2026-06-17,C0152,Google Ads,28.06
+HC-11847,2026-06-17,C0160,Walk-in,20.94
+HC-11848,2026-06-17,C0180,Walk-in,19.82
+HC-11849,2026-06-17,C0224,Referral,36.06
+HC-11850,2026-06-17,C0341,Walk-in,13.46
+HC-11851,2026-06-17,C0362,Instagram,25.61
+HC-11852,2026-06-17,C0424,Walk-in,14.12
+HC-11853,2026-06-17,C0484,Farmers Market,17.43
+HC-11854,2026-06-17,C0602,Walk-in,20.55
+HC-11855,2026-06-17,C0629,Referral,39.00
+HC-11856,2026-06-17,C0660,Instagram,14.37
+HC-11857,2026-06-17,C0715,Instagram,21.36
+HC-11858,2026-06-17,C0776,Instagram,20.80
+HC-11859,2026-06-18,C0293,Walk-in,18.91
+HC-11860,2026-06-18,C0553,Farmers Market,12.49
+HC-11861,2026-06-18,C0600,Farmers Market,23.05
+HC-11862,2026-06-18,C0720,Instagram,29.24
+HC-11863,2026-06-19,C0189,Instagram,25.96
+HC-11864,2026-06-19,C0191,Walk-in,21.60
+HC-11865,2026-06-19,C0239,Walk-in,23.38
+HC-11866,2026-06-19,C0250,Referral,31.23
+HC-11867,2026-06-19,C0576,Referral,35.81
+HC-11868,2026-06-19,C0680,Referral,22.12
+HC-11869,2026-06-19,C0784,Walk-in,18.84
+HC-11870,2026-06-20,C0041,Referral,30.33
+HC-11871,2026-06-20,C0106,Farmers Market,26.40
+HC-11872,2026-06-20,C0298,Walk-in,14.34
+HC-11873,2026-06-20,C0304,Referral,31.47
+HC-11874,2026-06-20,C0335,Walk-in,22.26
+HC-11875,2026-06-20,C0398,Referral,25.01
+HC-11876,2026-06-20,C0407,Walk-in,18.37
+HC-11877,2026-06-20,C0526,Walk-in,20.27
+HC-11878,2026-06-20,C0606,Referral,31.62
+HC-11879,2026-06-20,C0671,Instagram,22.66
+HC-11880,2026-06-20,C0679,Referral,22.47
+HC-11881,2026-06-21,C0218,Instagram,22.65
+HC-11882,2026-06-21,C0485,Farmers Market,21.40
+HC-11883,2026-06-21,C0587,Farmers Market,25.54
+HC-11884,2026-06-21,C0647,Referral,33.40
+HC-11885,2026-06-21,C0725,Walk-in,22.39
+HC-11886,2026-06-22,C0013,Referral,33.10
+HC-11887,2026-06-22,C0055,Instagram,15.18
+HC-11888,2026-06-22,C0059,Referral,28.52
+HC-11889,2026-06-22,C0067,Walk-in,21.49
+HC-11890,2026-06-22,C0086,Walk-in,19.54
+HC-11891,2026-06-22,C0132,Referral,21.54
+HC-11892,2026-06-22,C0271,Farmers Market,16.83
+HC-11893,2026-06-22,C0312,Walk-in,18.76
+HC-11894,2026-06-22,C0434,Walk-in,23.76
+HC-11895,2026-06-22,C0496,Referral,22.86
+HC-11896,2026-06-22,C0538,Walk-in,16.19
+HC-11897,2026-06-22,C0723,Instagram,18.98
+HC-11898,2026-06-22,C0761,Walk-in,18.91
+HC-11899,2026-06-23,C0006,Google Ads,20.73
+HC-11900,2026-06-23,C0050,Walk-in,16.58
+HC-11901,2026-06-23,C0054,Walk-in,23.75
+HC-11902,2026-06-23,C0121,Walk-in,19.95
+HC-11903,2026-06-23,C0141,Google Ads,31.14
+HC-11904,2026-06-23,C0161,Walk-in,23.57
+HC-11905,2026-06-23,C0318,Referral,33.41
+HC-11906,2026-06-23,C0393,Walk-in,13.36
+HC-11907,2026-06-23,C0526,Walk-in,20.48
+HC-11908,2026-06-23,C0605,Google Ads,21.02
+HC-11909,2026-06-23,C0653,Instagram,23.48
+HC-11910,2026-06-23,C0718,Referral,28.11
+HC-11911,2026-06-23,C0767,Walk-in,16.09
+HC-11912,2026-06-23,C0774,Referral,34.10
+HC-11913,2026-06-23,C0777,Instagram,29.92
+HC-11914,2026-06-24,C0102,Walk-in,11.31
+HC-11915,2026-06-24,C0129,Instagram,21.70
+HC-11916,2026-06-24,C0234,Instagram,19.81
+HC-11917,2026-06-24,C0310,Referral,25.57
+HC-11918,2026-06-24,C0361,Walk-in,24.52
+HC-11919,2026-06-24,C0394,Referral,35.29
+HC-11920,2026-06-24,C0397,Referral,32.78
+HC-11921,2026-06-24,C0629,Referral,38.58
+HC-11922,2026-06-24,C0721,Referral,38.43
+HC-11923,2026-06-25,C0045,Google Ads,30.53
+HC-11924,2026-06-25,C0069,Farmers Market,22.01
+HC-11925,2026-06-25,C0080,Google Ads,28.56
+HC-11926,2026-06-25,C0173,Farmers Market,25.17
+HC-11927,2026-06-25,C0341,Walk-in,18.92
+HC-11928,2026-06-25,C0381,Instagram,16.62
+HC-11929,2026-06-25,C0387,Referral,100.25
+HC-11930,2026-06-25,C0433,Walk-in,15.09
+HC-11931,2026-06-25,C0435,Walk-in,11.62
+HC-11932,2026-06-25,C0510,Referral,24.40
+HC-11933,2026-06-25,C0529,Walk-in,24.28
+HC-11934,2026-06-25,C0581,Walk-in,24.57
+HC-11935,2026-06-25,C0607,Google Ads,18.30
+HC-11936,2026-06-25,C0737,Walk-in,23.06
+HC-11937,2026-06-25,C0769,Walk-in,15.53
+HC-11938,2026-06-26,C0156,Farmers Market,27.16
+HC-11939,2026-06-26,C0191,Walk-in,18.48
+HC-11940,2026-06-26,C0217,Referral,38.90
+HC-11941,2026-06-26,C0301,Referral,26.71
+HC-11942,2026-06-26,C0354,Referral,24.44
+HC-11943,2026-06-26,C0413,Referral,25.27
+HC-11944,2026-06-26,C0569,Walk-in,14.54
+HC-11945,2026-06-26,C0742,Instagram,18.00
+HC-11946,2026-06-27,C0055,Instagram,19.25
+HC-11947,2026-06-27,C0243,Referral,24.86
+HC-11948,2026-06-27,C0308,Instagram,22.59
+HC-11949,2026-06-27,C0359,Instagram,14.76
+HC-11950,2026-06-27,C0469,Farmers Market,21.00
+HC-11951,2026-06-27,C0473,Instagram,25.25
+HC-11952,2026-06-27,C0480,Referral,20.38
+HC-11953,2026-06-27,C0487,Referral,34.43
+HC-11954,2026-06-27,C0566,Farmers Market,24.42
+HC-11955,2026-06-27,C0580,Referral,24.94
+HC-11956,2026-06-27,C0591,Referral,35.37
+HC-11957,2026-06-27,C0632,Farmers Market,12.68
+HC-11958,2026-06-27,C0633,Referral,34.63
+HC-11959,2026-06-27,,Farmers Market,19.15
+HC-11960,2026-06-28,C0250,Referral,20.21
+HC-11961,2026-06-28,C0281,Referral,31.79
+HC-11962,2026-06-28,C0482,Walk-in,15.60
+HC-11963,2026-06-28,C0525,Referral,24.62
+HC-11964,2026-06-28,C0579,Google Ads,19.78
+HC-11965,2026-06-28,C0612,Farmers Market,18.13
+HC-11966,2026-06-29,C0215,Referral,34.59
+HC-11967,2026-06-29,C0293,Walk-in,16.46
+HC-11968,2026-06-29,C0342,Walk-in,18.20
+HC-11969,2026-06-29,C0650,Walk-in,19.38
+HC-11970,2026-06-29,C0674,Instagram,21.05
+HC-11971,2026-06-29,C0707,Instagram,20.52
+HC-11972,2026-06-29,C0738,Farmers Market,17.51
+HC-11973,2026-06-29,C0749,Walk-in,22.21
+HC-11974,2026-06-29,C0761,Walk-in,20.35
+HC-11975,2026-06-30,C0039,Farmers Market,24.74
+HC-11976,2026-06-30,C0206,Farmers Market,15.68
+HC-11977,2026-06-30,C0228,Instagram,26.47
+HC-11978,2026-06-30,C0276,Walk-in,15.35
+HC-11979,2026-06-30,C0294,Instagram,16.92
+HC-11980,2026-06-30,C0393,Walk-in,22.68
+HC-11981,2026-06-30,C0462,Instagram,27.06
+HC-11982,2026-06-30,C0729,Instagram,16.81
+HC-11983,2026-06-30,C0796,Referral,27.02
+HC-11984,2026-06-30,C0797,Farmers Market,16.80
+HC-11985,2026-07-01,C0028,Farmers Market,13.02
+HC-11986,2026-07-01,C0032,Instagram,16.84
+HC-11987,2026-07-01,C0036,Walk-in,15.43
+HC-11988,2026-07-01,C0067,Walk-in,12.91
+HC-11989,2026-07-01,C0086,Walk-in,19.58
+HC-11990,2026-07-01,C0160,Walk-in,13.90
+HC-11991,2026-07-01,C0178,Walk-in,16.87
+HC-11992,2026-07-01,C0212,Walk-in,21.82
+HC-11993,2026-07-01,C0268,Referral,31.62
+HC-11994,2026-07-01,C0349,Instagram,26.13
+HC-11995,2026-07-01,C0387,Referral,22.64
+HC-11996,2026-07-01,C0429,Walk-in,21.44
+HC-11997,2026-07-01,C0507,Farmers Market,21.47
+HC-11998,2026-07-01,C0547,Farmers Market,12.83
+HC-11999,2026-07-01,C0619,Referral,30.04
+HC-12000,2026-07-01,C0647,Referral,23.34
+HC-12001,2026-07-01,C0679,Referral,38.98
+HC-12002,2026-07-01,C0761,Walk-in,14.34
+HC-12003,2026-07-02,C0104,Referral,19.79
+HC-12004,2026-07-02,C0121,Walk-in,18.35
+HC-12005,2026-07-02,C0138,Google Ads,23.45
+HC-12006,2026-07-02,C0166,Farmers Market,16.74
+HC-12007,2026-07-02,C0178,Walk-in,23.42
+HC-12008,2026-07-02,C0180,Walk-in,19.22
+HC-12009,2026-07-02,C0224,Referral,32.19
+HC-12010,2026-07-02,C0298,Walk-in,14.17
+HC-12011,2026-07-02,C0311,Farmers Market,24.59
+HC-12012,2026-07-02,C0361,Walk-in,19.37
+HC-12013,2026-07-02,C0371,Walk-in,24.21
+HC-12014,2026-07-02,C0377,Walk-in,18.06
+HC-12015,2026-07-02,C0424,Walk-in,24.45
+HC-12016,2026-07-02,C0572,Instagram,29.85
+HC-12017,2026-07-02,C0724,Walk-in,13.70
+HC-12018,2026-07-02,C0798,Farmers Market,23.52
+HC-12019,2026-07-03,C0158,Instagram,26.74
+HC-12020,2026-07-03,,Walk-in,15.55
+HC-12021,2026-07-03,C0305,Farmers Market,16.11
+HC-12022,2026-07-03,C0406,Walk-in,13.31
+HC-12023,2026-07-03,C0407,Walk-in,20.18
+HC-12024,2026-07-03,C0509,Instagram,17.10
+HC-12025,2026-07-03,C0510,Referral,21.43
+HC-12026,2026-07-03,C0532,Instagram,23.50
+HC-12027,2026-07-03,C0600,Farmers Market,12.75
+HC-12028,2026-07-03,C0725,Walk-in,17.08
+HC-12029,2026-07-04,C0011,Google Ads,16.82
+HC-12030,2026-07-04,C0054,Walk-in,18.46
+HC-12031,2026-07-04,C0073,Walk-in,12.61
+HC-12032,2026-07-04,C0284,Instagram,13.76
+HC-12033,2026-07-04,C0424,Walk-in,22.70
+HC-12034,2026-07-04,C0434,Walk-in,11.86
+HC-12035,2026-07-04,C0526,Walk-in,19.69
+HC-12036,2026-07-05,C0239,Walk-in,20.15
+HC-12037,2026-07-05,C0281,Referral,33.45
+HC-12038,2026-07-05,C0318,Referral,34.68
+HC-12039,2026-07-05,C0394,Referral,22.75
+HC-12040,2026-07-05,C0470,Walk-in,17.71
+HC-12041,2026-07-05,C0480,Referral,32.92
+HC-12042,2026-07-05,C0491,Google Ads,26.37
+HC-12043,2026-07-05,C0506,Walk-in,15.71
+HC-12044,2026-07-05,C0584,Referral,29.65
+HC-12045,2026-07-05,C0629,Referral,31.47
+HC-12046,2026-07-05,C0710,Farmers Market,14.74
+HC-12047,2026-07-06,C0067,Walk-in,19.58
+HC-12048,2026-07-06,C0163,Walk-in,21.12
+HC-12049,2026-07-06,C0217,Referral,39.09
+HC-12050,2026-07-06,C0221,Farmers Market,13.84
+HC-12051,2026-07-06,C0301,Referral,33.80
+HC-12052,2026-07-06,C0304,Referral,27.16
+HC-12053,2026-07-06,C0310,Referral,20.96
+HC-12054,2026-07-06,C0331,Instagram,18.36
+HC-12055,2026-07-06,C0351,Google Ads,22.39
+HC-12056,2026-07-06,C0504,Instagram,14.78
+HC-12057,2026-07-06,C0683,Farmers Market,22.37
+HC-12058,2026-07-07,C0153,Instagram,26.45
+HC-12059,2026-07-07,C0155,Walk-in,11.14
+HC-12060,2026-07-07,C0215,Referral,33.93
+HC-12061,2026-07-07,C0240,Instagram,26.06
+HC-12062,2026-07-07,C0317,Walk-in,12.14
+HC-12063,2026-07-07,C0327,Referral,21.86
+HC-12064,2026-07-07,C0503,Walk-in,22.58
+HC-12065,2026-07-07,C0529,Walk-in,13.33
+HC-12066,2026-07-07,C0721,Referral,30.85
+HC-12067,2026-07-07,C0743,Google Ads,22.76
+HC-12068,2026-07-07,C0765,Referral,35.37
+HC-12069,2026-07-08,C0298,Walk-in,22.42
+HC-12070,2026-07-08,C0312,Walk-in,15.45
+HC-12071,2026-07-08,C0357,Referral,19.65
+HC-12072,2026-07-08,C0362,Instagram,29.22
+HC-12073,2026-07-08,C0570,Walk-in,13.82
+HC-12074,2026-07-08,C0578,Referral,32.12
+HC-12075,2026-07-08,C0591,Referral,23.96
+HC-12076,2026-07-08,C0670,Referral,30.85
+HC-12077,2026-07-08,C0718,Referral,38.27
+HC-12078,2026-07-08,C0769,Walk-in,18.57
+HC-12079,2026-07-08,C0784,Walk-in,14.60
+HC-12080,2026-07-09,C0028,Farmers Market,14.34
+HC-12081,2026-07-09,C0132,Referral,24.54
+HC-12082,2026-07-09,C0191,Walk-in,13.10
+HC-12083,2026-07-09,C0210,Google Ads,33.15
+HC-12084,2026-07-09,C0212,Walk-in,19.88
+HC-12085,2026-07-09,C0290,Farmers Market,19.67
+HC-12086,2026-07-09,C0496,Referral,24.93
+HC-12087,2026-07-09,C0545,Walk-in,15.79
+HC-12088,2026-07-09,C0606,Referral,24.92
+HC-12089,2026-07-09,C0629,Referral,34.86
+HC-12090,2026-07-09,C0647,Referral,34.52
+HC-12091,2026-07-10,C0055,Instagram,28.06
+HC-12092,2026-07-10,C0069,Farmers Market,23.01
+HC-12093,2026-07-10,C0121,Walk-in,16.91
+HC-12094,2026-07-10,C0225,Farmers Market,13.99
+HC-12095,2026-07-10,C0250,Referral,27.43
+HC-12096,2026-07-10,C0483,Walk-in,14.15
+HC-12097,2026-07-10,C0653,Instagram,17.33
+HC-12098,2026-07-10,C0759,Referral,36.41
+HC-12099,2026-07-11,C0050,Walk-in,14.32
+HC-12100,2026-07-11,C0070,Walk-in,12.77
+HC-12101,2026-07-11,C0228,Instagram,25.07
+HC-12102,2026-07-11,C0387,Referral,29.00
+HC-12103,2026-07-11,C0494,Farmers Market,18.28
+HC-12104,2026-07-11,C0520,Farmers Market,14.00
+HC-12105,2026-07-11,C0576,Referral,19.21
+HC-12106,2026-07-11,C0580,Referral,33.48
+HC-12107,2026-07-11,C0586,Walk-in,55.46
+HC-12108,2026-07-11,C0716,Farmers Market,14.01
+HC-12109,2026-07-11,C0774,Referral,35.96
+HC-12110,2026-07-12,C0045,Google Ads,21.57
+HC-12111,2026-07-12,C0161,Walk-in,22.36
+HC-12112,2026-07-12,C0270,Instagram,16.64
+HC-12113,2026-07-12,C0341,Walk-in,12.32
+HC-12113,2026-07-12,C0341,Walk-in,12.32
+HC-12114,2026-07-12,C0361,Walk-in,22.58
+HC-12115,2026-07-12,C0496,Referral,30.50
+HC-12116,2026-07-12,C0553,Farmers Market,17.15
+HC-12117,2026-07-12,C0557,Instagram,16.32
+HC-12118,2026-07-12,C0587,Farmers Market,21.22
+HC-12119,2026-07-12,C0724,Walk-in,15.52
+HC-12120,2026-07-12,C0737,Walk-in,12.14
+RF-901,2026-07-12,C0215,Referral,-33.93
+RF-902,2026-07-12,C0424,Walk-in,-22.70
+HC-12121,2026-07-13,C0031,Instagram,17.40
+HC-12122,2026-07-13,C0041,Referral,19.36
+HC-12123,2026-07-13,C0144,Referral,26.48
+HC-12124,2026-07-13,C0224,Referral,26.40
+HC-12125,2026-07-13,C0271,Farmers Market,16.88
+HC-12126,2026-07-13,C0293,Walk-in,22.80
+HC-12127,2026-07-13,C0314,Instagram,21.28
+HC-12128,2026-07-13,C0318,Referral,35.39
+HC-12129,2026-07-13,C0355,Google Ads,16.63
+HC-12130,2026-07-13,C0435,Walk-in,21.69
+HC-12131,2026-07-13,C0460,Google Ads,22.72
+HC-12132,2026-07-13,C0485,Farmers Market,16.67
+HC-12133,2026-07-13,C0525,Referral,28.02
+HC-12134,2026-07-13,C0651,Google Ads,30.96
+HC-12135,2026-07-13,C0680,Referral,33.01
+HC-12136,2026-07-13,C0705,Instagram,17.59
+HC-12137,2026-07-13,C0753,Walk-in,21.80
+HC-12138,2026-07-13,C0796,Referral,34.20
+HC-12139,2026-07-14,C0156,Farmers Market,18.99
+HC-12140,2026-07-14,C0215,Referral,27.30
+HC-12141,2026-07-14,C0485,Farmers Market,23.22
+HC-12142,2026-07-14,C0486,Google Ads,17.48
+HC-12143,2026-07-14,C0506,Walk-in,11.16
+HC-12144,2026-07-14,C0617,Google Ads,31.44
+HC-12145,2026-07-14,C0633,Referral,19.12
+HC-12146,2026-07-14,C0756,Instagram,20.42
+HC-12147,2026-07-15,C0095,Google Ads,22.55
+HC-12148,2026-07-15,C0217,Referral,35.57
+HC-12149,2026-07-15,C0223,Walk-in,21.38
+HC-12150,2026-07-15,C0249,Instagram,27.83
+HC-12151,2026-07-15,C0342,Walk-in,15.86
+HC-12152,2026-07-15,C0433,Walk-in,21.99
+HC-12153,2026-07-15,C0449,Instagram,21.69
+HC-12154,2026-07-15,C0510,Referral,31.49
+HC-12155,2026-07-15,C0538,Walk-in,15.70
+HC-12156,2026-07-15,C0666,Farmers Market,16.73
+HC-12157,2026-07-15,C0679,Referral,17.90
+HC-12158,2026-07-15,C0716,Farmers Market,14.54
+HC-12159,2026-07-16,C0067,Walk-in,21.78
+HC-12160,2026-07-16,C0075,Instagram,25.91
+HC-12161,2026-07-16,C0086,Walk-in,11.98
+HC-12162,2026-07-16,C0166,Farmers Market,25.15
+HC-12163,2026-07-16,C0203,Farmers Market,14.98
+HC-12164,2026-07-16,C0268,Referral,19.33
+HC-12165,2026-07-16,C0354,Referral,20.09
+HC-12166,2026-07-16,C0359,Instagram,25.31
+HC-12167,2026-07-16,C0397,Referral,34.26
+HC-12168,2026-07-16,C0470,Walk-in,17.53
+HC-12169,2026-07-16,C0480,Referral,35.54
+HC-12170,2026-07-16,C0556,Instagram,28.04
+HC-12171,2026-07-16,C0629,Referral,20.33
+HC-12172,2026-07-16,C0749,Walk-in,11.60
+HC-12173,2026-07-17,C0016,Farmers Market,13.40
+HC-12174,2026-07-17,C0017,Instagram,17.42
+HC-12175,2026-07-17,C0054,Walk-in,23.40
+HC-12176,2026-07-17,C0180,Walk-in,14.92
+HC-12177,2026-07-17,C0206,Farmers Market,24.18
+HC-12178,2026-07-17,C0262,Farmers Market,23.06
+HC-12179,2026-07-17,C0339,Walk-in,17.18
+HC-12180,2026-07-17,C0394,Referral,17.82
+HC-12181,2026-07-17,C0407,Walk-in,18.01
+HC-12182,2026-07-17,C0548,Walk-in,24.48
+HC-12183,2026-07-17,C0600,Farmers Market,18.00
+HC-12184,2026-07-17,C0654,Farmers Market,17.42
+HC-12185,2026-07-17,C0738,Farmers Market,18.82
+HC-12186,2026-07-17,C0761,Walk-in,17.33
+HC-12187,2026-07-18,C0019,Farmers Market,13.24
+HC-12188,2026-07-18,C0070,Walk-in,12.60
+HC-12189,2026-07-18,C0106,Farmers Market,24.53
+HC-12190,2026-07-18,C0121,Walk-in,20.94
+HC-12191,2026-07-18,C0190,Farmers Market,26.27
+HC-12192,2026-07-18,C0191,Walk-in,11.38
+HC-12193,2026-07-18,C0239,Walk-in,12.28
+HC-12194,2026-07-18,C0276,Walk-in,11.12
+HC-12195,2026-07-18,C0739,Google Ads,17.19
+HC-12196,2026-07-18,C0797,Farmers Market,24.86
+HC-12197,2026-07-19,C0215,Referral,18.27
+HC-12198,2026-07-19,C0281,Referral,25.30
+HC-12199,2026-07-19,C0293,Walk-in,14.17
+HC-12200,2026-07-19,C0356,Google Ads,27.43
+HC-12201,2026-07-19,C0372,Referral,35.25
+HC-12202,2026-07-19,C0503,Walk-in,12.78
+HC-12203,2026-07-19,C0532,Instagram,22.36
+HC-12204,2026-07-19,C0568,Walk-in,24.18
+HC-12205,2026-07-19,C0584,Referral,25.46
+HC-12206,2026-07-19,C0591,Referral,35.62
+HC-12207,2026-07-19,C0660,Instagram,29.82
+HC-12208,2026-07-19,C0703,Google Ads,33.82
+HC-12209,2026-07-19,C0727,Instagram,14.74
+HC-12210,2026-07-20,C0102,Walk-in,13.08
+HC-12211,2026-07-20,C0335,Walk-in,16.41
+HC-12212,2026-07-20,C0387,Referral,25.37
+HC-12213,2026-07-20,C0429,Walk-in,23.02
+HC-12214,2026-07-20,C0436,Instagram,17.62
+HC-12215,2026-07-20,C0482,Walk-in,22.59
+HC-12216,2026-07-20,C0483,Walk-in,16.67
+HC-12217,2026-07-20,C0526,Walk-in,15.37
+HC-12218,2026-07-20,C0706,Farmers Market,18.81
+HC-12219,2026-07-20,C0721,Referral,88.28
+HC-12220,2026-07-20,C0749,Walk-in,11.57
+HC-12221,2026-07-21,C0008,Google Ads,20.00
+HC-12222,2026-07-21,C0266,Google Ads,30.77
+HC-12223,2026-07-21,C0301,Referral,26.20
+HC-12224,2026-07-21,C0305,Farmers Market,21.87
+HC-12225,2026-07-21,C0310,Referral,30.91
+HC-12226,2026-07-21,C0443,Google Ads,33.66
+HC-12227,2026-07-21,C0647,Referral,23.77
+HC-12228,2026-07-21,C0718,Referral,27.52
+HC-12229,2026-07-22,C0063,Walk-in,19.53
+HC-12230,2026-07-22,C0224,Referral,34.40
+HC-12231,2026-07-22,C0293,Walk-in,23.96
+HC-12232,2026-07-22,C0361,Walk-in,11.90
+HC-12233,2026-07-22,C0413,Referral,25.35
+HC-12234,2026-07-22,C0434,Walk-in,17.34
+HC-12235,2026-07-22,C0559,Walk-in,11.79
+HC-12236,2026-07-22,C0576,Referral,19.57
+HC-12237,2026-07-22,C0609,Instagram,19.93
+HC-12238,2026-07-22,C0719,Instagram,19.89
+HC-12239,2026-07-22,C0724,Walk-in,23.50
+HC-12240,2026-07-23,C0050,Walk-in,20.73
+HC-12241,2026-07-23,C0212,Walk-in,24.22
+HC-12242,2026-07-23,C0268,Referral,38.54
+HC-12243,2026-07-23,C0566,Farmers Market,19.71
+HC-12244,2026-07-23,C0661,Farmers Market,24.14
+HC-12245,2026-07-23,C0670,Referral,25.15
+HC-12246,2026-07-23,C0785,Referral,25.37
+HC-12247,2026-07-24,C0028,Farmers Market,14.81
+HC-12248,2026-07-24,C0092,Walk-in,19.25
+HC-12249,2026-07-24,C0121,Walk-in,16.03
+HC-12250,2026-07-24,C0243,Referral,32.68
+HC-12251,2026-07-24,C0274,Farmers Market,24.50
+HC-12252,2026-07-24,C0318,Referral,30.00
+HC-12253,2026-07-24,C0342,Walk-in,18.70
+HC-12254,2026-07-24,C0377,Walk-in,17.72
+HC-12255,2026-07-24,C0393,Walk-in,22.70
+HC-12256,2026-07-24,C0398,Referral,28.93
+HC-12257,2026-07-24,C0487,Referral,33.10
+HC-12258,2026-07-24,C0529,Walk-in,17.92
+HC-12259,2026-07-24,C0553,Farmers Market,16.86
+HC-12260,2026-07-24,C0679,Referral,35.90
+HC-12261,2026-07-24,C0728,Instagram,19.39
+HC-12262,2026-07-24,C0767,Walk-in,15.01
+HC-12263,2026-07-24,C0790,Instagram,21.52
+HC-12264,2026-07-25,C0160,Walk-in,22.36
+HC-12265,2026-07-25,C0470,Walk-in,16.80
+HC-12266,2026-07-25,C0509,Instagram,30.28
+HC-12267,2026-07-25,C0636,Instagram,27.79
+HC-12268,2026-07-25,C0794,Walk-in,21.49
+HC-12269,2026-07-26,C0029,Google Ads,23.50
+HC-12270,2026-07-26,C0104,Referral,33.89
+HC-12271,2026-07-26,C0203,Farmers Market,15.19
+HC-12272,2026-07-26,C0217,Referral,37.22
+HC-12273,2026-07-26,C0278,Farmers Market,12.63
+HC-12274,2026-07-26,C0302,Google Ads,31.07
+HC-12275,2026-07-26,C0327,Referral,33.92
+HC-12276,2026-07-26,C0354,Referral,23.46
+HC-12277,2026-07-26,C0435,Walk-in,23.24
+HC-12278,2026-07-26,C0538,Walk-in,17.55
+HC-12279,2026-07-26,C0562,Instagram,29.62
+HC-12280,2026-07-26,C0606,Referral,24.87
+HC-12281,2026-07-26,C0629,Referral,38.66
+HC-12282,2026-07-26,C0650,Walk-in,17.24
+HC-12283,2026-07-26,C0725,Walk-in,15.32
+HC-12284,2026-07-26,C0775,Instagram,16.09
+HC-12285,2026-07-26,C0798,Farmers Market,18.55
+HC-12286,2026-07-27,C0166,Farmers Market,25.51
+HC-12287,2026-07-27,C0480,Referral,33.42
+HC-12288,2026-07-27,C0591,Referral,37.25
+HC-12289,2026-07-27,C0633,Referral,25.58
+HC-12290,2026-07-28,C0009,Instagram,26.17
+HC-12291,2026-07-28,C0054,Walk-in,12.02
+HC-12292,2026-07-28,C0059,Referral,23.66
+HC-12293,2026-07-28,C0158,Instagram,23.05
+HC-12294,2026-07-28,C0215,Referral,23.19
+HC-12295,2026-07-28,C0406,Walk-in,20.73
+HC-12296,2026-07-28,C0496,Referral,32.49
+HC-12297,2026-07-28,C0506,Walk-in,20.27
+HC-12298,2026-07-28,C0612,Farmers Market,17.84
+HC-12299,2026-07-28,C0696,Instagram,25.93
+HC-12300,2026-07-28,C0721,Referral,22.56
+HC-12301,2026-07-28,C0740,Walk-in,11.22
+HC-12302,2026-07-28,C0761,Walk-in,21.98
+HC-12303,2026-07-28,C0774,Referral,20.94
+HC-12304,2026-07-28,C0796,Referral,20.24
+HC-12305,2026-07-29,C0308,Instagram,16.81
+HC-12306,2026-07-29,C0341,Walk-in,16.06
+HC-12307,2026-07-29,C0359,Instagram,30.12
+HC-12308,2026-07-29,C0386,Farmers Market,21.10
+HC-12309,2026-07-29,C0394,Referral,38.07
+HC-12310,2026-07-29,C0397,Referral,24.78
+HC-12311,2026-07-29,C0407,Walk-in,15.37
+HC-12312,2026-07-29,C0488,Instagram,27.09
+HC-12313,2026-07-29,C0501,Instagram,28.26
+HC-12314,2026-07-29,C0510,Referral,19.33
+HC-12315,2026-07-29,C0587,Farmers Market,22.81
+HC-12316,2026-07-29,C0710,Farmers Market,25.42
+HC-12317,2026-07-30,C0129,Instagram,22.70
+HC-12318,2026-07-30,C0298,Walk-in,21.64
+HC-12319,2026-07-30,C0305,Farmers Market,25.10
+HC-12320,2026-07-30,C0319,Farmers Market,13.17
+HC-12321,2026-07-30,C0387,Referral,29.21
+HC-12322,2026-07-30,C0407,Walk-in,23.88
+HC-12323,2026-07-30,C0434,Walk-in,21.20
+HC-12324,2026-07-30,C0647,Referral,33.40
+HC-12325,2026-07-30,C0769,Walk-in,21.13
+HC-12326,2026-07-31,C0041,Referral,36.27
+HC-12327,2026-07-31,C0067,Walk-in,16.01
+HC-12328,2026-07-31,C0086,Walk-in,15.17
+HC-12329,2026-07-31,C0121,Walk-in,18.81
+HC-12330,2026-07-31,C0126,Farmers Market,13.30
+HC-12331,2026-07-31,C0161,Walk-in,15.79
+HC-12332,2026-07-31,C0250,Referral,28.44
+HC-12333,2026-07-31,C0304,Referral,25.39
+HC-12334,2026-07-31,C0331,Instagram,28.72
+HC-12335,2026-07-31,C0672,Referral,26.14
+HC-12336,2026-07-31,C0680,Referral,34.47
+HC-12337,2026-08-01,C0068,Referral,34.92
+HC-12338,2026-08-01,C0310,Referral,39.08
+HC-12339,2026-08-01,C0372,Referral,27.57
+HC-12340,2026-08-01,C0462,Instagram,16.15
+HC-12341,2026-08-01,,Instagram,18.73
+HC-12342,2026-08-01,C0632,Farmers Market,26.93
+HC-12343,2026-08-02,C0006,Google Ads,28.04
+HC-12344,2026-08-02,C0019,Farmers Market,27.33
+HC-12345,2026-08-02,C0152,Google Ads,22.51
+HC-12346,2026-08-02,C0257,Google Ads,15.85
+HC-12347,2026-08-02,C0336,Instagram,17.78
+HC-12348,2026-08-02,C0361,Walk-in,96.85
+HC-12349,2026-08-02,C0580,Referral,23.80
+HC-12350,2026-08-02,C0606,Referral,36.04
+HC-12351,2026-08-02,C0718,Referral,29.53
+HC-12352,2026-08-02,C0759,Referral,17.62
+HC-12353,2026-08-02,C0784,Walk-in,15.01
+HC-12354,2026-08-03,C0243,Referral,31.84
+HC-12355,2026-08-03,C0300,Farmers Market,16.53
+HC-12356,2026-08-03,C0317,Walk-in,11.88
+HC-12357,2026-08-03,C0433,Walk-in,24.08
+HC-12358,2026-08-03,C0600,Farmers Market,22.42
+HC-12359,2026-08-03,C0604,Walk-in,23.55
+HC-12360,2026-08-03,C0654,Farmers Market,16.77
+HC-12361,2026-08-03,C0679,Referral,18.52
+HC-12362,2026-08-03,C0759,Referral,34.03
+HC-12363,2026-08-04,C0098,Referral,21.46
+HC-12364,2026-08-04,C0118,Walk-in,22.25
+HC-12365,2026-08-04,C0156,Farmers Market,17.53
+HC-12366,2026-08-04,C0191,Walk-in,19.70
+HC-12367,2026-08-04,C0239,Walk-in,20.89
+HC-12368,2026-08-04,C0267,Walk-in,23.97
+HC-12369,2026-08-04,C0293,Walk-in,17.96
+HC-12370,2026-08-04,C0320,Instagram,26.86
+HC-12371,2026-08-04,C0484,Farmers Market,23.60
+HC-12372,2026-08-04,C0607,Google Ads,26.52
+HC-12373,2026-08-04,C0765,Referral,19.96
+HC-12374,2026-08-05,C0019,Farmers Market,24.27
+HC-12375,2026-08-05,C0050,Walk-in,11.28
+HC-12376,2026-08-05,C0173,Farmers Market,14.51
+HC-12377,2026-08-05,C0225,Farmers Market,27.37
+HC-12378,2026-08-05,C0234,Instagram,14.28
+HC-12379,2026-08-05,C0276,Walk-in,14.06
+HC-12380,2026-08-05,C0304,Referral,38.41
+HC-12381,2026-08-05,C0386,Farmers Market,25.06
+HC-12382,2026-08-05,C0510,Referral,28.63
+HC-12383,2026-08-05,C0584,Referral,20.09
+HC-12384,2026-08-05,C0749,Walk-in,20.89
+HC-12385,2026-08-05,C0796,Referral,28.49
+HC-12386,2026-08-06,C0024,Walk-in,15.35
+HC-12387,2026-08-06,C0104,Referral,25.16
+HC-12388,2026-08-06,C0224,Referral,17.74
+HC-12389,2026-08-06,C0248,Google Ads,28.17
+HC-12390,2026-08-06,C0294,Instagram,22.23
+HC-12391,2026-08-06,C0318,Referral,30.41
+HC-12392,2026-08-06,C0367,Farmers Market,13.28
+HC-12393,2026-08-06,C0470,Walk-in,22.08
+HC-12394,2026-08-06,C0483,Walk-in,17.29
+HC-12395,2026-08-06,C0538,Walk-in,12.42
+HC-12396,2026-08-06,C0586,Walk-in,18.83
+HC-12397,2026-08-06,C0629,Referral,37.08
+HC-12398,2026-08-06,C0633,Referral,20.19
+HC-12399,2026-08-06,C0798,Farmers Market,23.94
+HC-12400,2026-08-07,C0002,Google Ads,28.08
+HC-12401,2026-08-07,C0141,Google Ads,30.31
+HC-12402,2026-08-07,C0215,Referral,24.93
+HC-12403,2026-08-07,C0226,Referral,34.95
+HC-12404,2026-08-07,C0281,Referral,28.08
+HC-12405,2026-08-07,C0427,Referral,34.07
+HC-12406,2026-08-07,C0496,Referral,17.59
+HC-12407,2026-08-07,C0503,Walk-in,17.06
+HC-12408,2026-08-07,C0506,Walk-in,17.95
+HC-12409,2026-08-07,C0521,Instagram,14.82
+HC-12410,2026-08-07,C0526,Walk-in,17.61
+HC-12411,2026-08-07,C0532,Instagram,20.76
+HC-12412,2026-08-07,C0591,Referral,26.78
+HC-12413,2026-08-07,C0633,Referral,17.79
+HC-12414,2026-08-07,C0753,Walk-in,12.37
+HC-12415,2026-08-07,C0774,Referral,38.74
+HC-12416,2026-08-08,C0041,Referral,23.17
+HC-12417,2026-08-08,C0054,Walk-in,15.23
+HC-12418,2026-08-08,C0088,Referral,30.62
+HC-12419,2026-08-08,C0102,Walk-in,19.33
+HC-12420,2026-08-08,C0155,Walk-in,11.21
+HC-12421,2026-08-08,C0178,Walk-in,15.16
+HC-12422,2026-08-08,C0180,Walk-in,11.41
+HC-12423,2026-08-08,C0193,Farmers Market,23.00
+HC-12424,2026-08-08,C0293,Walk-in,21.94
+HC-12425,2026-08-08,C0335,Walk-in,18.83
+HC-12426,2026-08-08,C0429,Walk-in,17.17
+HC-12427,2026-08-08,C0618,Walk-in,17.84
+HC-12428,2026-08-08,C0621,Walk-in,16.68
+HC-12429,2026-08-08,C0653,Instagram,19.61
+HC-12430,2026-08-08,C0724,Walk-in,11.23
+HC-12431,2026-08-08,C0726,Farmers Market,20.20
+HC-12432,2026-08-08,C0737,Walk-in,13.82
+HC-12433,2026-08-09,C0035,Walk-in,21.22
+HC-12434,2026-08-09,C0217,Referral,19.00
+HC-12435,2026-08-09,C0301,Referral,29.89
+HC-12436,2026-08-09,C0387,Referral,34.19
+HC-12437,2026-08-09,C0407,Walk-in,15.96
+HC-12438,2026-08-09,C0413,Referral,38.18
+HC-12439,2026-08-09,C0480,Referral,34.82
+HC-12440,2026-08-09,C0525,Referral,29.40
+HC-12441,2026-08-09,C0648,Walk-in,22.65
+HC-12442,2026-08-09,C0663,Walk-in,23.59
+HC-12443,2026-08-09,C0705,Instagram,22.56
+HC-12444,2026-08-09,C0723,Instagram,23.82
+HC-12445,2026-08-09,C0761,Walk-in,22.91
+HC-12446,2026-08-10,C0069,Farmers Market,14.12
+HC-12447,2026-08-10,C0086,Walk-in,11.81
+HC-12448,2026-08-10,C0268,Referral,29.07
+HC-12449,2026-08-10,C0271,Farmers Market,27.02
+HC-12450,2026-08-10,C0366,Google Ads,15.81
+HC-12451,2026-08-10,C0494,Farmers Market,18.62
+HC-12452,2026-08-10,C0529,Walk-in,21.39
+HC-12453,2026-08-10,C0718,Referral,33.38
+HC-12454,2026-08-10,C0721,Referral,37.63
+HC-12455,2026-08-10,C0734,Google Ads,17.61
+HC-12456,2026-08-10,C0738,Farmers Market,18.23
+HC-12457,2026-08-11,C0039,Farmers Market,18.84
+HC-12458,2026-08-11,C0068,Referral,19.18
+HC-12459,2026-08-11,C0070,Walk-in,17.15
+HC-12460,2026-08-11,C0298,Walk-in,12.12
+HC-12461,2026-08-11,C0362,Instagram,14.21
+HC-12462,2026-08-11,C0406,Walk-in,24.29
+HC-12463,2026-08-11,C0435,Walk-in,15.10
+HC-12464,2026-08-11,C0625,Farmers Market,18.60
+HC-12465,2026-08-11,C0672,Referral,31.73
+HC-12466,2026-08-11,C0679,Referral,19.91
+HC-12467,2026-08-11,C0680,Referral,37.85
+HC-12468,2026-08-11,C0797,Farmers Market,15.00
+HC-12469,2026-08-12,C0055,Instagram,25.30
+HC-12470,2026-08-12,C0067,Walk-in,23.42
+HC-12471,2026-08-12,C0071,Referral,18.86
+HC-12472,2026-08-12,C0206,Farmers Market,27.42
+HC-12473,2026-08-12,C0307,Google Ads,19.96
+HC-12474,2026-08-12,C0357,Referral,31.47
+HC-12475,2026-08-12,C0372,Referral,27.84
+HC-12476,2026-08-12,C0394,Referral,23.94
+HC-12477,2026-08-12,C0485,Farmers Market,23.21
+HC-12478,2026-08-12,C0496,Referral,37.02
+HC-12479,2026-08-12,C0574,Walk-in,13.04
+HC-12480,2026-08-12,C0584,Referral,27.98
+HC-12481,2026-08-12,C0604,Walk-in,20.70
+HC-12482,2026-08-13,C0028,Farmers Market,23.08
+HC-12483,2026-08-13,C0128,Walk-in,14.40
+HC-12484,2026-08-13,C0155,Walk-in,14.79
+HC-12485,2026-08-13,C0203,Farmers Market,25.78
+HC-12486,2026-08-13,C0251,Referral,25.92
+HC-12487,2026-08-13,C0523,Google Ads,24.44
+HC-12488,2026-08-13,C0629,Referral,27.00
+HC-12489,2026-08-13,C0751,Walk-in,21.84
+HC-12490,2026-08-14,C0161,Walk-in,21.72
+HC-12491,2026-08-14,C0166,Farmers Market,19.72
+HC-12492,2026-08-14,C0224,Referral,31.53
+HC-12493,2026-08-14,C0228,Instagram,15.15
+HC-12494,2026-08-14,C0281,Referral,25.53
+HC-12495,2026-08-14,C0434,Walk-in,22.53
+HC-12496,2026-08-14,C0600,Farmers Market,25.08
+HC-12497,2026-08-14,C0632,Farmers Market,22.80
+HC-12498,2026-08-14,C0724,Walk-in,19.85
+HC-12499,2026-08-15,C0121,Walk-in,18.57
+HC-12500,2026-08-15,C0239,Walk-in,14.53
+HC-12501,2026-08-15,C0297,Referral,22.44
+HC-12502,2026-08-15,C0318,Referral,33.34
+HC-12503,2026-08-15,C0341,Walk-in,11.97
+HC-12504,2026-08-15,C0361,Walk-in,18.67
+HC-12505,2026-08-15,C0447,Instagram,19.14
+HC-12506,2026-08-15,C0470,Walk-in,16.95
+HC-12507,2026-08-15,C0496,Referral,26.47
+HC-12508,2026-08-15,C0637,Farmers Market,23.81
+HC-12509,2026-08-15,C0647,Referral,28.42
+HC-12510,2026-08-15,C0650,Walk-in,21.83
+HC-12511,2026-08-15,C0692,Farmers Market,17.74
+HC-12512,2026-08-15,C0714,Google Ads,32.10
+HC-12513,2026-08-16,C0059,Referral,30.23
+HC-12514,2026-08-16,C0082,Referral,29.01
+HC-12515,2026-08-16,C0310,Referral,18.84
+HC-12516,2026-08-16,C0339,Walk-in,19.08
+HC-12517,2026-08-16,C0377,Walk-in,22.53
+HC-12518,2026-08-16,C0455,Instagram,24.97
+HC-12519,2026-08-16,C0482,Walk-in,16.70
+HC-12520,2026-08-16,C0500,Instagram,15.16
+HC-12521,2026-08-16,C0509,Instagram,14.89
+HC-12522,2026-08-16,C0545,Walk-in,23.85
+HC-12523,2026-08-16,C0576,Referral,19.38
+HC-12524,2026-08-16,C0586,Walk-in,11.17
+HC-12525,2026-08-16,C0591,Referral,31.71
+HC-12526,2026-08-16,C0729,Instagram,16.63
+HC-12527,2026-08-16,C0738,Farmers Market,12.88
+HC-12528,2026-08-16,C0761,Walk-in,14.38
+HC-12529,2026-08-16,C0796,Referral,28.71
+HC-12530,2026-08-17,C0063,Walk-in,12.14
+HC-12531,2026-08-17,C0188,Walk-in,11.20
+HC-12532,2026-08-17,C0212,Walk-in,23.68
+HC-12533,2026-08-17,C0243,Referral,25.02
+HC-12534,2026-08-17,C0276,Walk-in,16.98
+HC-12535,2026-08-17,C0342,Walk-in,19.64
+HC-12536,2026-08-17,C0427,Referral,30.37
+HC-12537,2026-08-17,C0462,Instagram,14.25
+HC-12538,2026-08-17,C0483,Walk-in,21.86
+HC-12539,2026-08-17,C0593,Walk-in,23.23
+HC-12540,2026-08-17,C0674,Instagram,29.66
+HC-12541,2026-08-17,C0725,Walk-in,14.82
+HC-12542,2026-08-17,C0749,Walk-in,12.43
+HC-12543,2026-08-17,C0774,Referral,34.59
+HC-12544,2026-08-18,C0180,Walk-in,22.96
+HC-12545,2026-08-18,C0215,Referral,21.03
+HC-12546,2026-08-18,C0217,Referral,26.13
+HC-12547,2026-08-18,C0293,Walk-in,20.36
+HC-12548,2026-08-18,C0372,Referral,37.48
+HC-12549,2026-08-18,C0397,Referral,31.57
+HC-12550,2026-08-18,C0463,Farmers Market,23.29
+HC-12551,2026-08-18,C0529,Walk-in,21.84
+HC-12552,2026-08-18,C0563,Farmers Market,27.09
+HC-12553,2026-08-18,C0605,Google Ads,16.85
+HC-12554,2026-08-18,C0648,Walk-in,24.24
+HC-12555,2026-08-18,C0688,Farmers Market,17.54
+HC-12556,2026-08-18,C0767,Walk-in,13.20
+HC-12557,2026-08-19,C0132,Referral,23.18
+HC-12558,2026-08-19,C0173,Farmers Market,21.89
+HC-12559,2026-08-19,C0191,Walk-in,11.18
+HC-12560,2026-08-19,C0250,Referral,17.64
+HC-12561,2026-08-19,C0270,Instagram,14.83
+HC-12562,2026-08-19,C0393,Walk-in,24.59
+HC-12563,2026-08-19,C0434,Walk-in,22.75
+HC-12564,2026-08-19,C0460,Google Ads,26.34
+HC-12565,2026-08-19,C0535,Referral,32.59
+HC-12566,2026-08-19,C0633,Referral,27.60
+HC-12567,2026-08-20,C0160,Walk-in,22.58
+HC-12568,2026-08-20,C0216,Farmers Market,22.95
+HC-12569,2026-08-20,C0225,Farmers Market,25.44
+HC-12570,2026-08-20,C0335,Walk-in,19.77
+HC-12571,2026-08-20,C0361,Walk-in,12.54
+HC-12572,2026-08-20,C0387,Referral,23.52
+HC-12573,2026-08-20,C0487,Referral,34.01
+HC-12574,2026-08-20,C0510,Referral,34.52
+HC-12575,2026-08-20,C0577,Google Ads,33.09
+HC-12576,2026-08-20,C0660,Instagram,25.80
+HC-12577,2026-08-20,C0670,Referral,37.38
+HC-12578,2026-08-20,C0672,Referral,37.82
+HC-12579,2026-08-20,C0710,Farmers Market,24.53
+HC-12580,2026-08-20,C0786,Google Ads,16.76
+HC-12581,2026-08-21,C0050,Walk-in,16.55
+HC-12582,2026-08-21,C0121,Walk-in,17.91
+HC-12583,2026-08-21,C0254,Referral,20.42
+HC-12584,2026-08-21,C0267,Walk-in,17.51
+HC-12585,2026-08-21,C0301,Referral,32.37
+HC-12586,2026-08-21,C0499,Instagram,17.37
+HC-12587,2026-08-21,C0587,Farmers Market,16.26
+HC-12588,2026-08-21,C0657,Instagram,16.75
+HC-12589,2026-08-21,C0668,Google Ads,28.14
+HC-12590,2026-08-21,C0678,Referral,33.85
+HC-12591,2026-08-21,C0721,Referral,20.65
+HC-12592,2026-08-22,C0017,Instagram,23.53
+HC-12593,2026-08-22,C0104,Referral,31.43
+HC-12594,2026-08-22,C0106,Farmers Market,13.55
+HC-12595,2026-08-22,C0138,Google Ads,30.30
+HC-12596,2026-08-22,C0308,Instagram,15.95
+HC-12597,2026-08-22,C0425,Referral,26.11
+HC-12598,2026-08-22,C0435,Walk-in,24.04
+HC-12599,2026-08-22,C0580,Referral,33.99
+HC-12600,2026-08-22,C0591,Referral,36.54
+HC-12601,2026-08-22,C0696,Instagram,18.32
+HC-12602,2026-08-22,C0711,Referral,28.38
+HC-12603,2026-08-23,C0032,Instagram,20.98
+HC-12604,2026-08-23,C0054,Walk-in,18.79
+HC-12605,2026-08-23,C0196,Walk-in,15.92
+HC-12606,2026-08-23,C0203,Farmers Market,21.76
+HC-12607,2026-08-23,C0256,Google Ads,28.55
+HC-12608,2026-08-23,C0304,Referral,21.52
+HC-12609,2026-08-23,C0305,Farmers Market,22.44
+HC-12610,2026-08-23,C0318,Referral,19.25
+HC-12611,2026-08-23,C0398,Referral,32.88
+HC-12612,2026-08-23,C0400,Referral,19.91
+HC-12613,2026-08-23,C0406,Walk-in,20.47
+HC-12614,2026-08-23,C0501,Instagram,21.95
+HC-12615,2026-08-23,C0525,Referral,38.07
+HC-12616,2026-08-23,C0532,Instagram,17.90
+HC-12617,2026-08-23,C0541,Referral,27.42
+HC-12618,2026-08-23,C0629,Referral,34.86
+HC-12619,2026-08-23,C0781,Referral,32.41
+HC-12620,2026-08-24,C0029,Google Ads,29.71
+HC-12621,2026-08-24,C0035,Walk-in,18.79
+HC-12622,2026-08-24,C0250,Referral,29.50
+HC-12623,2026-08-24,C0293,Walk-in,16.34
+HC-12624,2026-08-24,C0394,Referral,19.51
+HC-12625,2026-08-24,C0480,Referral,30.98
+HC-12626,2026-08-24,C0522,Google Ads,23.27
+HC-12627,2026-08-24,C0526,Walk-in,19.33
+HC-12628,2026-08-24,C0570,Walk-in,14.71
+HC-12629,2026-08-24,C0661,Farmers Market,14.32
+HC-12630,2026-08-24,C0761,Walk-in,12.00
+HC-12631,2026-08-24,C0769,Walk-in,24.25
+HC-12632,2026-08-25,C0034,Instagram,24.12
+HC-12633,2026-08-25,C0069,Farmers Market,12.92
+HC-12634,2026-08-25,C0070,Walk-in,19.12
+HC-12635,2026-08-25,C0211,Referral,24.23
+HC-12636,2026-08-25,C0212,Walk-in,14.09
+HC-12637,2026-08-25,C0214,Farmers Market,15.12
+HC-12638,2026-08-25,C0224,Referral,17.73
+HC-12639,2026-08-25,C0268,Referral,22.10
+HC-12640,2026-08-25,C0276,Walk-in,12.88
+HC-12641,2026-08-25,C0310,Referral,32.70
+HC-12642,2026-08-25,C0331,Instagram,15.12
+HC-12643,2026-08-25,C0358,Instagram,19.20
+HC-12644,2026-08-25,C0452,Walk-in,19.85
+HC-12645,2026-08-25,C0521,Instagram,18.42
+HC-12646,2026-08-25,C0584,Referral,38.12
+HC-12647,2026-08-25,C0654,Farmers Market,17.39
+HC-12648,2026-08-25,C0716,Farmers Market,13.62
+HC-12649,2026-08-25,C0797,Farmers Market,14.65
+HC-12650,2026-08-26,C0043,Walk-in,13.76
+HC-12651,2026-08-26,C0067,Walk-in,16.70
+HC-12652,2026-08-26,C0158,Instagram,17.73
+HC-12653,2026-08-26,C0190,Farmers Market,24.91
+HC-12654,2026-08-26,C0217,Referral,23.52
+HC-12655,2026-08-26,C0281,Referral,22.02
+HC-12656,2026-08-26,C0297,Referral,27.37
+HC-12657,2026-08-26,C0470,Walk-in,11.60
+HC-12658,2026-08-26,C0503,Walk-in,19.57
+HC-12659,2026-08-26,C0604,Walk-in,13.18
+HC-12660,2026-08-26,C0613,Farmers Market,16.45
+HC-12661,2026-08-26,C0647,Referral,27.85
+HC-12662,2026-08-26,C0666,Farmers Market,16.02
+HC-12663,2026-08-26,C0719,Instagram,21.58
+HC-12664,2026-08-26,C0724,Walk-in,16.47
+HC-12665,2026-08-26,C0798,Farmers Market,14.93
+HC-12666,2026-08-27,C0132,Referral,33.83
+HC-12667,2026-08-27,C0161,Walk-in,15.79
+HC-12668,2026-08-27,C0239,Walk-in,24.50
+HC-12669,2026-08-27,C0271,Farmers Market,22.20
+HC-12670,2026-08-27,C0362,Instagram,21.77
+HC-12671,2026-08-27,C0372,Referral,32.31
+HC-12672,2026-08-27,C0374,Google Ads,20.83
+HC-12673,2026-08-27,C0378,Walk-in,17.61
+HC-12674,2026-08-27,C0433,Walk-in,18.91
+HC-12675,2026-08-27,C0496,Referral,32.74
+HC-12676,2026-08-27,C0506,Walk-in,22.73
+HC-12677,2026-08-27,C0549,Farmers Market,27.45
+HC-12678,2026-08-27,C0606,Referral,36.79
+HC-12679,2026-08-27,C0633,Referral,36.96
+HC-12680,2026-08-27,C0681,Google Ads,34.65
+HC-12681,2026-08-27,C0710,Farmers Market,17.39
+HC-12682,2026-08-27,C0718,Referral,26.75
+HC-12683,2026-08-27,C0784,Walk-in,21.55
+HC-12684,2026-08-28,C0041,Referral,27.37
+HC-12685,2026-08-28,C0129,Instagram,25.35
+HC-12686,2026-08-28,C0156,Farmers Market,26.86
+HC-12687,2026-08-28,C0298,Walk-in,71.00
+HC-12688,2026-08-28,C0299,Farmers Market,17.99
+HC-12689,2026-08-28,C0361,Walk-in,11.47
+HC-12690,2026-08-28,C0544,Farmers Market,12.60
+HC-12691,2026-08-28,C0725,Walk-in,19.96
+HC-12692,2026-08-28,C0785,Referral,38.53
+HC-12693,2026-08-28,C0796,Referral,22.08
+HC-12694,2026-08-29,C0191,Walk-in,21.37
+HC-12695,2026-08-29,C0294,Instagram,23.99
+HC-12696,2026-08-29,C0359,Instagram,19.40
+HC-12697,2026-08-29,C0363,Google Ads,30.01
+HC-12698,2026-08-29,C0377,Walk-in,21.73
+HC-12699,2026-08-29,C0394,Referral,24.13
+HC-12700,2026-08-29,C0407,Walk-in,22.66
+HC-12701,2026-08-29,C0648,Walk-in,17.69
+HC-12702,2026-08-29,C0679,Referral,19.99
+HC-12703,2026-08-29,C0680,Referral,30.14
+HC-12704,2026-08-29,C0737,Walk-in,14.38
+HC-12705,2026-08-29,C0767,Walk-in,17.51
+HC-12706,2026-08-30,C0098,Referral,31.04
+HC-12707,2026-08-30,C0251,Referral,36.62
+HC-12708,2026-08-30,C0317,Walk-in,23.81
+HC-12709,2026-08-30,C0508,Google Ads,23.64
+HC-12710,2026-08-30,C0529,Walk-in,16.24
+HC-12711,2026-08-30,C0600,Farmers Market,12.81
+HC-12712,2026-08-30,C0653,Instagram,24.35
+HC-12713,2026-08-30,C0721,Referral,17.56
+HC-12714,2026-08-31,C0160,Walk-in,20.20
+HC-12715,2026-08-31,C0387,Referral,34.76
+HC-12716,2026-08-31,C0397,Referral,33.80
+HC-12717,2026-08-31,C0434,Walk-in,19.67
+HC-12718,2026-08-31,C0473,Instagram,13.88
+HC-12719,2026-08-31,C0494,Farmers Market,18.06
+HC-12720,2026-08-31,C0503,Walk-in,20.26
+HC-12721,2026-08-31,C0545,Walk-in,20.00
+HC-12722,2026-08-31,C0576,Referral,37.63
+HC-12723,2026-08-31,C0705,Instagram,28.40
+HC-12724,2026-09-01,C0082,Referral,27.35
+HC-12725,2026-09-01,C0086,Walk-in,15.27
+HC-12726,2026-09-01,C0102,Walk-in,21.61
+HC-12727,2026-09-01,C0166,Farmers Market,18.19
+HC-12728,2026-09-01,C0245,Walk-in,17.09
+HC-12729,2026-09-01,C0253,Farmers Market,23.01
+HC-12730,2026-09-01,C0278,Farmers Market,12.82
+HC-12731,2026-09-01,C0333,Walk-in,15.53
+HC-12732,2026-09-01,C0339,Walk-in,13.80
+HC-12733,2026-09-01,C0341,Walk-in,18.54
+HC-12734,2026-09-01,C0413,Referral,23.85
+HC-12735,2026-09-01,C0427,Referral,34.85
+HC-12736,2026-09-01,C0474,Walk-in,13.90
+HC-12737,2026-09-01,C0483,Walk-in,11.45
+HC-12738,2026-09-01,C0538,Walk-in,85.10
+HC-12739,2026-09-01,C0629,Referral,31.19
+HC-12740,2026-09-01,C0672,Referral,32.78
+HC-12741,2026-09-02,C0059,Referral,28.13
+HC-12742,2026-09-02,C0121,Walk-in,14.85
+HC-12743,2026-09-02,C0188,Walk-in,15.77
+HC-12744,2026-09-02,C0215,Referral,37.89
+HC-12745,2026-09-02,C0222,Walk-in,19.83
+HC-12746,2026-09-02,C0308,Instagram,21.30
+HC-12747,2026-09-02,C0406,Walk-in,13.14
+HC-12748,2026-09-02,C0453,Farmers Market,18.87
+HC-12749,2026-09-02,C0470,Walk-in,17.35
+HC-12750,2026-09-02,C0480,Referral,33.73
+HC-12751,2026-09-02,C0570,Walk-in,19.83
+HC-12752,2026-09-02,C0586,Walk-in,18.02
+HC-12753,2026-09-02,C0604,Walk-in,18.14
+HC-12754,2026-09-02,C0753,Walk-in,20.69
+HC-12755,2026-09-02,C0759,Referral,32.31
+HC-12756,2026-09-02,C0774,Referral,23.37
+HC-12757,2026-09-03,C0055,Instagram,29.53
+HC-12758,2026-09-03,C0335,Walk-in,11.57
+HC-12759,2026-09-03,C0342,Walk-in,13.50
+HC-12760,2026-09-03,C0408,Instagram,15.12
+HC-12761,2026-09-03,C0510,Referral,19.68
+HC-12762,2026-09-03,C0519,Walk-in,18.78
+HC-12763,2026-09-03,C0579,Google Ads,33.52
+HC-12764,2026-09-03,C0591,Referral,36.65
+HC-12765,2026-09-03,C0647,Referral,37.13
+HC-12766,2026-09-03,C0650,Walk-in,24.23
+HC-12767,2026-09-03,C0685,Referral,27.16
+HC-12768,2026-09-03,C0711,Referral,18.46
+HC-12769,2026-09-03,C0724,Walk-in,20.63
+HC-12770,2026-09-03,C0778,Referral,35.53
+HC-12771,2026-09-04,C0028,Farmers Market,14.05
+HC-12772,2026-09-04,C0066,Walk-in,20.62
+HC-12773,2026-09-04,C0246,Instagram,13.95
+HC-12774,2026-09-04,C0252,Instagram,26.46
+HC-12775,2026-09-04,C0318,Referral,34.20
+HC-12776,2026-09-04,C0355,Google Ads,19.04
+HC-12777,2026-09-04,C0422,Walk-in,11.50
+HC-12778,2026-09-04,C0435,Walk-in,20.18
+HC-12779,2026-09-04,C0506,Walk-in,13.71
+HC-12780,2026-09-04,C0761,Walk-in,20.33
+HC-12781,2026-09-05,C0155,Walk-in,11.28
+HC-12782,2026-09-05,C0156,Farmers Market,24.11
+HC-12783,2026-09-05,C0192,Walk-in,20.73
+HC-12784,2026-09-05,C0201,Referral,23.14
+HC-12785,2026-09-05,C0224,Referral,34.94
+HC-12786,2026-09-05,C0239,Walk-in,17.36
+HC-12787,2026-09-05,C0243,Referral,25.86
+HC-12788,2026-09-05,C0496,Referral,29.17
+HC-12789,2026-09-05,C0504,Instagram,16.90
+HC-12790,2026-09-05,C0541,Referral,33.21
+HC-12791,2026-09-05,C0612,Farmers Market,19.55
+HC-12792,2026-09-05,C0672,Referral,36.94
+HC-12793,2026-09-06,C0106,Farmers Market,24.85
+HC-12794,2026-09-06,C0231,Instagram,30.23
+HC-12795,2026-09-06,C0250,Referral,30.19
+HC-12796,2026-09-06,C0387,Referral,38.47
+HC-12797,2026-09-06,C0629,Referral,35.76
+HC-12798,2026-09-06,C0674,Instagram,27.70
+HC-12799,2026-09-06,C0706,Farmers Market,26.89
+HC-12800,2026-09-06,C0749,Walk-in,20.92
+HC-12801,2026-09-06,C0756,Instagram,23.25
+HC-12802,2026-09-06,C0757,Instagram,21.50
+HC-12803,2026-09-07,C0068,Referral,22.42
+HC-12804,2026-09-07,C0161,Walk-in,20.87
+HC-12805,2026-09-07,C0217,Referral,36.42
+HC-12806,2026-09-07,C0244,Google Ads,17.04
+HC-12807,2026-09-07,C0281,Referral,25.35
+HC-12808,2026-09-07,C0301,Referral,33.12
+HC-12809,2026-09-07,C0428,Farmers Market,14.59
+HC-12810,2026-09-07,C0539,Google Ads,33.50
+HC-12811,2026-09-07,C0649,Google Ads,25.69
+HC-12812,2026-09-08,C0016,Farmers Market,23.99
+HC-12813,2026-09-08,C0063,Walk-in,20.22
+HC-12814,2026-09-08,C0070,Walk-in,14.06
+HC-12815,2026-09-08,C0086,Walk-in,11.82
+HC-12816,2026-09-08,C0157,Walk-in,16.22
+HC-12817,2026-09-08,C0173,Farmers Market,13.50
+HC-12818,2026-09-08,C0215,Referral,24.85
+HC-12819,2026-09-08,C0226,Referral,30.51
+HC-12820,2026-09-08,C0293,Walk-in,21.99
+HC-12821,2026-09-08,C0407,Walk-in,16.12
+HC-12822,2026-09-08,C0409,Instagram,18.50
+HC-12823,2026-09-08,C0447,Instagram,26.45
+HC-12824,2026-09-08,C0718,Referral,20.30
+HC-12825,2026-09-09,C0006,Google Ads,18.89
+HC-12826,2026-09-09,C0024,Walk-in,20.16
+HC-12827,2026-09-09,C0054,Walk-in,12.74
+HC-12828,2026-09-09,C0235,Walk-in,19.94
+HC-12829,2026-09-09,C0254,Referral,38.61
+HC-12830,2026-09-09,C0268,Referral,22.15
+HC-12831,2026-09-09,C0303,Instagram,22.34
+HC-12832,2026-09-09,C0310,Referral,20.27
+HC-12833,2026-09-09,C0393,Walk-in,22.43
+HC-12834,2026-09-09,C0427,Referral,25.24
+HC-12835,2026-09-09,C0480,Referral,20.34
+HC-12836,2026-09-09,C0485,Farmers Market,16.11
+HC-12837,2026-09-09,C0584,Referral,21.16
+HC-12838,2026-09-09,C0625,Farmers Market,23.78
+HC-12839,2026-09-09,C0632,Farmers Market,17.12
+HC-12840,2026-09-09,C0654,Farmers Market,23.61
+HC-12841,2026-09-09,C0679,Referral,21.96
+HC-12842,2026-09-09,C0725,Walk-in,15.57
+HC-12843,2026-09-09,C0792,Farmers Market,23.59
+HC-12844,2026-09-10,C0109,Instagram,22.27
+HC-12845,2026-09-10,C0132,Referral,24.07
+HC-12846,2026-09-10,C0228,Instagram,26.15
+HC-12847,2026-09-10,C0276,Walk-in,22.99
+HC-12848,2026-09-10,C0344,Referral,23.63
+HC-12849,2026-09-10,C0361,Walk-in,19.08
+HC-12850,2026-09-10,C0387,Referral,21.36
+HC-12851,2026-09-10,C0462,Instagram,25.51
+HC-12852,2026-09-10,C0509,Instagram,15.59
+HC-12853,2026-09-10,C0525,Referral,35.27
+HC-12854,2026-09-10,C0535,Referral,31.69
+HC-12855,2026-09-10,C0604,Walk-in,12.75
+HC-12856,2026-09-10,C0633,Referral,25.88
+HC-12857,2026-09-10,C0648,Walk-in,12.54
+HC-12858,2026-09-10,C0672,Referral,27.13
+HC-12859,2026-09-10,C0680,Referral,20.79
+HC-12860,2026-09-10,C0724,Walk-in,11.83
+HC-12861,2026-09-10,C0796,Referral,33.55
+HC-12862,2026-09-11,C0019,Farmers Market,18.78
+HC-12863,2026-09-11,C0035,Walk-in,22.39
+HC-12864,2026-09-11,C0121,Walk-in,20.30
+HC-12865,2026-09-11,C0141,Google Ads,15.90
+HC-12866,2026-09-11,C0196,Walk-in,17.20
+HC-12867,2026-09-11,C0206,Farmers Market,24.01
+HC-12868,2026-09-11,C0274,Farmers Market,25.29
+HC-12869,2026-09-11,C0317,Walk-in,16.07
+HC-12870,2026-09-11,C0429,Walk-in,17.07
+HC-12871,2026-09-11,C0434,Walk-in,14.68
+HC-12872,2026-09-11,C0526,Walk-in,16.25
+HC-12873,2026-09-11,C0606,Referral,25.92
+HC-12874,2026-09-11,C0637,Farmers Market,20.81
+HC-12875,2026-09-11,C0746,Farmers Market,21.46
+HC-12876,2026-09-11,C0767,Walk-in,15.06
+HC-12877,2026-09-12,C0041,Referral,36.55
+HC-12878,2026-09-12,C0128,Walk-in,14.11
+HC-12879,2026-09-12,C0271,Farmers Market,12.52
+HC-12880,2026-09-12,C0394,Referral,36.08
+HC-12881,2026-09-12,C0470,Walk-in,20.38
+HC-12882,2026-09-12,C0591,Referral,19.98
+HC-12883,2026-09-12,C0738,Farmers Market,18.76
+HC-12884,2026-09-12,C0749,Walk-in,19.71
+HC-12885,2026-09-12,C0797,Farmers Market,22.51
+HC-12886,2026-09-13,C0029,Google Ads,18.66
+HC-12887,2026-09-13,C0118,Walk-in,24.27
+HC-12888,2026-09-13,C0180,Walk-in,19.30
+HC-12889,2026-09-13,C0372,Referral,23.22
+HC-12890,2026-09-13,C0510,Referral,18.38
+HC-12891,2026-09-13,C0563,Farmers Market,18.49
+HC-12892,2026-09-13,C0586,Walk-in,20.85
+HC-12893,2026-09-13,C0587,Farmers Market,21.54
+HC-12894,2026-09-13,C0728,Instagram,25.35
+HC-12895,2026-09-14,C0082,Referral,24.28
+HC-12896,2026-09-14,C0104,Referral,32.34
+HC-12897,2026-09-14,C0191,Walk-in,21.09
+HC-12898,2026-09-14,C0211,Referral,19.50
+HC-12899,2026-09-14,C0304,Referral,33.27
+HC-12900,2026-09-14,C0305,Farmers Market,17.29
+HC-12901,2026-09-14,C0387,Referral,18.48
+HC-12902,2026-09-14,C0400,Referral,32.61
+HC-12903,2026-09-14,C0496,Referral,31.57
+HC-12904,2026-09-14,C0509,Instagram,16.92
+HC-12905,2026-09-14,C0647,Referral,24.36
+HC-12906,2026-09-14,C0661,Farmers Market,26.87
+HC-12907,2026-09-14,C0798,Farmers Market,17.65
+HC-12908,2026-09-15,C0203,Farmers Market,16.84
+HC-12909,2026-09-15,C0245,Walk-in,12.25
+HC-12910,2026-09-15,C0342,Walk-in,20.69
+HC-12911,2026-09-15,C0361,Walk-in,20.73
+HC-12912,2026-09-15,C0483,Walk-in,11.19
+HC-12913,2026-09-15,C0532,Instagram,29.91
+HC-12914,2026-09-15,C0576,Referral,17.78
+HC-12915,2026-09-15,C0716,Farmers Market,15.51
+HC-12916,2026-09-16,C0086,Walk-in,12.09
+HC-12917,2026-09-16,C0155,Walk-in,20.22
+HC-12918,2026-09-16,C0160,Walk-in,15.17
+HC-12919,2026-09-16,C0217,Referral,31.01
+HC-12920,2026-09-16,C0234,Instagram,17.95
+HC-12921,2026-09-16,C0239,Walk-in,13.43
+HC-12922,2026-09-16,C0281,Referral,27.37
+HC-12923,2026-09-16,C0318,Referral,35.20
+HC-12924,2026-09-16,C0319,Farmers Market,17.20
+HC-12925,2026-09-16,C0487,Referral,27.51
+HC-12926,2026-09-17,C0054,Walk-in,20.57
+HC-12927,2026-09-17,C0068,Referral,32.12
+HC-12928,2026-09-17,C0188,Walk-in,22.24
+HC-12929,2026-09-17,C0470,Walk-in,17.79
+HC-12930,2026-09-17,C0496,Referral,18.22
+HC-12931,2026-09-17,C0529,Walk-in,21.37
+HC-12932,2026-09-17,C0541,Referral,20.55
+HC-12933,2026-09-17,C0580,Referral,20.84
+HC-12934,2026-09-17,C0660,Instagram,30.14
+HC-12935,2026-09-17,C0670,Referral,78.15
+HC-12936,2026-09-17,C0769,Walk-in,18.76
+HC-12937,2026-09-17,C0792,Farmers Market,25.87</script>
+<script>
+(function () {
+  'use strict';
+
+  /* small helpers */
+  var $ = function (id) { return document.getElementById(id); };
+  var DAY = 86400000;
+  var MONTH_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var MONTH_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  var MONTHS = { jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, sept: 9, oct: 10, nov: 11, dec: 12,
+    january: 1, february: 2, march: 3, april: 4, june: 6, july: 7, august: 8, september: 9, october: 10, november: 11, december: 12 };
+
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function money(v, cents) {
+    var n = Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: cents ? 2 : 0 });
+    return (v < 0 ? '−' : '') + '$' + n;
+  }
+  function plainMoney(v) { return (v < 0 ? '-' : '') + '$' + Math.abs(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function count(n) { return n.toLocaleString('en-US'); }
+  function plural(n, one, many) { return count(n) + ' ' + (n === 1 ? one : (many || one + 's')); }
+  function pct(x) { return Math.round(x * 100) + '%'; }
+  function round2(x) { return Math.round(x * 100) / 100; }
+  function median(a) { var s = a.slice().sort(function (x, y) { return x - y; }); var m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; }
+
+  function mkDay(y, mo, d) {
+    if (!(y >= 1990 && y <= 2100) || mo < 1 || mo > 12 || d < 1) return null;
+    var dim = new Date(Date.UTC(y, mo, 0)).getUTCDate();
+    if (d > dim) return null;
+    return Date.UTC(y, mo - 1, d) / DAY;
+  }
+  function parts(day) { var t = new Date(day * DAY); return { y: t.getUTCFullYear(), m: t.getUTCMonth() + 1, d: t.getUTCDate() }; }
+  function daysInMonth(y, m) { return new Date(Date.UTC(y, m, 0)).getUTCDate(); }
+  function fmtDay(day) { var p = parts(day); return MONTH_SHORT[p.m - 1] + ' ' + p.d + ', ' + p.y; }
+  function isoDay(day) { var p = parts(day); return p.y + '-' + String(p.m).padStart(2, '0') + '-' + String(p.d).padStart(2, '0'); }
+  function monthName(key, long) { var y = +key.slice(0, 4), m = +key.slice(5, 7); return (long ? MONTH_LONG : MONTH_SHORT)[m - 1] + ' ' + y; }
+
+  /* reading the file */
+  function parseCSV(text) {
+    if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+    var nl = text.indexOf('\n');
+    var first = nl >= 0 ? text.slice(0, nl) : text;
+    var delim = ',', best = -1;
+    [',', ';', '\t'].forEach(function (c) { var n = first.split(c).length; if (n > best) { best = n; delim = c; } });
+    var rows = [], row = [], field = '', inQ = false, i = 0, L = text.length, ch;
+    while (i < L) {
+      ch = text[i];
+      if (inQ) {
+        if (ch === '"') { if (text[i + 1] === '"') { field += '"'; i += 2; continue; } inQ = false; i++; continue; }
+        field += ch; i++; continue;
+      }
+      if (ch === '"') { inQ = true; i++; continue; }
+      if (ch === delim) { row.push(field); field = ''; i++; continue; }
+      if (ch === '\r') { i++; continue; }
+      if (ch === '\n') { row.push(field); rows.push(row); row = []; field = ''; i++; continue; }
+      field += ch; i++;
+    }
+    if (field !== '' || row.length) { row.push(field); rows.push(row); }
+    rows = rows.filter(function (r) { return r.some(function (c) { return c.trim() !== ''; }); });
+    return { header: (rows[0] || []).map(function (h) { return h.trim(); }), rows: rows.slice(1) };
+  }
+
+  function parseDate(s, style) {
+    if (s == null) return null;
+    var t = String(s).trim(), m;
+    if (!t) return null;
+    if ((m = t.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})(?=$|[T\s])/))) return mkDay(+m[1], +m[2], +m[3]);
+    if ((m = t.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4}|\d{2})(?=$|[T\s,])/))) {
+      var a = +m[1], b = +m[2], y = +m[3];
+      if (y < 100) y += 2000;
+      return style === 'dmy' ? mkDay(y, b, a) : mkDay(y, a, b);
+    }
+    if ((m = t.match(/^(\d{1,2})\s+([A-Za-z]{3,9})\.?,?\s+(\d{4})/))) { var mo = MONTHS[m[2].toLowerCase()]; return mo ? mkDay(+m[3], mo, +m[1]) : null; }
+    if ((m = t.match(/^(?:[A-Za-z]{3,9},?\s+)?([A-Za-z]{3,9})\.?\s+(\d{1,2}),?\s+(\d{4})/))) { var mo2 = MONTHS[m[1].toLowerCase()]; return mo2 ? mkDay(+m[3], mo2, +m[2]) : null; }
+    return null;
+  }
+
+  function detectStyle(values) {
+    var dmy = 0, mdy = 0, slashy = 0;
+    for (var i = 0; i < values.length; i++) {
+      var m = String(values[i] || '').trim().match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})/);
+      if (!m) continue;
+      slashy++;
+      var a = +m[1], b = +m[2];
+      if (a > 12 && b <= 12) dmy++;
+      else if (b > 12 && a <= 12) mdy++;
+    }
+    return { style: dmy > mdy ? 'dmy' : 'mdy', ambiguous: slashy > 0 && dmy === 0 && mdy === 0, slashy: slashy };
+  }
+
+  function parseAmount(s) {
+    if (s == null) return null;
+    var t = String(s).trim();
+    if (!t) return null;
+    var neg = false;
+    if (/^\(.*\)$/.test(t)) { neg = true; t = t.slice(1, -1); }
+    t = t.replace(/[−–]/g, '-');
+    if (/-\s*$/.test(t)) { neg = true; t = t.replace(/-\s*$/, ''); }
+    t = t.replace(/[^0-9.,\-]/g, '');
+    if (/^-?\d+,\d{1,2}$/.test(t)) t = t.replace(',', '.');
+    else t = t.replace(/,/g, '');
+    if (!/^-?(\d+\.?\d*|\.\d+)$/.test(t)) return null;
+    var v = parseFloat(t);
+    if (!isFinite(v)) return null;
+    if (neg) v = -Math.abs(v);
+    return v;
+  }
+
+  var ALIASES = {
+    date: ['order date', 'date', 'created at', 'created', 'created (utc)', 'transaction date', 'sale date', 'paid at', 'invoice date', 'datetime', 'timestamp', 'time', 'day'],
+    amount: ['amount', 'total', 'net sales', 'net total', 'order total', 'total amount', 'amount paid', 'total money', 'total collected', 'grand total', 'gross sales', 'net amount', 'sales', 'revenue', 'subtotal', 'price'],
+    customer: ['customer id', 'customer', 'customer email', 'email', 'client id', 'client', 'customer number', 'member id', 'customer name', 'buyer email', 'buyer', 'phone'],
+    channel: ['channel', 'source', 'sales channel', 'referral source', 'utm source', 'marketing channel', 'acquisition channel', 'lead source', 'source name', 'how did you hear about us', 'how did you hear'],
+    order: ['order id', 'order number', 'order no', 'order', 'transaction id', 'payment id', 'receipt number', 'receipt', 'invoice number', 'invoice', 'sale id', 'name', 'id']
+  };
+  function norm(s) { return String(s).toLowerCase().replace(/[_\-#]+/g, ' ').replace(/[^a-z0-9 ()]/g, '').replace(/\s+/g, ' ').trim(); }
+  function guessMapping(header) {
+    var H = header.map(norm), used = {}, map = {};
+    ['date', 'amount', 'customer', 'channel', 'order'].forEach(function (f) {
+      var hit = -1, list = ALIASES[f];
+      for (var a = 0; a < list.length && hit < 0; a++) for (var i = 0; i < H.length; i++) if (!used[i] && H[i] === list[a]) { hit = i; break; }
+      if (hit < 0) for (var a2 = 0; a2 < list.length && hit < 0; a2++) {
+        if (list[a2].length < 5) continue;
+        for (var j = 0; j < H.length; j++) if (!used[j] && H[j].indexOf(list[a2]) >= 0) { hit = j; break; }
+      }
+      map[f] = hit;
+      if (hit >= 0) used[hit] = true;
+    });
+    return map;
+  }
+
+  /* the analysis */
+  function analyze(data, map, styleSetting) {
+    var R = { ok: false };
+    if (map.date < 0 || map.amount < 0) { R.error = 'Pick the columns that hold the order date and the amount, and the kit will read your file.'; return R; }
+    var rows = data.rows;
+    var det = detectStyle(rows.map(function (r) { return r[map.date]; }));
+    var style = styleSetting === 'auto' ? det.style : styleSetting;
+    R.dateStyle = style; R.dateAmbiguous = styleSetting === 'auto' && det.ambiguous;
+
+    var seen = new Set(), rawSum = 0, dups = [], badDates = [], badAmts = [], used = [];
+    for (var i = 0; i < rows.length; i++) {
+      var r = rows[i];
+      var a = parseAmount(r[map.amount]);
+      if (a != null) rawSum += a;
+      var key = r.map(function (c) { return (c || '').trim(); }).join('\u0001');
+      if (seen.has(key)) { dups.push({ r: r, a: a }); continue; }
+      seen.add(key);
+      var d = parseDate(r[map.date], style);
+      if (d == null) { badDates.push({ r: r, a: a }); continue; }
+      if (a == null) { badAmts.push({ r: r }); continue; }
+      used.push({
+        i: i, day: d, amt: a,
+        cust: map.customer >= 0 ? String(r[map.customer] || '').trim() : '',
+        ch: map.channel >= 0 ? (String(r[map.channel] || '').trim() || '(blank)') : '',
+        order: map.order >= 0 ? String(r[map.order] || '').trim() : ''
+      });
+    }
+    R.rowsInFile = rows.length;
+    R.rawSum = round2(rawSum);
+    R.dups = dups.length; R.dupSum = round2(dups.reduce(function (s, x) { return s + (x.a || 0); }, 0));
+    R.badDates = badDates.map(function (x) { return { text: String(x.r[map.date] || '').trim(), order: map.order >= 0 ? String(x.r[map.order] || '').trim() : '', a: x.a }; });
+    R.badDateSum = round2(badDates.reduce(function (s, x) { return s + (x.a || 0); }, 0));
+    R.badAmts = badAmts.map(function (x) { return String(x.r[map.amount] || '').trim(); });
+    R.used = used;
+    if (!used.length) { R.error = 'None of the rows could be read. Check that the Order date and Amount columns are matched correctly.'; return R; }
+
+    R.net = round2(used.reduce(function (s, u) { return s + u.amt; }, 0));
+    var refunds = used.filter(function (u) { return u.amt < 0; });
+    R.refunds = refunds.length; R.refundSum = round2(refunds.reduce(function (s, u) { return s + u.amt; }, 0));
+    R.orders = used.filter(function (u) { return u.amt > 0; }).length;
+    R.zeros = used.filter(function (u) { return u.amt === 0; }).length;
+    R.hasCustomer = map.customer >= 0; R.hasChannel = map.channel >= 0; R.hasOrder = map.order >= 0;
+    R.missingCust = R.hasCustomer ? used.filter(function (u) { return !u.cust; }).length : 0;
+
+    // order numbers that repeat with different details
+    if (R.hasOrder) {
+      var oc = new Map();
+      used.forEach(function (u) { if (u.amt >= 0 && u.order) oc.set(u.order, (oc.get(u.order) || 0) + 1); });
+      var ids = 0, extra = 0;
+      oc.forEach(function (n) { if (n > 1) { ids++; extra += n - 1; } });
+      R.orderConflicts = ids; R.orderConflictRows = extra;
+    }
+
+    // dates and months
+    var minDay = Infinity, maxDay = -Infinity;
+    used.forEach(function (u) { if (u.day < minDay) minDay = u.day; if (u.day > maxDay) maxDay = u.day; });
+    R.minDay = minDay; R.asOf = maxDay;
+    var p0 = parts(minDay), p1 = parts(maxDay);
+    var months = [], byKey = {};
+    for (var y = p0.y, m = p0.m; y < p1.y || (y === p1.y && m <= p1.m); m === 12 ? (y++, m = 1) : m++) {
+      var k = y + '-' + String(m).padStart(2, '0');
+      var o = { key: k, y: y, m: m, net: 0, orders: 0, start: Date.UTC(y, m - 1, 1) / DAY, dim: daysInMonth(y, m), partial: false };
+      months.push(o); byKey[k] = o;
+    }
+    used.forEach(function (u) { var p = parts(u.day); var o = byKey[p.y + '-' + String(p.m).padStart(2, '0')]; o.net += u.amt; if (u.amt > 0) o.orders++; });
+    months.forEach(function (o) { o.net = round2(o.net); });
+    var first = months[0], last = months[months.length - 1];
+    if (p0.d > 1) { first.partial = true; first.from = minDay; }
+    if (p1.d < last.dim) {
+      last.partial = true;
+      var startCov = Math.max(last.start, minDay);
+      last.daysCovered = maxDay - startCov + 1;
+      last.pace = round2(last.net / last.daysCovered * last.dim);
+      last.through = p1.d;
+    }
+    R.months = months;
+    R.full = months.filter(function (o) { return !o.partial; });
+
+    // trend
+    var F = R.full, T = { kind: 'none' };
+    if (F.length >= 6) {
+      var a3 = F.slice(-3), b3 = F.slice(-6, -3);
+      T = { kind: 'q', a: avg(a3), b: avg(b3), aFrom: a3[0].key, aTo: a3[2].key, bFrom: b3[0].key, bTo: b3[2].key };
+    } else if (F.length >= 2) {
+      T = { kind: 'm', a: F[F.length - 1].net, b: F[F.length - 2].net, aFrom: F[F.length - 1].key, bFrom: F[F.length - 2].key };
+    }
+    if (T.kind !== 'none') T.change = T.b > 0 ? T.a / T.b - 1 : null;
+    if (F.length) { T.best = F.reduce(function (x, o) { return o.net > x.net ? o : x; }, F[0]); }
+    R.trend = T;
+
+    // customers
+    R.customers = null;
+    if (R.hasCustomer) {
+      var C = new Map();
+      used.slice().sort(function (x, y2) { return x.day - y2.day || x.i - y2.i; }).forEach(function (u) {
+        if (!u.cust) return;
+        var key2 = u.cust.toLowerCase();
+        var c = C.get(key2);
+        if (!c) { c = { id: u.cust, net: 0, orders: 0, days: new Set(), first: null, ch: '', last: null }; C.set(key2, c); }
+        c.net += u.amt;
+        if (u.amt > 0) {
+          c.orders++; c.days.add(u.day);
+          if (c.first == null) { c.first = u.day; c.ch = u.ch; }
+          c.last = u.day;
+        }
+      });
+      var buyers = [];
+      C.forEach(function (c) { if (c.orders >= 1) { c.net = round2(c.net); buyers.push(c); } });
+      if (buyers.length) {
+        buyers.sort(function (x, y2) { return y2.net - x.net; });
+        var topK = Math.max(1, Math.round(buyers.length * 0.2));
+        var total = buyers.reduce(function (s, c) { return s + c.net; }, 0);
+        var topSum = buyers.slice(0, topK).reduce(function (s, c) { return s + c.net; }, 0);
+        var repeaters = buyers.filter(function (c) { return c.orders >= 2; }).length;
+        R.customers = { list: buyers, n: buyers.length, topK: topK, topShare: total > 0 ? topSum / total : 0, total: total, repeatRate: repeaters / buyers.length, avgSpend: total / buyers.length };
+
+        // channels (by where each customer first came from)
+        if (R.hasChannel) {
+          var cutoff = maxDay - 90;
+          var elig = buyers.filter(function (c) { return c.first <= cutoff; });
+          var allUsed = false;
+          if (elig.length < 30) { elig = buyers; allUsed = true; }
+          var G = new Map();
+          elig.forEach(function (c) { var g = G.get(c.ch); if (!g) { g = { ch: c.ch, n: 0, rep: 0, net: 0 }; G.set(c.ch, g); } g.n++; g.net += c.net; if (c.orders >= 2) g.rep++; });
+          var rowsC = [];
+          G.forEach(function (g) { rowsC.push({ ch: g.ch, n: g.n, repeat: g.rep / g.n, avg: g.net / g.n }); });
+          rowsC.sort(function (x, y2) { return y2.avg - x.avg; });
+          R.channels = { rows: rowsC, allUsed: allUsed, cutoff: cutoff, eligible: elig.length };
+        }
+
+        // regulars who have gone quiet
+        var risk = [], lost = 0;
+        buyers.forEach(function (c) {
+          if (c.days.size < 3) return;
+          var d = Array.from(c.days).sort(function (x, y2) { return x - y2; });
+          var gaps = [];
+          for (var g2 = 1; g2 < d.length; g2++) gaps.push(d[g2] - d[g2 - 1]);
+          var typical = median(gaps);
+          var since = maxDay - d[d.length - 1];
+          if (since >= 30 && since > 2 * typical) {
+            if (since <= 180) risk.push({ id: c.id, typical: typical, since: since, last: d[d.length - 1], net: c.net, ch: c.ch, orders: c.orders });
+            else lost++;
+          }
+        });
+        risk.sort(function (x, y2) { return y2.net - x.net; });
+        R.risk = { list: risk, lost: lost, spent: risk.reduce(function (s, x) { return s + x.net; }, 0), typical: risk.length ? median(risk.map(function (x) { return x.typical; })) : null };
+      }
+    }
+    R.ok = true;
+    return R;
+  }
+  function avg(list) { return list.reduce(function (s, o) { return s + o.net; }, 0) / list.length; }
+
+  /* state */
+  var SAMPLE_NAME = 'Hilltop Coffee Roasters';
+  var state = { data: null, fileName: '', isSample: true, map: null, style: 'auto', result: null, riskOpen: false };
+  var FIELDS = ['date', 'amount', 'customer', 'channel', 'order'];
+
+  function loadText(text, name, isSample) {
+    var data = parseCSV(text);
+    $('fileError').hidden = true;
+    if (!data.header.length || !data.rows.length) { showFileError('That file looks empty. Export your sales again and choose the new file.'); return; }
+    state.data = data; state.fileName = name; state.isSample = isSample; state.style = 'auto'; state.riskOpen = false;
+    state.map = guessMapping(data.header);
+    $('map-style').value = 'auto';
+    fillSelects();
+    $('biz').value = isSample ? 'coffee roaster' : '';
+    run();
+    var needs = state.map.date < 0 || state.map.amount < 0;
+    $('mapping').open = needs;
+  }
+  function showFileError(msg) { var e = $('fileError'); e.textContent = msg; e.hidden = false; }
+
+  function fillSelects() {
+    FIELDS.forEach(function (f) {
+      var sel = $('map-' + f);
+      var opts = '<option value="-1">' + (f === 'date' || f === 'amount' ? 'Choose a column' : 'Not in my file') + '</option>';
+      state.data.header.forEach(function (h, i) { opts += '<option value="' + i + '">' + esc(h || ('Column ' + (i + 1))) + '</option>'; });
+      sel.innerHTML = opts;
+      sel.value = String(state.map[f]);
+    });
+  }
+
+  function run() {
+    var R = analyze(state.data, state.map, state.style);
+    state.result = R;
+    render(R);
+  }
+
+  /* rendering */
+  function render(R) {
+    var name = state.isSample ? 'the sample shop, ' + SAMPLE_NAME : state.fileName;
+    $('status').innerHTML = 'Now showing <strong>' + esc(name) + '</strong>, ' + plural(state.data.rows.length, 'row') + '.' + (state.isSample ? ' The shop and its data are made up.' : '');
+    $('sampleBadge').hidden = !state.isSample;
+    var note = 'The kit guessed these from your column names. Change any that look wrong and everything updates.';
+    if (R.dateAmbiguous) note += ' Dates like 03/04/2026 could mean March 4 or April 3, so the kit reads them month first. Switch to day first if that is wrong.';
+    else if (R.dateStyle === 'dmy' && state.style === 'auto') note += ' Your dates look day first (like 17/09/2026), so that is how the kit reads them.';
+    $('mapNote').textContent = note;
+
+    var main = ['findings', 'growth', 'best', 'channels', 'drift', 'ask', 'range', 'trustLink'];
+    if (!R.ok) {
+      $('mainError').textContent = R.error; $('mainError').hidden = false;
+      main.forEach(function (id) { $(id).hidden = true; });
+      $('receipt').innerHTML = '<div class="head"><span class="shop">Sales file check</span><span class="meta">Waiting for the date and amount columns</span></div>';
+      $('checks').innerHTML = '';
+      $('mapping').open = true;
+      return;
+    }
+    $('mainError').hidden = true;
+    main.forEach(function (id) { $(id).hidden = false; });
+    $('range').textContent = 'Covering ' + fmtDay(R.minDay) + ' to ' + fmtDay(R.asOf) + '. Everything below is measured as of the last day in the file.';
+
+    renderReceipt(R);
+    renderChecks(R);
+    renderGrowth(R);
+    renderBest(R);
+    renderChannels(R);
+    renderDrift(R);
+    renderFindings(R);
+    buildPrompt();
+  }
+
+  function ln(label, val, cls) { return '<div class="ln ' + (cls || '') + '"><span class="lbl">' + label + '</span><span class="dots"></span><span class="val">' + val + '</span></div>'; }
+  function renderReceipt(R) {
+    var shop = state.isSample ? SAMPLE_NAME : 'Your sales file';
+    var h = '<div class="head"><span class="shop">' + esc(shop) + '</span><span class="meta">Sales file check</span><span class="meta">' + esc(state.isSample ? 'hilltop-coffee-orders.csv' : state.fileName) + '</span><span class="meta">' + fmtDay(R.minDay) + ' to ' + fmtDay(R.asOf) + '</span></div>';
+    h += '<div class="rule"></div>';
+    h += ln('Rows in file', count(R.rowsInFile));
+    if (R.dups) h += ln('Duplicates removed', '−' + count(R.dups));
+    if (R.badDates.length) h += ln('Unreadable dates', '−' + count(R.badDates.length));
+    if (R.badAmts.length) h += ln('Unreadable amounts', '−' + count(R.badAmts.length));
+    h += ln('Rows used', count(R.used.length), 'total');
+    h += '<div class="rule"></div>';
+    h += ln('Amount column, added up', money(R.rawSum, true));
+    if (R.dups) h += ln('Duplicate rows', money(-R.dupSum, true));
+    if (R.badDateSum) h += ln('Rows with bad dates', money(-R.badDateSum, true));
+    h += ln('Net sales you can trust', money(R.net, true), 'total');
+    if (R.refunds) h += '<div class="sub">includes ' + plural(R.refunds, 'refund') + ' (' + money(R.refundSum, true) + ')</div>';
+    h += '<div class="sub">' + plural(R.orders, 'order') + '</div>';
+    h += '<div class="foot">Checked in your browser<br>Nothing uploaded</div>';
+    $('receipt').innerHTML = h;
+  }
+
+  function check(chip, label, title, desc) { return '<div class="check"><span class="chip ' + chip + '">' + label + '</span><span class="t">' + title + '</span><p class="d">' + desc + '</p></div>'; }
+  function renderChecks(R) {
+    var h = '', clear = [];
+    if (R.dups) h += check('fixed', 'Fixed', plural(R.dups, 'duplicate row'), 'These rows matched another row in every column, so the extra copies were removed. Exports that run twice often cause this. Together they would have added ' + money(R.dupSum, true) + ' that never happened.');
+    else clear.push('no duplicate rows');
+    if (R.badDates.length) {
+      var ex = R.badDates.slice(0, 3).map(function (b) { return '<code>' + esc(b.text || '(blank)') + '</code>' + (b.order ? ' on order ' + esc(b.order) : ''); }).join(', ');
+      h += check('needs', 'Needs you', plural(R.badDates.length, 'unreadable date'), 'The kit could not read ' + ex + '. ' + (R.badDates.length === 1 ? 'That row is' : 'Those rows are') + ' left out' + (R.badDateSum ? ' (' + money(R.badDateSum, true) + ')' : '') + ' until the date is fixed in your file.');
+    } else clear.push('every date readable');
+    if (R.badAmts.length) h += check('needs', 'Needs you', plural(R.badAmts.length, 'unreadable amount'), 'Values like <code>' + esc(R.badAmts[0] || '(blank)') + '</code> are not numbers, so those rows are left out.');
+    else clear.push('every amount readable');
+    if (R.refunds) h += check('handled', 'Handled', plural(R.refunds, 'refund'), 'Negative amounts are treated as refunds. They are subtracted from sales (' + money(R.refundSum, true) + '), but they do not count as orders.');
+    if (R.hasCustomer && R.missingCust) h += check('heads', 'Heads up', plural(R.missingCust, 'order') + ' with no customer', 'These still count toward sales. They are left out of the customer answers because the kit cannot tell who placed them.');
+    else if (R.hasCustomer) clear.push('every order has a customer');
+    if (!R.hasCustomer) h += check('heads', 'Heads up', 'No customer column', 'Without a customer column the kit can show sales over time, but not best customers, channels or drifting regulars. Match the column above if your file has one.');
+    var last = R.months[R.months.length - 1], first = R.months[0];
+    if (last.partial) h += check('handled', 'Handled', monthName(last.key, true) + ' is a partial month', 'The file stops on ' + fmtDay(R.asOf) + ', so ' + monthName(last.key, true) + ' has only ' + plural(last.daysCovered, 'day') + ' of sales. It is shown on its own so it does not look like a drop.');
+    if (first.partial && R.months.length > 1) h += check('handled', 'Handled', monthName(first.key, true) + ' is a partial month', 'The file starts on ' + fmtDay(R.minDay) + ', so that month is left out of the comparisons.');
+    if (R.hasOrder && R.orderConflicts) {
+      var many = R.orderConflictRows > 0.05 * R.used.length;
+      h += check('heads', 'Heads up', plural(R.orderConflicts, 'order number') + ' used more than once', many ? 'Many order numbers repeat with different details. Your file may list items instead of orders. Sales totals are still right, but order counts will be too high.' : 'These rows share an order number but have different details, so both were kept. It is worth a quick look in your system.');
+    } else if (R.hasOrder) clear.push('order numbers unique');
+    if (R.zeros) h += check('heads', 'Heads up', plural(R.zeros, 'order') + ' for $0', 'Free or comped orders are kept, but they are not counted as paid orders.');
+    var sum = [];
+    if (R.dups) sum.push(plural(R.dups, 'duplicate row') + ' removed');
+    if (R.badDates.length) sum.push(plural(R.badDates.length, 'unreadable date') + ' to fix');
+    if (R.badAmts.length) sum.push(plural(R.badAmts.length, 'unreadable amount') + ' to fix');
+    if (R.missingCust) sum.push(plural(R.missingCust, 'order') + ' with no customer');
+    $('trustLink').innerHTML = '<strong>File check:</strong> ' + (sum.length ? sum.join(', ') + '.' : 'nothing to fix.') + ' <a href="#trust">See the full check</a>';
+    if (clear.length) h += '<p class="clear-line"><span class="chip clear">All clear</span> ' + clear.join(', ') + '.</p>';
+    $('checks').innerHTML = h;
+  }
+
+  function changeWords(c) {
+    if (c == null) return { dir: 'flat', txt: '' };
+    if (c > 0.02) return { dir: 'up', txt: pct(c) + ' more than' };
+    if (c < -0.02) return { dir: 'down', txt: pct(-c) + ' less than' };
+    return { dir: 'flat', txt: 'about the same as' };
+  }
+  function renderGrowth(R) {
+    var T = R.trend, s = '';
+    if (T.kind === 'q') {
+      var w = changeWords(T.change);
+      s = (w.dir === 'up' ? '<strong>Yes, sales are growing.</strong> ' : w.dir === 'down' ? '<strong>Sales are slipping.</strong> ' : '<strong>Sales are steady.</strong> ');
+      s += 'Over the last three full months (' + monthName(T.aFrom) + ' to ' + monthName(T.aTo) + ') you averaged <strong>' + money(T.a) + ' a month</strong>, ' + w.txt + ' the three months before.';
+    } else if (T.kind === 'm') {
+      var w2 = changeWords(T.change);
+      s = 'There are only a few full months so far. ' + monthName(T.aFrom, true) + ' brought in <strong>' + money(T.a) + '</strong>, ' + w2.txt + ' ' + monthName(T.bFrom, true) + '.';
+    } else {
+      s = 'There is not a full month of sales in this file yet, so there is nothing to compare. The chart shows what is there so far.';
+    }
+    if (T.best && R.full.length >= 3) s += ' Your best full month was ' + monthName(T.best.key, true) + ' (' + money(T.best.net) + ').';
+    var last = R.months[R.months.length - 1];
+    if (last.partial && last.pace != null) s += ' ' + monthName(last.key, true) + ' only has data through the ' + ordinal(last.through) + '. At its current pace it would finish near ' + money(last.pace) + '.';
+    $('growthAnswer').innerHTML = s;
+    var hasPartial = R.months.some(function (o) { return o.partial; });
+    $('growthLegend').hidden = !hasPartial;
+    drawMonths(R);
+  }
+  function ordinal(n) { var s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
+
+  function niceMax(v) {
+    if (v <= 0) return 1;
+    var e = Math.pow(10, Math.floor(Math.log10(v))), f = v / e;
+    var n = f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10;
+    return n * e;
+  }
+  function shortMoney(v) { return v >= 1000 ? '$' + (v / 1000).toLocaleString('en-US', { maximumFractionDigits: v % 1000 === 0 ? 0 : 1 }) + 'k' : '$' + Math.round(v); }
+
+  var chartSel = null;
+  function drawMonths(R) {
+    var box = $('monthChart');
+    var W = Math.max(280, Math.round(box.clientWidth || 600));
+    var H = W < 480 ? 210 : 250;
+    var M = R.months, n = M.length;
+    var padL = 48, padR = 8, padT = 12, padB = 38;
+    var pw = W - padL - padR, ph = H - padT - padB;
+    var top = 0;
+    M.forEach(function (o) { top = Math.max(top, o.net, o.pace || 0); });
+    var max = niceMax(top * 1.04);
+    var ticks = 4, step = max / ticks;
+    var y = function (v) { return padT + ph - (Math.max(0, v) / max) * ph; };
+    var band = pw / n, bw = Math.max(3, Math.min(46, band * 0.66));
+    var every = 1;
+    var minLabel = 40;
+    while (band * every < minLabel) every++;
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="Net sales by month">';
+    for (var t = 0; t <= ticks; t++) {
+      var v = step * t, yy = y(v);
+      svg += '<line class="' + (t === 0 ? 'baseline' : 'gridline') + '" x1="' + padL + '" x2="' + (W - padR) + '" y1="' + yy + '" y2="' + yy + '"/>';
+      svg += '<text class="tick" x="' + (padL - 8) + '" y="' + (yy + 4) + '" text-anchor="end">' + shortMoney(v) + '</text>';
+    }
+    M.forEach(function (o, i) {
+      var cx = padL + band * i + band / 2, x = cx - bw / 2;
+      var yv = y(o.net), hgt = padT + ph - yv;
+      svg += '<g data-i="' + i + '">';
+      if (o.partial && o.pace != null && o.pace > o.net) svg += '<rect class="pace" x="' + (x + 0.75) + '" y="' + y(o.pace) + '" width="' + (bw - 1.5) + '" height="' + (yv - y(o.pace)) + '" rx="2"/>';
+      svg += '<rect class="bar' + (o.partial ? ' partial' : '') + '" x="' + x + '" y="' + yv + '" width="' + bw + '" height="' + Math.max(0, hgt) + '" rx="2"/>';
+      svg += '<rect class="hit" tabindex="0" data-i="' + i + '" x="' + (padL + band * i) + '" y="' + padT + '" width="' + band + '" height="' + ph + '" aria-label="' + monthName(o.key, true) + ': ' + money(o.net) + '"/>';
+      svg += '</g>';
+      if (i % every === 0) {
+        var lab = MONTH_SHORT[o.m - 1];
+        svg += '<text class="tick" x="' + cx + '" y="' + (H - padB + 16) + '" text-anchor="middle">' + lab + '</text>';
+        if (i === 0 || o.m === 1) svg += '<text class="tick" x="' + cx + '" y="' + (H - padB + 31) + '" text-anchor="middle">' + o.y + '</text>';
+      }
+    });
+    svg += '</svg>';
+    box.innerHTML = svg;
+    var gs = box.querySelectorAll('g[data-i]');
+    function pick(i) {
+      chartSel = i;
+      gs.forEach(function (g, j) { g.classList.toggle('dim', j !== i); });
+      var o = M[i];
+      var txt = '<strong>' + monthName(o.key, true) + ':</strong> ' + money(o.net, true) + ' from ' + plural(o.orders, 'order');
+      if (o.partial && o.pace != null) txt += ', ' + ordinal(o.through) + ' so far. Pace for the full month: ' + money(o.pace) + '.';
+      else if (o.partial) txt += ' (partial month).';
+      $('readout').innerHTML = txt;
+    }
+    function reset() {
+      gs.forEach(function (g) { g.classList.remove('dim'); });
+      var F = R.full, o = F.length ? F[F.length - 1] : M[n - 1];
+      $('readout').innerHTML = '<strong>Last full month, ' + monthName(o.key, true) + ':</strong> ' + money(o.net, true) + ' from ' + plural(o.orders, 'order') + '.';
+      chartSel = null;
+    }
+    box.querySelectorAll('.hit').forEach(function (h) {
+      var i = +h.getAttribute('data-i');
+      h.addEventListener('pointerenter', function () { pick(i); });
+      h.addEventListener('focus', function () { pick(i); });
+      h.addEventListener('click', function () { pick(i); });
+    });
+    box.querySelector('svg').addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') reset(); });
+    reset();
+  }
+
+  function renderBest(R) {
+    var C = R.customers;
+    if (!C) {
+      $('bestAnswer').innerHTML = R.hasCustomer ? 'No orders in this file have a customer attached.' : 'This needs a customer column. Match one under <em>Columns the kit is using</em> if your file has one.';
+      $('conc').innerHTML = ''; $('bestTableBox').innerHTML = ''; $('bestTableBox').hidden = true; $('bestNote').textContent = '';
+      return;
+    }
+    $('bestTableBox').hidden = false;
+    $('bestAnswer').innerHTML = 'Your top 20% of customers (' + count(C.topK) + ' ' + (C.topK === 1 ? 'person' : 'people') + ') bring in <strong>' + pct(C.topShare) + ' of your sales</strong>. The average customer has spent ' + money(C.avgSpend) + ', and ' + pct(C.repeatRate) + ' have ordered more than once.';
+    var a = Math.max(0, Math.min(1, C.topShare));
+    $('conc').innerHTML = '<div class="track" role="img" aria-label="Top 20 percent of customers bring in ' + pct(a) + ' of sales"><span class="a" style="width:' + (a * 100).toFixed(1) + '%"></span><span class="b" style="width:' + ((1 - a) * 100).toFixed(1) + '%"></span></div>' +
+      '<div class="labels"><span><strong>Top 20%</strong> of customers: ' + pct(a) + ' of sales</span><span>Everyone else: ' + pct(1 - a) + '</span></div>';
+    var rows = C.list.slice(0, 10);
+    var t = '<table><thead><tr><th>Customer</th><th class="r">Orders</th><th class="r">Spent</th><th>Last order</th>' + (R.hasChannel ? '<th>Came from</th>' : '') + '</tr></thead><tbody>';
+    rows.forEach(function (c) {
+      t += '<tr><td class="id">' + esc(c.id) + '</td><td class="r">' + count(c.orders) + '</td><td class="r">' + money(c.net, true) + '</td><td>' + (c.last != null ? fmtDay(c.last) : '') + '</td>' + (R.hasChannel ? '<td>' + esc(c.ch) + '</td>' : '') + '</tr>';
+    });
+    t += '</tbody></table>';
+    $('bestTableBox').innerHTML = t;
+    var note = 'The table shows your ten biggest customers by money spent, after refunds. Percentages count only sales that have a customer attached.';
+    if (R.missingCust) note += ' ' + plural(R.missingCust, 'order') + ' had no customer, so ' + (R.missingCust === 1 ? 'it is' : 'they are') + ' not in this answer.';
+    $('bestNote').textContent = note;
+  }
+
+  function renderChannels(R) {
+    var box = $('chanBars');
+    var CH = R.channels;
+    if (!R.hasChannel || !CH) {
+      $('chanAnswer').innerHTML = !R.hasCustomer ? 'This needs a customer column and a column that says where each customer came from.' : 'This needs a column that says where each customer came from, such as Instagram, a referral or walk-in. If your file has one, match it under <em>Columns the kit is using</em>.';
+      box.innerHTML = ''; $('chanNote').textContent = '';
+      return;
+    }
+    var rows = CH.rows;
+    if (rows.length < 2) {
+      $('chanAnswer').textContent = 'All of these customers came from one place (' + (rows[0] ? rows[0].ch : 'unknown') + '), so there is nothing to compare yet.';
+      box.innerHTML = ''; $('chanNote').textContent = '';
+      return;
+    }
+    var solid = rows.filter(function (r) { return r.n >= 10; });
+    var pool = solid.length >= 2 ? solid : rows;
+    var best = pool[0], worst = pool[pool.length - 1];
+    var ratio = worst.avg > 0 ? best.avg / worst.avg : null;
+    var s;
+    if (ratio != null && ratio >= 1.25) {
+      s = 'Customers who first came through <strong>' + esc(best.ch) + '</strong> have spent <strong>' + money(best.avg) + ' each</strong> so far, about ' + ratio.toFixed(1) + ' times as much as customers from ' + esc(worst.ch) + ' (' + money(worst.avg) + ').';
+      if (best.repeat - worst.repeat >= 0.15) s += ' The difference is loyalty: ' + pct(best.repeat) + ' of ' + esc(best.ch) + ' customers came back for a second order, compared with ' + pct(worst.repeat) + ' from ' + esc(worst.ch) + '.';
+    } else {
+      s = 'Your channels bring in customers of similar value, between ' + money(worst.avg) + ' and ' + money(best.avg) + ' each so far.';
+    }
+    $('chanAnswer').innerHTML = s;
+    var maxAvg = rows[0].avg || 1;
+    box.innerHTML = rows.map(function (r) {
+      return '<div class="row"><span class="name">' + esc(r.ch) + '</span><span class="barbox"><i style="width:' + Math.max(1.5, r.avg / maxAvg * 100).toFixed(1) + '%"></i></span><span class="val">' + money(r.avg) + '</span>' +
+        '<span class="meta">' + plural(r.n, 'customer') + ', ' + pct(r.repeat) + ' came back' + (r.n < 10 ? '. Too few customers to lean on.' : '') + '</span></div>';
+    }).join('');
+    $('chanNote').textContent = CH.allUsed
+      ? 'Most customers in this file are new, so this uses everyone. Newer customers have had less time to come back, which pulls averages down.'
+      : 'Bars show average spend per customer, grouped by where each customer placed their first order. To keep it fair, only customers whose first order was on or before ' + fmtDay(CH.cutoff) + ' (90 days before the file ends) are counted, so brand-new customers do not drag the averages down.';
+  }
+
+  function gapWords(d) {
+    d = Math.round(d);
+    if (d < 14) return 'every ' + d + ' days';
+    var w = Math.round(d / 7);
+    return 'every ' + d + ' days (about ' + w + ' week' + (w === 1 ? '' : 's') + ')';
+  }
+  function renderDrift(R) {
+    var K = R.risk;
+    var tb = $('driftTableBox');
+    $('driftFallback').hidden = true; $('driftCopied').textContent = '';
+    if (!K) {
+      $('driftAnswer').innerHTML = 'This needs a customer column so the kit can follow each person over time.';
+      tb.innerHTML = ''; tb.hidden = true; $('driftActions').hidden = true;
+      return;
+    }
+    if (!K.list.length) {
+      $('driftAnswer').innerHTML = 'None of your regular customers look overdue right now.' + (K.lost ? ' ' + plural(K.lost, 'regular') + ' stopped ordering more than six months ago.' : '');
+      tb.innerHTML = ''; tb.hidden = true; $('driftActions').hidden = true;
+      return;
+    }
+    tb.hidden = false; $('driftActions').hidden = false;
+    var s = '<strong>' + plural(K.list.length, 'regular customer') + ' ' + (K.list.length === 1 ? 'has' : 'have') + ' gone quiet.</strong> They usually ordered ' + gapWords(K.typical) + ', and together they have spent <strong>' + money(K.spent) + '</strong> with you. A short personal note to the people at the top of this list is a cheap first step.';
+    if (K.lost) s += ' Another ' + plural(K.lost, 'regular') + ' stopped more than six months ago.';
+    $('driftAnswer').innerHTML = s;
+    var show = state.riskOpen ? K.list : K.list.slice(0, 12);
+    var t = '<table><thead><tr><th>Customer</th><th class="r">Usually orders every</th><th class="r">Last order</th><th class="r">Spent</th>' + (R.hasChannel ? '<th>Came from</th>' : '') + '</tr></thead><tbody>';
+    show.forEach(function (x) {
+      t += '<tr><td class="id">' + esc(x.id) + '</td><td class="r">' + Math.round(x.typical) + ' days</td><td class="r" title="' + fmtDay(x.last) + '">' + x.since + ' days ago</td><td class="r">' + money(x.net, true) + '</td>' + (R.hasChannel ? '<td>' + esc(x.ch) + '</td>' : '') + '</tr>';
+    });
+    t += '</tbody></table>';
+    tb.innerHTML = t;
+    var more = $('driftMore');
+    if (K.list.length > 12) { more.hidden = false; more.textContent = state.riskOpen ? 'Show the top 12' : 'Show all ' + count(K.list.length); }
+    else more.hidden = true;
+  }
+  function driftTSV() {
+    var R = state.result, K = R.risk;
+    var lines = ['customer\tusual_gap_days\tdays_since_last_order\tlast_order_date\ttotal_spent' + (R.hasChannel ? '\tfirst_came_from' : '')];
+    K.list.forEach(function (x) { lines.push([x.id, Math.round(x.typical), x.since, isoDay(x.last), x.net.toFixed(2)].concat(R.hasChannel ? [x.ch] : []).join('\t')); });
+    return lines.join('\n');
+  }
+
+  function renderFindings(R) {
+    var items = [];
+    var T = R.trend;
+    if (T.kind !== 'none' && T.change != null) {
+      var w = changeWords(T.change);
+      var t1 = w.dir === 'up' ? 'Sales are up ' + pct(T.change) : w.dir === 'down' ? 'Sales are down ' + pct(-T.change) : 'Sales are steady';
+      items.push(['growth', 'Growth', t1 + (T.kind === 'q' ? ' over the last three full months, compared with the three before.' : ' from one full month to the next.'), '']);
+    } else items.push(['growth', 'Growth', 'Not enough full months to compare yet.', 'muted']);
+    if (R.customers) items.push(['best', 'Best customers', 'Your top 20% of customers bring in ' + pct(R.customers.topShare) + ' of sales.', '']);
+    else items.push(['best', 'Best customers', 'Needs a customer column.', 'muted']);
+    var CH = R.channels;
+    if (CH && CH.rows.length >= 2) {
+      var solid = CH.rows.filter(function (r) { return r.n >= 10; }); var pool = solid.length >= 2 ? solid : CH.rows;
+      var b = pool[0], wv = pool[pool.length - 1], ratio = wv.avg > 0 ? b.avg / wv.avg : null;
+      items.push(['channels', 'Channels', ratio && ratio >= 1.25 ? esc(b.ch) + ' customers are worth ' + ratio.toFixed(1) + ' times as much as ' + esc(wv.ch) + ' customers.' : 'Channels bring in customers of similar value.', '']);
+    } else items.push(['channels', 'Channels', 'Needs a column for where customers came from.', 'muted']);
+    if (R.risk) items.push(['drift', 'Drifting away', R.risk.list.length ? plural(R.risk.list.length, 'regular') + ' have gone quiet. They have spent ' + money(R.risk.spent) + ' with you.' : 'No regulars look overdue right now.', R.risk.list.length ? 'warn' : '']);
+    else items.push(['drift', 'Drifting away', 'Needs a customer column.', 'muted']);
+    $('findings').innerHTML = items.map(function (it) {
+      return '<li><a class="jump" href="#' + it[0] + '"><span class="dot ' + it[3] + '"></span><span><span class="k">' + it[1] + '</span>' + it[2] + '</span></a></li>';
+    }).join('');
+  }
+
+  function buildPrompt() {
+    var R = state.result;
+    if (!R || !R.ok) { $('prompt').value = ''; return; }
+    var biz = $('biz').value.trim() || 'small business';
+    var q = $('question').value.trim() || 'Based only on these numbers, what are the three most useful things I could do next month to grow sales?';
+    var L = [];
+    L.push('I run a ' + biz + '. Below is a summary of my sales from ' + fmtDay(R.minDay) + ' to ' + fmtDay(R.asOf) + '. It was made with the Small Business Decision Kit and contains totals only, no customer details.');
+    L.push('');
+    L.push('Please use only the numbers below. If you need a number that is not here, tell me which one instead of guessing. Keep your answer short and in plain English, and say how sure you are.');
+    L.push('');
+    L.push('My question: ' + q);
+    L.push('');
+    L.push('DATA NOTES');
+    L.push('* Net sales after refunds: ' + plainMoney(R.net) + ' from ' + count(R.orders) + ' orders.');
+    if (R.dups) L.push('* ' + plural(R.dups, 'duplicate row') + ' were removed.');
+    if (R.badDates.length) L.push('* ' + plural(R.badDates.length, 'row') + ' with an unreadable date ' + (R.badDates.length === 1 ? 'is' : 'are') + ' left out (' + plainMoney(R.badDateSum) + ').');
+    if (R.refunds) L.push('* ' + plural(R.refunds, 'refund') + ' totaling ' + plainMoney(R.refundSum) + ' are included in net sales.');
+    if (R.missingCust) L.push('* ' + plural(R.missingCust, 'order') + ' had no customer ID.');
+    R.months.forEach(function (o) { if (o.partial) L.push('* ' + monthName(o.key, true) + ' is a partial month in this file.'); });
+    L.push('');
+    L.push('NET SALES BY MONTH');
+    R.months.forEach(function (o) {
+      var tag = '';
+      if (o.partial && o.pace != null) tag = ' (partial, through the ' + ordinal(o.through) + '; full-month pace ' + plainMoney(o.pace) + ')';
+      else if (o.partial) tag = ' (partial)';
+      L.push('* ' + monthName(o.key, true) + ': ' + plainMoney(o.net) + ', ' + count(o.orders) + ' orders' + tag);
+    });
+    if (R.customers) {
+      var C = R.customers;
+      L.push('');
+      L.push('CUSTOMERS');
+      L.push('* ' + count(C.n) + ' customers placed at least one order.');
+      L.push('* The top 20% of customers bring in ' + pct(C.topShare) + ' of sales that have a customer attached.');
+      L.push('* Average spend per customer: ' + plainMoney(C.avgSpend) + '. Share who ordered more than once: ' + pct(C.repeatRate) + '.');
+    }
+    if (R.channels && R.channels.rows.length) {
+      L.push('');
+      L.push('WHERE CUSTOMERS FIRST CAME FROM' + (R.channels.allUsed ? ' (all customers)' : ' (customers whose first order was at least 90 days before the file ends)'));
+      R.channels.rows.forEach(function (r) { L.push('* ' + r.ch + ': ' + count(r.n) + ' customers, ' + pct(r.repeat) + ' came back for a second order, average spend ' + plainMoney(r.avg) + ' each'); });
+    }
+    if (R.risk) {
+      L.push('');
+      L.push('REGULARS WHO HAVE GONE QUIET');
+      L.push('* A regular has 3 or more orders. They count as quiet when the time since their last order is more than double their usual gap, at least 30 days and under 6 months.');
+      L.push('* ' + count(R.risk.list.length) + ' regulars are quiet right now. Together they have spent ' + plainMoney(R.risk.spent) + (R.risk.list.length ? ', and they usually ordered every ' + Math.round(R.risk.typical) + ' days.' : '.'));
+      if (R.risk.lost) L.push('* ' + count(R.risk.lost) + ' more regulars stopped over 6 months ago.');
+    }
+    $('prompt').value = L.join('\n');
+  }
+
+  function copyText(text, statusEl, fallbackEl) {
+    function fail() {
+      if (fallbackEl) { if (fallbackEl.value !== text) fallbackEl.value = text; fallbackEl.hidden = false; fallbackEl.focus(); fallbackEl.select(); }
+      statusEl.textContent = 'Your browser blocked copying. The text is selected, so press Ctrl+C (Cmd+C on a Mac).';
+    }
+    try {
+      if (!navigator.clipboard || !navigator.clipboard.writeText) { fail(); return; }
+      navigator.clipboard.writeText(text).then(function () { statusEl.textContent = 'Copied.'; }, fail);
+    } catch (e) { fail(); }
+  }
+
+  /* wiring */
+  function readFile(f) {
+    if (!f) return;
+    if (/\.(xlsx|xls|numbers)$/i.test(f.name)) { showFileError('This is a spreadsheet file, not a CSV. Open it and save a copy as CSV (File, then Save As or Download, then CSV), and choose that copy.'); return; }
+    var rd = new FileReader();
+    rd.onload = function () { loadText(String(rd.result || ''), f.name, false); };
+    rd.onerror = function () { showFileError('The browser could not read that file. Try exporting it again.'); };
+    rd.readAsText(f);
+  }
+  $('file').addEventListener('change', function (e) { readFile(e.target.files[0]); e.target.value = ''; });
+  $('useSample').addEventListener('click', function () { loadText($('sample-csv').textContent.trim(), 'hilltop-coffee-orders.csv', true); });
+  var drop = $('drop');
+  ['dragenter', 'dragover'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); }); });
+  ['dragleave', 'drop'].forEach(function (ev) { drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); }); });
+  drop.addEventListener('drop', function (e) { var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; readFile(f); });
+  drop.addEventListener('keydown', function (e) { if (e.target === drop && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); $('file').click(); } });
+  FIELDS.forEach(function (f) {
+    $('map-' + f).addEventListener('change', function (e) {
+      var v = +e.target.value;
+      if (v >= 0) FIELDS.forEach(function (g) { if (g !== f && state.map[g] === v) { state.map[g] = -1; $('map-' + g).value = '-1'; } });
+      state.map[f] = v; state.riskOpen = false; run();
+    });
+  });
+  $('map-style').addEventListener('change', function (e) { state.style = e.target.value; run(); });
+  $('biz').addEventListener('input', buildPrompt);
+  $('question').addEventListener('input', buildPrompt);
+  $('copyPrompt').addEventListener('click', function () { copyText($('prompt').value, $('promptCopied'), $('prompt')); });
+  $('driftCopy').addEventListener('click', function () { copyText(driftTSV(), $('driftCopied'), $('driftFallback')); });
+  $('driftMore').addEventListener('click', function () { state.riskOpen = !state.riskOpen; renderDrift(state.result); });
+  var rT = null;
+  if (window.ResizeObserver) {
+    var lastW = 0;
+    new ResizeObserver(function (en) {
+      var w = Math.round(en[0].contentRect.width);
+      if (Math.abs(w - lastW) < 8) return;
+      lastW = w; clearTimeout(rT);
+      rT = setTimeout(function () { if (state.result && state.result.ok) drawMonths(state.result); }, 80);
+    }).observe($('monthChart'));
+  }
+
+  $('question').value = 'Based only on these numbers, what are the three most useful things I could do next month to grow sales?';
+  loadText($('sample-csv').textContent.trim(), 'hilltop-coffee-orders.csv', true);
+})();
+</script>
+</body>
+</html>
